@@ -882,25 +882,25 @@
                 <span>9:41</span><span style="font-size:12px">●●●</span>
               </div>
               <div class="p-nav">
-                <button class="p-back" onclick="pBack('p-s2','p-s1')">← Back</button>
+                <button class="p-back" onclick="goBack()">← Back</button>
                 <div class="p-nav-t">Transfer</div>
                 <div class="p-nav-sp"></div>
               </div>
               <div class="tx-hero">
-                <div class="tx-hero-flag">🇹🇭</div>
-                <div class="tx-hero-amt">£850.00</div>
-                <div class="tx-hero-to">to Somsak Chai · Thailand</div>
+                <div class="tx-hero-flag" id="s2-flag">🇹🇭</div>
+                <div class="tx-hero-amt" id="s2-amt">£850.00</div>
+                <div class="tx-hero-to" id="s2-to">to Somsak Chai · Thailand</div>
                 <div class="tx-spill">
                   <div class="tx-spill-dot"></div>
-                  Delayed · 2 days
+                  <span id="s2-spill">Delayed · 2 days</span>
                 </div>
               </div>
               <div class="tx-rows">
-                <div class="tx-row"><span class="tx-row-lbl">They receive</span><span class="tx-row-val">฿38,240 THB</span></div>
-                <div class="tx-row"><span class="tx-row-lbl">Rate</span><span class="tx-row-val">1 GBP = 45.00 THB</span></div>
-                <div class="tx-row"><span class="tx-row-lbl">Fee</span><span class="tx-row-val">£4.80</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">They receive</span><span class="tx-row-val" id="s2-receive">฿38,240 THB</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Rate</span><span class="tx-row-val" id="s2-rate">1 GBP = 45.00 THB</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Fee</span><span class="tx-row-val" id="s2-fee">£4.80</span></div>
                 <div class="tx-row"><span class="tx-row-lbl">Started</span><span class="tx-row-val">Mon, 9 Mar</span></div>
-                <div class="tx-row"><span class="tx-row-lbl">Ref</span><span class="tx-row-val" style="font-family:monospace;font-size:11px">TRF-7823-THB</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Ref</span><span class="tx-row-val" id="s2-ref" style="font-family:monospace;font-size:11px">TRF-7823-THB</span></div>
               </div>
               <div class="wpt-cta" onclick="pOpenSheet()">
                 <div class="wpt-cta-row">
@@ -1111,46 +1111,83 @@
 
 <script>
 var currentScenario = 'thailand';
+var fromNotif = false;
+
+var scenarioData = {
+  thailand: {
+    flag: '🇹🇭', amt: '£850.00', to: 'to Somsak Chai · Thailand',
+    receive: '฿38,240 THB', rate: '1 GBP = 45.00 THB', fee: '£4.80',
+    ref: 'TRF-7823-THB', spill: 'Delayed · 2 days',
+    wptTitle: 'Your transfer to Thailand is delayed',
+    notifTitle: 'Transfer to Thailand delayed',
+    notifBody: 'Your £850 to Somsak Chai is held for AML compliance. Tap to find out why.'
+  },
+  india: {
+    flag: '🇮🇳', amt: '£500.00', to: 'to Priya Sharma · India',
+    receive: '₹52,400 INR', rate: '1 GBP = 104.80 INR', fee: '£3.50',
+    ref: 'TRF-4491-INR', spill: 'On hold · action needed',
+    wptTitle: 'Your transfer to India needs attention',
+    notifTitle: 'Transfer to India needs action',
+    notifBody: 'Your £500 to Priya Sharma needs a purpose code. Tap to resolve.'
+  },
+  us: {
+    flag: '🇺🇸', amt: '£1,200.00', to: 'to James Wilson · United States',
+    receive: '$1,491 USD', rate: '1 GBP = 1.243 USD', fee: '£6.20',
+    ref: 'TRF-9012-USD', spill: 'Delayed · ACH settlement',
+    wptTitle: 'Your US transfer is processing',
+    notifTitle: 'US transfer processing slowly',
+    notifBody: 'Your £1,200 to James Wilson is waiting on ACH settlement. Tap for details.'
+  }
+};
 
 function pGo(from, to) {
   document.getElementById(from).classList.add('slide-left');
   document.getElementById(to).classList.remove('slide-right');
 }
-function pBack(from, to) {
+function pOpenSheet() { document.getElementById('p-overlay').classList.add('open'); }
+function pCloseSheet() { document.getElementById('p-overlay').classList.remove('open'); }
+
+// Smart back — returns to lock screen if came from notification, else to Screen 1
+function goBack() {
   pCloseSheet();
-  document.getElementById(from).classList.add('slide-right');
-  document.getElementById(to).classList.remove('slide-left');
-}
-function pOpenSheet() {
-  document.getElementById('p-overlay').classList.add('open');
-}
-function pCloseSheet() {
-  document.getElementById('p-overlay').classList.remove('open');
+  document.getElementById('p-s2').classList.add('slide-right');
+  if (fromNotif) {
+    fromNotif = false;
+    document.getElementById('p-s0').classList.remove('slide-left');
+  } else {
+    document.getElementById('p-s1').classList.remove('slide-left');
+  }
 }
 
-// Notification tap — go straight to transfer detail + open widget
+// Notification tap — skip Screen 1, go straight to detail + open widget
 function notifTap() {
-  // Reset s0 → s1 (slide left), s1 → s2 (slide left)
+  fromNotif = true;
   document.getElementById('p-s0').classList.add('slide-left');
-  document.getElementById('p-s1').classList.remove('slide-right');
-  document.getElementById('p-s1').classList.add('slide-left');
   document.getElementById('p-s2').classList.remove('slide-right');
   setTimeout(pOpenSheet, 180);
 }
 
-// Reset phone to lock screen + trigger notification
-function resetToLockScreen(scenario) {
+function updateScreen2(name) {
+  var d = scenarioData[name];
+  document.getElementById('s2-flag').textContent    = d.flag;
+  document.getElementById('s2-amt').textContent     = d.amt;
+  document.getElementById('s2-to').textContent      = d.to;
+  document.getElementById('s2-spill').textContent   = d.spill;
+  document.getElementById('s2-receive').textContent = d.receive;
+  document.getElementById('s2-rate').textContent    = d.rate;
+  document.getElementById('s2-fee').textContent     = d.fee;
+  document.getElementById('s2-ref').textContent     = d.ref;
+}
+
+function resetToLockScreen() {
   pCloseSheet();
-  // Reset all screens
-  ['p-s0','p-s1','p-s2'].forEach(id => {
-    document.getElementById(id).classList.remove('slide-left');
-  });
+  fromNotif = false;
+  ['p-s0','p-s1','p-s2'].forEach(id => document.getElementById(id).classList.remove('slide-left'));
   document.getElementById('p-s1').classList.add('slide-right');
   document.getElementById('p-s2').classList.add('slide-right');
-  // Hide then re-show notification with bounce
-  const notif = document.getElementById('s0-notif');
+  var notif = document.getElementById('s0-notif');
   notif.classList.remove('show');
-  setTimeout(() => notif.classList.add('show'), 800);
+  setTimeout(() => notif.classList.add('show'), 700);
 }
 
 function setSupportScenario(name, btn) {
@@ -1160,34 +1197,17 @@ function setSupportScenario(name, btn) {
   document.querySelectorAll('.wpt-scen').forEach(s => s.classList.remove('on'));
   document.getElementById('wpt-' + name).classList.add('on');
 
-  const titles = {
-    thailand: 'Your transfer to Thailand is delayed',
-    india:    'Your transfer to India needs attention',
-    us:       'Your US transfer is processing'
-  };
-  const notifTitles = {
-    thailand: 'Transfer to Thailand delayed',
-    india:    'Transfer to India needs action',
-    us:       'US transfer processing slowly'
-  };
-  const notifBodies = {
-    thailand: 'Your £850 to Somsak Chai is held for AML compliance. Tap to find out why.',
-    india:    'Your £500 to Priya Sharma needs a purpose code. Tap to resolve.',
-    us:       'Your £1,200 to James Wilson is waiting on ACH settlement. Tap for details.'
-  };
-
-  document.getElementById('wpt-title').textContent = titles[name];
-  document.getElementById('s0-notif-title').textContent = notifTitles[name];
-  document.getElementById('s0-notif-body').textContent = notifBodies[name];
-
-  resetToLockScreen(name);
+  var d = scenarioData[name];
+  document.getElementById('wpt-title').textContent       = d.wptTitle;
+  document.getElementById('s0-notif-title').textContent  = d.notifTitle;
+  document.getElementById('s0-notif-body').textContent   = d.notifBody;
+  updateScreen2(name);
+  resetToLockScreen();
 }
 
-// Auto-show notification on load
 window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    document.getElementById('s0-notif').classList.add('show');
-  }, 1200);
+  updateScreen2('thailand');
+  setTimeout(() => document.getElementById('s0-notif').classList.add('show'), 1200);
 });
 </script>
 </body>
