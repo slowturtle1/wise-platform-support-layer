@@ -1551,24 +1551,26 @@ function pBack(from, to) {
 function pOpenSheet() { document.getElementById('p-overlay').classList.add('open'); }
 function pCloseSheet() { document.getElementById('p-overlay').classList.remove('open'); }
 
-// Smart back — returns to lock screen if came from notification, else to Screen 1
+// Back from Screen 2 — always go to Screen 1 so user can see the banner
 function goBack() {
   pCloseSheet();
   document.getElementById('p-s2').classList.add('slide-right');
-  if (fromNotif) {
-    fromNotif = false;
-    document.getElementById('p-s0').classList.remove('slide-left');
-  } else {
-    document.getElementById('p-s1').classList.remove('slide-left');
-  }
+  document.getElementById('p-s1').classList.remove('slide-left');
+  fromNotif = false;
 }
 
-// Notification tap — skip Screen 1, go straight to detail + open widget
+// Notification tap — land on Screen 1 briefly so user sees it, then auto-advance to Screen 2
 function notifTap() {
   fromNotif = true;
+  // S0 → S1
   document.getElementById('p-s0').classList.add('slide-left');
-  document.getElementById('p-s2').classList.remove('slide-right');
-  setTimeout(pOpenSheet, 180);
+  document.getElementById('p-s1').classList.remove('slide-right');
+  // After brief pause, S1 → S2 + open sheet
+  setTimeout(function() {
+    document.getElementById('p-s1').classList.add('slide-left');
+    document.getElementById('p-s2').classList.remove('slide-right');
+    setTimeout(pOpenSheet, 200);
+  }, 900);
 }
 
 function updateScreen2(name) {
