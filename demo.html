@@ -815,6 +815,73 @@
     .footer-strip { padding: 1.5rem 1.25rem; }
     .trust-bar { gap: 1rem; padding: 1rem 1.25rem 0; }
   }
+
+  /* ===== AI EXPLAIN BLOCK ===== */
+  .ai-explain-block {
+    background: linear-gradient(135deg, #f0faf8, #e6f5f3);
+    border: 1px solid #b2e8e3; border-left: 3px solid var(--teal);
+    border-radius: 12px; padding: 12px 14px; margin-top: 14px;
+  }
+  .ai-explain-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 7px;
+  }
+  .ai-badge {
+    background: var(--teal); color: white;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 2px 7px; border-radius: 9999px; text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .ai-mode-label { font-size: 10px; color: var(--muted); font-weight: 500; }
+  .ai-explain-text { font-size: 12.5px; color: #1a3a3a; line-height: 1.65; min-height: 18px; }
+  .ai-cursor {
+    display: inline-block; width: 2px; height: 13px;
+    background: var(--teal); vertical-align: middle; margin-left: 1px;
+    animation: ai-blink 0.8s step-end infinite;
+  }
+  @keyframes ai-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .ai-explain-block.ai-done .ai-cursor { display: none; }
+
+  /* ===== CHAT SECTION ===== */
+  .chat-section { margin-top: 16px; border-top: 1px solid #f0f0f0; padding-top: 14px; }
+  .chat-divider { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 10px; }
+  .chat-msgs { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .chat-msg { font-size: 12px; line-height: 1.55; padding: 8px 11px; border-radius: 10px; max-width: 92%; }
+  .chat-msg-user { background: var(--navy); color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
+  .chat-msg-ai { background: #f0f0f0; color: var(--text); align-self: flex-start; border-bottom-left-radius: 3px; }
+  .chat-input-row { display: flex; gap: 8px; align-items: center; }
+  .chat-input {
+    flex: 1; border: 1.5px solid var(--border); border-radius: 20px;
+    padding: 7px 13px; font-size: 12px; font-family: inherit;
+    outline: none; background: white; transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: var(--teal); }
+  .chat-send {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--navy); color: var(--lime);
+    border: none; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s;
+  }
+  .chat-send:hover { background: #1e4800; }
+
+  /* ===== AI KEY INPUT ===== */
+  .ai-key-row {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1.25rem; flex-wrap: wrap;
+  }
+  .ai-key-ico { font-size: 15px; flex-shrink: 0; }
+  .ai-key-lbl { font-size: 11.5px; color: var(--muted); font-weight: 500; flex: 1; min-width: 180px; }
+  .ai-key-input {
+    border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 5px 11px; font-size: 11.5px; font-family: monospace;
+    outline: none; width: 200px; transition: border-color 0.2s;
+  }
+  .ai-key-input:focus { border-color: var(--teal); }
+  .ai-key-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; }
+  .ai-key-status.demo { background: #fef3c7; color: #92400e; }
+  .ai-key-status.live { background: #d1fae5; color: #065f46; }
 </style>
 </head>
 <body>
@@ -909,6 +976,13 @@
               <p>If action is needed, users resolve it in-app. If not, they're reassured. Support queue stays quiet.</p>
             </div>
           </div>
+        </div>
+
+        <div class="ai-key-row">
+          <span class="ai-key-ico">✦</span>
+          <span class="ai-key-lbl">Claude AI key <span style="color:#aaa;font-style:italic">(optional — demo works without it)</span></span>
+          <input type="password" class="ai-key-input" id="ai-key-input" placeholder="sk-ant-api03-..." oninput="updateApiKey(this.value)">
+          <span class="ai-key-status demo" id="ai-key-status">Demo mode</span>
         </div>
 
         <div style="margin-top: 2rem;">
@@ -1207,6 +1281,15 @@
                 <div class="wpt-h1" id="wpt-title">Your transfer to Thailand is delayed</div>
                 <div class="wpt-h2">Here's exactly what's happening and what to expect.</div>
 
+                <!-- AI Explanation -->
+                <div class="ai-explain-block" id="ai-explain-block">
+                  <div class="ai-explain-header">
+                    <span class="ai-badge">✦ AI</span>
+                    <span class="ai-mode-label" id="ai-mode-lbl">Generating explanation…</span>
+                  </div>
+                  <div class="ai-explain-text" id="ai-explain-text"><span class="ai-cursor"></span></div>
+                </div>
+
                 <!-- Scenario: Thailand -->
                 <div class="wpt-scen on" id="wpt-thailand">
                   <div class="wpt-diag">
@@ -1310,6 +1393,16 @@
                   <div class="wpt-foot">
                     <span class="wpt-badge-sm">WISE</span>
                     <span>Transfer support powered by Wise Platform</span>
+                  </div>
+                </div>
+
+                <!-- AI Follow-up Chat -->
+                <div class="chat-section">
+                  <div class="chat-divider">Still have a question?</div>
+                  <div class="chat-msgs" id="chat-msgs"></div>
+                  <div class="chat-input-row">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Ask about your transfer…" onkeydown="if(event.key==='Enter') sendChatMessage()">
+                    <button class="chat-send" onclick="sendChatMessage()">➤</button>
                   </div>
                 </div>
               </div>
@@ -1548,7 +1641,7 @@ function pBack(from, to) {
   document.getElementById(from).classList.add('slide-right');
   document.getElementById(to).classList.remove('slide-left');
 }
-function pOpenSheet() { document.getElementById('p-overlay').classList.add('open'); }
+function pOpenSheet() { document.getElementById('p-overlay').classList.add('open'); startAIExplanation(); }
 function pCloseSheet() { document.getElementById('p-overlay').classList.remove('open'); }
 
 // Back from Screen 2 — always go to Screen 1 so user can see the banner
@@ -1610,6 +1703,215 @@ function setSupportScenario(name, btn) {
   document.getElementById('s0-notif-body').textContent   = d.notifBody;
   updateScreen2(name);
   resetToLockScreen();
+}
+
+/* ===== AI INTEGRATION ===== */
+var CLAUDE_API_KEY = '';
+var chatHistory = [];
+var isStreaming = false;
+
+var scenarioTransfers = {
+  thailand: {
+    corridor: 'GBP → THB (Thailand)', amount: '£850.00', recipient: 'Somsak Chai',
+    status: 'Delayed', eta: '1–2 additional business days',
+    reason: 'Thai AML compliance — transfer exceeds ฿30,000 threshold, routed for enhanced compliance screening',
+    action: 'None — customer just needs to wait'
+  },
+  india: {
+    corridor: 'GBP → INR (India)', amount: '£500.00', recipient: 'Priya Sharma',
+    status: 'On hold', eta: '1–2 days after customer confirms purpose code',
+    reason: "RBI mandatory purpose code — India's Reserve Bank requires all inbound international transfers to declare a transfer purpose",
+    action: 'Customer must select a purpose code (e.g. family maintenance, salary, education)'
+  },
+  us: {
+    corridor: 'GBP → USD (United States)', amount: '£1,200.00', recipient: 'James Wilson',
+    status: 'Processing', eta: 'Clears Wednesday, delivered Thursday',
+    reason: 'US ACH settlement window — bank debit submitted Monday, ACH batches clear in 1–3 business days',
+    action: 'None — customer just needs to wait'
+  }
+};
+
+var simulatedExplanations = {
+  thailand: "Your transfer is held because Thailand's central bank requires all incoming transfers above ฿30,000 to pass an enhanced compliance review — this is a standard regulatory requirement, not specific to you or your account. Wise has already submitted it for review. No action is needed; your exchange rate of 45.00 THB/GBP is locked.",
+  india: "India's Reserve Bank (RBI) requires every international transfer to declare its purpose — this is mandatory for all inbound transfers, not a flag on your account. Your £500 to Priya is on hold until you select a purpose code below. Once confirmed, Wise will process and deliver within 1–2 business days.",
+  us: "This is a normal part of how US bank transfers work. Your bank submitted the ACH debit on Monday, but US ACH payments settle in daily batches — typically 1–3 business days. Wise will convert and send your dollars the same day ACH settles, expected Wednesday, with delivery Thursday."
+};
+
+var fallbackReplies = {
+  rate:    "Your exchange rate is already locked in — even though the transfer is delayed, you'll receive exactly the amount shown. The rate won't change during processing.",
+  cancel:  "You can cancel from the Wise app while the transfer is still pending. Once it enters the compliance or payment stage, cancellation may not be available. Check the Wise app for the cancel option.",
+  time:    null, // filled dynamically
+  safe:    "Your money is completely safe. It's held securely by Wise — the delay is an expected part of the regulatory compliance process for this corridor, not a sign of any problem.",
+  fee:     "No additional fees are charged for this delay — you only paid the fee shown at checkout. The delay is due to a regulatory requirement, not a Wise processing issue."
+};
+
+function buildExplainPrompt(scenario) {
+  var t = scenarioTransfers[scenario];
+  return 'A customer has a ' + t.status.toLowerCase() + ' transfer:\n' +
+    '- Corridor: ' + t.corridor + '\n- Amount: ' + t.amount + '\n- Recipient: ' + t.recipient + '\n' +
+    '- Delay reason: ' + t.reason + '\n- ETA: ' + t.eta + '\n- Action required: ' + t.action + '\n\n' +
+    'Write 2–3 sentences explaining why this transfer is delayed, what happens next, and whether the customer needs to do anything. ' +
+    'Be specific to this corridor. Plain, calm language. Max 70 words. No bullet points or headers.';
+}
+
+function updateApiKey(val) {
+  CLAUDE_API_KEY = val.trim();
+  var status = document.getElementById('ai-key-status');
+  if (CLAUDE_API_KEY) {
+    status.textContent = 'Live AI'; status.className = 'ai-key-status live';
+  } else {
+    status.textContent = 'Demo mode'; status.className = 'ai-key-status demo';
+  }
+}
+
+async function startAIExplanation() {
+  var block   = document.getElementById('ai-explain-block');
+  var textEl  = document.getElementById('ai-explain-text');
+  var modeEl  = document.getElementById('ai-mode-lbl');
+  textEl.innerHTML = '<span class="ai-cursor"></span>';
+  block.classList.remove('ai-done');
+  chatHistory = [];
+  document.getElementById('chat-msgs').innerHTML = '';
+
+  if (!CLAUDE_API_KEY) {
+    modeEl.textContent = 'AI explanation (demo)';
+    await simulateStream(simulatedExplanations[currentScenario], textEl);
+    block.classList.add('ai-done');
+    chatHistory = [
+      { role: 'user',      content: buildExplainPrompt(currentScenario) },
+      { role: 'assistant', content: simulatedExplanations[currentScenario] }
+    ];
+  } else {
+    modeEl.textContent = 'Generating with Claude…';
+    try {
+      var reply = await callClaudeStream(
+        'You are a helpful transfer support assistant embedded in a banking app, powered by Wise Platform.',
+        [{ role: 'user', content: buildExplainPrompt(currentScenario) }],
+        textEl
+      );
+      modeEl.textContent = 'AI explanation (live)';
+      block.classList.add('ai-done');
+      chatHistory = [
+        { role: 'user',      content: buildExplainPrompt(currentScenario) },
+        { role: 'assistant', content: reply }
+      ];
+    } catch(e) {
+      modeEl.textContent = 'AI explanation (demo)';
+      textEl.innerHTML = '<span class="ai-cursor"></span>';
+      await simulateStream(simulatedExplanations[currentScenario], textEl);
+      block.classList.add('ai-done');
+      chatHistory = [
+        { role: 'user',      content: buildExplainPrompt(currentScenario) },
+        { role: 'assistant', content: simulatedExplanations[currentScenario] }
+      ];
+    }
+  }
+}
+
+async function callClaudeStream(systemPrompt, messages, targetEl) {
+  var res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': CLAUDE_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 200,
+      stream: true,
+      system: systemPrompt,
+      messages: messages
+    })
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  var reader  = res.body.getReader();
+  var decoder = new TextDecoder();
+  var full    = '';
+  targetEl.innerHTML = '';
+  while (true) {
+    var chunk = await reader.read();
+    if (chunk.done) break;
+    var lines = decoder.decode(chunk.value, { stream: true }).split('\n');
+    for (var line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      var data = line.slice(6).trim();
+      if (data === '[DONE]') continue;
+      try {
+        var parsed = JSON.parse(data);
+        if (parsed.type === 'content_block_delta' && parsed.delta && parsed.delta.type === 'text_delta') {
+          full += parsed.delta.text;
+          targetEl.textContent = full;
+          targetEl.innerHTML += '<span class="ai-cursor"></span>';
+        }
+      } catch(e2) {}
+    }
+  }
+  targetEl.textContent = full;
+  return full;
+}
+
+async function simulateStream(text, targetEl) {
+  targetEl.innerHTML = '';
+  var displayed = '';
+  for (var i = 0; i < text.length; i++) {
+    displayed += text[i];
+    targetEl.textContent = displayed;
+    var c = text[i];
+    await new Promise(r => setTimeout(r, c === '.' || c === ',' || c === '—' ? 42 : 11));
+  }
+}
+
+async function sendChatMessage() {
+  var input = document.getElementById('chat-input');
+  var msgs  = document.getElementById('chat-msgs');
+  var msg   = input.value.trim();
+  if (!msg || isStreaming) return;
+  input.value = '';
+
+  var userBubble = document.createElement('div');
+  userBubble.className = 'chat-msg chat-msg-user';
+  userBubble.textContent = msg;
+  msgs.appendChild(userBubble);
+
+  var aiBubble = document.createElement('div');
+  aiBubble.className = 'chat-msg chat-msg-ai';
+  aiBubble.innerHTML = '<span class="ai-cursor"></span>';
+  msgs.appendChild(aiBubble);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  isStreaming = true;
+  chatHistory.push({ role: 'user', content: msg });
+
+  var t = scenarioTransfers[currentScenario];
+  var sysMsg = 'You are a transfer support assistant embedded in Monzo, powered by Wise Platform. ' +
+    'The customer has a ' + t.status.toLowerCase() + ' transfer of ' + t.amount + ' to ' + t.recipient +
+    ' (' + t.corridor + '). Delay reason: ' + t.reason + '. Action required: ' + t.action +
+    '. Answer follow-up questions concisely and helpfully. Max 55 words.';
+
+  try {
+    if (!CLAUDE_API_KEY) throw new Error('no key');
+    var reply = await callClaudeStream(sysMsg, chatHistory, aiBubble);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    var fb = pickFallback(msg, t);
+    chatHistory.push({ role: 'assistant', content: fb });
+    await simulateStream(fb, aiBubble);
+  }
+
+  isStreaming = false;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function pickFallback(q, t) {
+  var lq = q.toLowerCase();
+  if (/rate|exchange/.test(lq))    return fallbackReplies.rate;
+  if (/cancel/.test(lq))           return fallbackReplies.cancel;
+  if (/safe|lost|scam|fraud/.test(lq)) return fallbackReplies.safe;
+  if (/fee|cost|charge/.test(lq))  return fallbackReplies.fee;
+  if (/long|when|time|how/.test(lq)) return "Based on current processing, expect resolution in " + t.eta + ". Wise will notify you as soon as the status changes.";
+  return "Your transfer is progressing as expected for the " + t.corridor + " corridor. If it doesn't resolve within " + t.eta + ", you can contact Wise support with full transfer context pre-filled.";
 }
 
 window.addEventListener('DOMContentLoaded', () => {
