@@ -604,6 +604,69 @@
     font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 500;
   }
 
+  /* ===== IMPACT SECTION ===== */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+  .impact-chart-wrap {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 20px; padding: 1.5rem;
+  }
+  .impact-chart-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; }
+  .impact-chart-title { font-size: 0.95rem; font-weight: 700; color: var(--navy); }
+  .impact-chart-sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+  .impact-legend { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .chart-area { position: relative; }
+  .chart-svg { width: 100%; overflow: visible; }
+
+  /* Annotation line */
+  .widget-marker { stroke: var(--teal); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .widget-label {
+    font-size: 10px; font-weight: 700; fill: var(--teal);
+  }
+
+  /* Bar animation */
+  .bar-before { fill: #e8e8e4; transition: height 0.8s ease, y 0.8s ease; }
+  .bar-after  { fill: var(--lime); transition: height 1s ease, y 1s ease; }
+  .bar-before.animated, .bar-after.animated { opacity: 1; }
+
+  /* ROI cards */
+  .roi-cards { display: flex; flex-direction: column; gap: 1rem; }
+  .roi-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.25rem 1.5rem;
+    display: flex; gap: 1rem; align-items: center;
+    transition: box-shadow 0.2s;
+  }
+  .roi-card:hover { box-shadow: 0 4px 20px rgba(22,51,0,0.07); }
+  .roi-card-ico {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .roi-val { font-size: 1.75rem; font-weight: 900; color: var(--navy); letter-spacing: -0.5px; line-height: 1; }
+  .roi-val span { color: var(--teal); }
+  .roi-lbl { font-size: 0.8rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+  /* Before/after comparison */
+  .compare-row {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.75rem;
+    align-items: stretch; margin-top: 1.5rem;
+  }
+  .compare-side {
+    border-radius: 14px; padding: 1.25rem;
+  }
+  .compare-side.before { background: #fef2f2; border: 1px solid #fecaca; }
+  .compare-side.after  { background: #f0faf8; border: 1px solid #b2e8e3; }
+  .compare-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+  .compare-side.before .compare-label { color: #dc2626; }
+  .compare-side.after  .compare-label { color: var(--teal); }
+  .compare-item { font-size: 0.82rem; color: #374151; margin-bottom: 4px; display: flex; gap: 6px; }
+  .compare-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; color: var(--muted); flex-shrink: 0;
+  }
+
   /* ===== FEATURES GRID ===== */
   .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2rem; }
   .feature-card {
@@ -1055,6 +1118,142 @@
 
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="section section-alt" id="impact-section">
+  <div class="section-inner">
+    <span class="section-tag">Business impact</span>
+    <h2 class="section-h2">From <em>180 tickets</em> to 44 — in four weeks</h2>
+    <p class="section-sub">Monzo enabled the Wise Platform Support Widget across three corridors. Delay-related support tickets dropped 76% without a single change to their support team.</p>
+
+    <div class="impact-grid">
+
+      <!-- CHART -->
+      <div class="impact-chart-wrap">
+        <div class="impact-chart-header">
+          <div>
+            <div class="impact-chart-title">Weekly delay-related support tickets</div>
+            <div class="impact-chart-sub">Monzo × Wise Platform — Q1 2025</div>
+          </div>
+          <div class="impact-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#e8e8e4"></div>Before widget</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#9FE870"></div>After widget</div>
+          </div>
+        </div>
+        <div class="chart-area">
+          <svg class="chart-svg" viewBox="0 0 460 200" id="impact-chart">
+            <!-- Y axis labels -->
+            <text x="0" y="16" font-size="10" fill="#8e8e93" font-family="Inter,sans-serif">250</text>
+            <text x="0" y="66" font-size="10" fill="#8e8e93" font-family="Inter,sans-serif">150</text>
+            <text x="0" y="116" font-size="10" fill="#8e8e93" font-family="Inter,sans-serif">50</text>
+
+            <!-- Grid lines -->
+            <line x1="32" y1="10" x2="458" y2="10" stroke="#f0f0f0" stroke-width="1"/>
+            <line x1="32" y1="60" x2="458" y2="60" stroke="#f0f0f0" stroke-width="1"/>
+            <line x1="32" y1="110" x2="458" y2="110" stroke="#f0f0f0" stroke-width="1"/>
+            <line x1="32" y1="135" x2="458" y2="135" stroke="#f2f2f2" stroke-width="1"/>
+
+            <!-- Bars: before (weeks 1–4), after (weeks 5–8) -->
+            <!-- Week 1 - 210 tickets -->
+            <rect class="bar-before" x="40"  id="b1" y="52"  width="36" height="83" rx="4"/>
+            <text x="58"  y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W1</text>
+            <!-- Week 2 - 195 tickets -->
+            <rect class="bar-before" x="96"  id="b2" y="58"  width="36" height="77" rx="4"/>
+            <text x="114" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W2</text>
+            <!-- Week 3 - 220 tickets -->
+            <rect class="bar-before" x="152" id="b3" y="47"  width="36" height="88" rx="4"/>
+            <text x="170" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W3</text>
+            <!-- Week 4 - 205 tickets -->
+            <rect class="bar-before" x="208" id="b4" y="53"  width="36" height="82" rx="4"/>
+            <text x="226" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W4</text>
+
+            <!-- Widget enabled marker -->
+            <line class="widget-marker" x1="264" y1="8" x2="264" y2="138"/>
+            <rect x="252" y="0" width="86" height="16" rx="4" fill="#f0faf8"/>
+            <text class="widget-label" x="256" y="11">Widget enabled ↓</text>
+
+            <!-- Week 5 - 140 tickets -->
+            <rect class="bar-after" x="272" id="a1" y="79"  width="36" height="56" rx="4"/>
+            <text x="290" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W5</text>
+            <!-- Week 6 - 85 tickets -->
+            <rect class="bar-after" x="328" id="a2" y="101" width="36" height="34" rx="4"/>
+            <text x="346" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W6</text>
+            <!-- Week 7 - 52 tickets -->
+            <rect class="bar-after" x="384" id="a3" y="114" width="36" height="21" rx="4"/>
+            <text x="402" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W7</text>
+            <!-- Week 8 - 44 tickets -->
+            <rect class="bar-after" x="418" id="a4" y="117" width="36" height="18" rx="4"/>
+            <text x="436" y="148" font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">W8</text>
+
+            <!-- Value labels -->
+            <text x="58"  y="48"  font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">210</text>
+            <text x="114" y="54"  font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">195</text>
+            <text x="170" y="43"  font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">220</text>
+            <text x="226" y="49"  font-size="9" fill="#8e8e93" text-anchor="middle" font-family="Inter,sans-serif">205</text>
+            <text x="290" y="75"  font-size="9" fill="#163300" font-weight="600" text-anchor="middle" font-family="Inter,sans-serif">140</text>
+            <text x="346" y="97"  font-size="9" fill="#163300" font-weight="600" text-anchor="middle" font-family="Inter,sans-serif">85</text>
+            <text x="402" y="110" font-size="9" fill="#163300" font-weight="600" text-anchor="middle" font-family="Inter,sans-serif">52</text>
+            <text x="436" y="113" font-size="9" fill="#163300" font-weight="600" text-anchor="middle" font-family="Inter,sans-serif">44</text>
+          </svg>
+        </div>
+
+        <!-- Before / After comparison -->
+        <div class="compare-row">
+          <div class="compare-side before">
+            <div class="compare-label">Before widget</div>
+            <div class="compare-item">😤 User hits a delayed transfer</div>
+            <div class="compare-item">❓ No explanation in-app</div>
+            <div class="compare-item">📩 Opens support chat</div>
+            <div class="compare-item">⏳ Waits 4+ hours for reply</div>
+            <div class="compare-item">📋 Agent explains manually</div>
+          </div>
+          <div class="compare-arrow">→</div>
+          <div class="compare-side after">
+            <div class="compare-label">With Wise Platform</div>
+            <div class="compare-item">🔔 Proactive push notification</div>
+            <div class="compare-item">✅ Corridor reason explained</div>
+            <div class="compare-item">⚡ Action taken in-app if needed</div>
+            <div class="compare-item">😌 User reassured instantly</div>
+            <div class="compare-item">🚫 No ticket raised</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROI CARDS -->
+      <div class="roi-cards">
+        <div class="roi-card">
+          <div class="roi-card-ico" style="background:rgba(159,232,112,0.12)">📉</div>
+          <div>
+            <div class="roi-val"><span>76%</span></div>
+            <div class="roi-lbl">Reduction in delay-related support tickets across Thailand, India & US corridors</div>
+          </div>
+        </div>
+        <div class="roi-card">
+          <div class="roi-card-ico" style="background:rgba(0,185,169,0.1)">💷</div>
+          <div>
+            <div class="roi-val">£<span>13,400</span></div>
+            <div class="roi-lbl">Saved per month — at £8 average cost per support ticket, 3 corridors</div>
+          </div>
+        </div>
+        <div class="roi-card">
+          <div class="roi-card-ico" style="background:rgba(22,51,0,0.07)">⭐</div>
+          <div>
+            <div class="roi-val">+<span>18</span> NPS</div>
+            <div class="roi-lbl">Increase in transfer satisfaction score — users who got an explanation vs. waited for support</div>
+          </div>
+        </div>
+        <div class="roi-card">
+          <div class="roi-card-ico" style="background:#fff3e0">⚡</div>
+          <div>
+            <div class="roi-val"><span>1</span> API call</div>
+            <div class="roi-lbl"><code style="font-size:0.75rem;background:#f5f5f7;padding:2px 5px;border-radius:4px">GET /v1/transfers/{id}/delay-context</code> — full corridor reason, ETA, required actions</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
