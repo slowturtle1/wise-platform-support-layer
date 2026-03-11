@@ -543,6 +543,67 @@
   .wpt-scen { display: none; }
   .wpt-scen.on { display: block; }
 
+  /* ===== SCREEN 0: LOCK SCREEN ===== */
+  .s0-bg {
+    min-height: 100%;
+    background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+  .s0-bg::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(159,232,112,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .s0-status {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 22px 0; font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+  .s0-time {
+    text-align: center; margin-top: 28px;
+    font-size: 72px; font-weight: 200; color: #fff;
+    letter-spacing: -2px; line-height: 1;
+  }
+  .s0-date {
+    text-align: center; font-size: 16px;
+    color: rgba(255,255,255,0.7); margin-top: 6px; font-weight: 400;
+  }
+  /* Notification banner */
+  .s0-notif {
+    margin: 24px 14px 0;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px; padding: 12px 14px;
+    cursor: pointer;
+    transform: translateY(-110%); opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s;
+  }
+  .s0-notif.show { transform: translateY(0); opacity: 1; }
+  .s0-notif-row { display: flex; align-items: center; gap: 10px; }
+  .s0-notif-app {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+    background: #FF3B2F;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .s0-notif-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+  .s0-notif-app-name { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); }
+  .s0-notif-time { font-size: 11px; color: rgba(255,255,255,0.45); }
+  .s0-notif-title { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; }
+  .s0-notif-body { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; line-height: 1.4; }
+  .s0-notif-wise {
+    display: flex; align-items: center; gap: 5px; margin-top: 8px;
+    padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .s0-notif-wise-badge { background: var(--navy); color: var(--lime); font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 3px; }
+  .s0-notif-wise-txt { font-size: 10px; color: rgba(255,255,255,0.4); }
+  .s0-hint {
+    text-align: center; margin-top: auto; padding-bottom: 32px;
+    font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 500;
+  }
+
   /* ===== FEATURES GRID ===== */
   .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2rem; }
   .feature-card {
@@ -712,8 +773,39 @@
       <div class="phone-wrap">
         <div class="demo-phone" id="demo-phone">
 
+          <!-- SCREEN 0: LOCK SCREEN + NOTIFICATION -->
+          <div class="p-screen" id="p-s0">
+            <div class="s0-bg">
+              <div class="s0-status">
+                <span>9:41</span><span style="font-size:12px">●●●</span>
+              </div>
+              <div class="s0-time">9:41</div>
+              <div class="s0-date">Wednesday, 11 March</div>
+
+              <div class="s0-notif" id="s0-notif" onclick="notifTap()">
+                <div class="s0-notif-row">
+                  <div class="s0-notif-app">🏦</div>
+                  <div style="flex:1">
+                    <div class="s0-notif-head">
+                      <span class="s0-notif-app-name" id="s0-notif-appname">Monzo</span>
+                      <span class="s0-notif-time">now</span>
+                    </div>
+                    <div class="s0-notif-title" id="s0-notif-title">Transfer to Thailand delayed</div>
+                    <div class="s0-notif-body" id="s0-notif-body">Your £850 to Somsak Chai is held for AML compliance. Tap to find out why.</div>
+                  </div>
+                </div>
+                <div class="s0-notif-wise">
+                  <span class="s0-notif-wise-badge">WISE</span>
+                  <span class="s0-notif-wise-txt">Delay context powered by Wise Platform</span>
+                </div>
+              </div>
+
+              <div class="s0-hint">Tap the notification to continue</div>
+            </div>
+          </div>
+
           <!-- SCREEN 1 -->
-          <div class="p-screen" id="p-s1">
+          <div class="p-screen slide-right" id="p-s1">
             <div class="s1-bg">
               <div class="p-status" style="background:#f5f5f7">
                 <span>9:41</span><span style="font-size:12px">●●●</span>
@@ -1018,6 +1110,8 @@
 </div>
 
 <script>
+var currentScenario = 'thailand';
+
 function pGo(from, to) {
   document.getElementById(from).classList.add('slide-left');
   document.getElementById(to).classList.remove('slide-right');
@@ -1033,21 +1127,68 @@ function pOpenSheet() {
 function pCloseSheet() {
   document.getElementById('p-overlay').classList.remove('open');
 }
+
+// Notification tap — go straight to transfer detail + open widget
+function notifTap() {
+  // Reset s0 → s1 (slide left), s1 → s2 (slide left)
+  document.getElementById('p-s0').classList.add('slide-left');
+  document.getElementById('p-s1').classList.remove('slide-right');
+  document.getElementById('p-s1').classList.add('slide-left');
+  document.getElementById('p-s2').classList.remove('slide-right');
+  setTimeout(pOpenSheet, 180);
+}
+
+// Reset phone to lock screen + trigger notification
+function resetToLockScreen(scenario) {
+  pCloseSheet();
+  // Reset all screens
+  ['p-s0','p-s1','p-s2'].forEach(id => {
+    document.getElementById(id).classList.remove('slide-left');
+  });
+  document.getElementById('p-s1').classList.add('slide-right');
+  document.getElementById('p-s2').classList.add('slide-right');
+  // Hide then re-show notification with bounce
+  const notif = document.getElementById('s0-notif');
+  notif.classList.remove('show');
+  setTimeout(() => notif.classList.add('show'), 800);
+}
+
 function setSupportScenario(name, btn) {
+  currentScenario = name;
   document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.wpt-scen').forEach(s => s.classList.remove('on'));
   document.getElementById('wpt-' + name).classList.add('on');
+
   const titles = {
     thailand: 'Your transfer to Thailand is delayed',
     india:    'Your transfer to India needs attention',
     us:       'Your US transfer is processing'
   };
+  const notifTitles = {
+    thailand: 'Transfer to Thailand delayed',
+    india:    'Transfer to India needs action',
+    us:       'US transfer processing slowly'
+  };
+  const notifBodies = {
+    thailand: 'Your £850 to Somsak Chai is held for AML compliance. Tap to find out why.',
+    india:    'Your £500 to Priya Sharma needs a purpose code. Tap to resolve.',
+    us:       'Your £1,200 to James Wilson is waiting on ACH settlement. Tap for details.'
+  };
+
   document.getElementById('wpt-title').textContent = titles[name];
-  document.getElementById('p-s1').classList.add('slide-left');
-  document.getElementById('p-s2').classList.remove('slide-right');
-  setTimeout(pOpenSheet, 120);
+  document.getElementById('s0-notif-title').textContent = notifTitles[name];
+  document.getElementById('s0-notif-body').textContent = notifBodies[name];
+
+  resetToLockScreen(name);
 }
+
+// Auto-show notification on load
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.getElementById('s0-notif').classList.add('show');
+  }, 1200);
+});
 </script>
 </body>
 </html>
