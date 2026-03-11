@@ -5,124 +5,268 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Wise Platform Support Widget</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --navy:   #163300;
+    --lime:   #9FE870;
+    --lime-dk:#7ed44e;
+    --white:  #ffffff;
+    --bg:     #f9f9f7;
+    --border: #e8e8e4;
+    --muted:  #6b7280;
+    --text:   #1a1a1a;
+    --teal:   #00b9a9;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(120, 80, 255, 0.13) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(0, 185, 169, 0.1) 0%, transparent 40%),
-      radial-gradient(ellipse at 55% 85%, rgba(22, 51, 0, 0.25) 0%, transparent 50%),
-      linear-gradient(160deg, #080c14 0%, #0d1520 40%, #100c1c 70%, #080e18 100%);
-    min-height: 100vh;
-    color: #fff;
+    background: var(--white);
+    color: var(--text);
     line-height: 1.5;
   }
 
-  /* NAV */
+  /* ===== NAV ===== */
   nav {
-    padding: 0 2rem;
-    display: flex; align-items: center;
-    height: 64px;
     position: sticky; top: 0; z-index: 100;
-    background: rgba(8, 12, 20, 0.75);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    height: 68px;
+    display: flex; align-items: center;
+    padding: 0 2.5rem;
+    gap: 2rem;
   }
-  .logo { font-size: 1.2rem; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
-  .logo-dot { color: #9FE870; }
-  .nav-tagline {
-    margin-left: auto; font-size: 0.8rem;
-    color: rgba(255,255,255,0.3); font-weight: 500; letter-spacing: 0.3px;
+  .nav-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 1.25rem; font-weight: 800; color: var(--navy);
+    letter-spacing: -0.5px; text-decoration: none;
   }
-
-  /* MAIN */
-  .main { padding: 2.5rem 2rem; max-width: 960px; margin: 0 auto; }
-
-  /* SECTION HEADER */
-  .section-header { margin-bottom: 1.75rem; }
-  .section-header h2 {
-    font-size: 1.75rem; font-weight: 800;
-    background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.55));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .section-header p { color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-top: 0.4rem; line-height: 1.65; max-width: 580px; }
-
-  /* DESC CARD */
-  .desc-card {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.09);
-    border-radius: 20px; padding: 1.25rem 1.5rem;
-    margin-bottom: 2rem;
-    display: flex; gap: 1rem; align-items: flex-start;
-  }
-  .desc-icon {
-    width: 44px; height: 44px;
-    background: rgba(159,232,112,0.1);
-    border: 1px solid rgba(159,232,112,0.2);
-    border-radius: 12px;
+  .nav-logo-mark {
+    width: 32px; height: 32px;
+    background: var(--navy);
+    border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; flex-shrink: 0;
   }
-  .desc-title { font-size: 1rem; font-weight: 700; color: #fff; }
-  .desc-body { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-top: 0.3rem; line-height: 1.65; }
+  .nav-links {
+    display: flex; gap: 0.25rem; margin-left: 1rem;
+  }
+  .nav-link {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.9rem; font-weight: 500; color: var(--muted);
+    border-radius: 6px; cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    border: none; background: none; font-family: inherit;
+  }
+  .nav-link:hover { color: var(--navy); background: var(--bg); }
+  .nav-cta {
+    margin-left: auto;
+    background: var(--navy); color: var(--white);
+    border: none; border-radius: 9999px;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .nav-cta:hover { background: #1e4800; }
 
-  /* SCENARIO BAR */
-  .scenario-label {
-    text-align: center; font-size: 0.72rem; font-weight: 700;
-    letter-spacing: 0.8px; text-transform: uppercase;
-    color: rgba(255,255,255,0.25); margin-bottom: 0.75rem;
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--navy);
+    padding: 5rem 2.5rem 5.5rem;
+    text-align: center;
+    position: relative; overflow: hidden;
   }
-  .support-scenario-bar {
-    display: flex; justify-content: center; gap: 0.5rem;
-    margin-bottom: 2.25rem; flex-wrap: wrap;
+  .hero::before {
+    content: '';
+    position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse, rgba(159,232,112,0.12) 0%, transparent 65%);
+    pointer-events: none;
   }
-  .support-scenario-btn {
-    padding: 0.45rem 1.1rem; border-radius: 40px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.06);
-    font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.5);
-    cursor: pointer; transition: all 0.2s; font-family: inherit;
-    backdrop-filter: blur(10px);
-  }
-  .support-scenario-btn:hover { background: rgba(255,255,255,0.11); color: rgba(255,255,255,0.85); }
-  .support-scenario-btn.active {
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
     background: rgba(159,232,112,0.12);
-    border-color: rgba(159,232,112,0.35);
-    color: #9FE870;
+    border: 1px solid rgba(159,232,112,0.25);
+    border-radius: 9999px; padding: 0.3rem 0.9rem;
+    font-size: 0.78rem; font-weight: 700; color: var(--lime);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--lime); }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 3.75rem);
+    font-weight: 900; color: var(--white);
+    line-height: 1.1; letter-spacing: -1.5px;
+    max-width: 780px; margin: 0 auto 1.25rem;
+  }
+  .hero h1 em {
+    font-style: normal; color: var(--lime);
+  }
+  .hero-sub {
+    font-size: 1.1rem; color: rgba(255,255,255,0.6);
+    max-width: 560px; margin: 0 auto 2.25rem;
+    line-height: 1.65;
+  }
+  .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--lime); color: var(--navy);
+    border: none; border-radius: 9999px;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem; font-weight: 800;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--lime-dk); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    border-radius: 9999px; padding: 0.75rem 1.75rem;
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.15); }
+
+  /* Trust bar */
+  .trust-bar {
+    background: rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 3.5rem; padding: 1.25rem 2.5rem 0;
+    display: flex; align-items: center; justify-content: center; gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .trust-lbl { font-size: 0.75rem; color: rgba(255,255,255,0.35); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+  .trust-partners { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .trust-partner { font-size: 0.9rem; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: -0.3px; }
+
+  /* ===== STATS ROW ===== */
+  .stats-row {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2.5rem;
+    display: flex; justify-content: center; gap: 0;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    flex: 1; min-width: 160px; max-width: 240px;
+    text-align: center; padding: 0 2rem;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-val { font-size: 2rem; font-weight: 900; color: var(--navy); letter-spacing: -1px; }
+  .stat-val span { color: var(--teal); }
+  .stat-lbl { font-size: 0.8rem; color: var(--muted); margin-top: 3px; font-weight: 500; }
+
+  /* ===== MAIN CONTENT ===== */
+  .section { padding: 5rem 2.5rem; }
+  .section-inner { max-width: 1080px; margin: 0 auto; }
+  .section-alt { background: var(--bg); }
+
+  .section-tag {
+    display: inline-block;
+    background: rgba(22,51,0,0.07);
+    color: var(--navy); border-radius: 6px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.4px; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-h2 {
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-weight: 900; color: var(--navy);
+    line-height: 1.15; letter-spacing: -0.75px;
+    max-width: 600px;
+    margin-bottom: 0.75rem;
+  }
+  .section-h2 em { font-style: normal; color: var(--teal); }
+  .section-sub {
+    font-size: 1rem; color: var(--muted);
+    max-width: 520px; line-height: 1.7;
+    margin-bottom: 2.5rem;
   }
 
-  /* PHONE */
-  .phone-wrap { display: flex; justify-content: center; }
+  /* ===== DEMO LAYOUT ===== */
+  .demo-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 4rem; align-items: start;
+  }
+  .demo-left { padding-top: 0.5rem; }
+
+  /* Scenario buttons */
+  .scenario-lbl {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .scenario-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+  .scenario-btn {
+    padding: 0.45rem 1rem; border-radius: 9999px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    font-size: 0.83rem; font-weight: 600; color: var(--muted);
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .scenario-btn:hover { border-color: var(--navy); color: var(--navy); }
+  .scenario-btn.active {
+    background: var(--navy); color: var(--lime);
+    border-color: var(--navy);
+  }
+
+  /* How it works list */
+  .how-list { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 0.5rem; }
+  .how-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .how-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--navy); color: var(--lime);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 800; flex-shrink: 0; margin-top: 1px;
+  }
+  .how-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--navy); }
+  .how-text p { font-size: 0.875rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+
+  /* API callout */
+  .api-callout {
+    margin-top: 2rem;
+    background: var(--navy); border-radius: 16px; padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .api-callout-ico {
+    width: 40px; height: 40px; background: rgba(159,232,112,0.15);
+    border: 1px solid rgba(159,232,112,0.25);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .api-callout h4 { font-size: 0.9rem; font-weight: 700; color: var(--white); }
+  .api-callout p { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .api-callout-btn {
+    margin-left: auto; flex-shrink: 0;
+    background: var(--lime); color: var(--navy);
+    border: none; border-radius: 9999px;
+    padding: 0.45rem 1rem;
+    font-size: 0.82rem; font-weight: 800;
+    cursor: pointer; font-family: inherit;
+  }
+
+  /* ===== PHONE ===== */
+  .phone-wrap { display: flex; justify-content: center; position: sticky; top: 88px; }
   .demo-phone {
     width: 375px; height: 780px;
-    background: linear-gradient(160deg, #0c1828 0%, #11102a 100%);
+    background: #f5f5f7;
     border-radius: 44px; overflow: hidden; position: relative;
     box-shadow:
-      0 48px 96px rgba(0,0,0,0.65),
-      0 0 0 1px rgba(255,255,255,0.1),
-      inset 0 0 0 1px rgba(255,255,255,0.04);
+      0 32px 72px rgba(22,51,0,0.18),
+      0 0 0 1px rgba(22,51,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.6);
     flex-shrink: 0;
-  }
-  .demo-phone::before {
-    content: '';
-    position: absolute; top: -15%; left: 5%; right: 5%; height: 55%;
-    background: radial-gradient(ellipse, rgba(0,185,169,0.1) 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
-  }
-  .demo-phone::after {
-    content: '';
-    position: absolute; bottom: -10%; left: 20%; right: 20%; height: 40%;
-    background: radial-gradient(ellipse, rgba(120,80,255,0.08) 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
   }
 
   .p-screen {
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    overflow-y: auto; background: transparent;
+    background: #f5f5f7; overflow-y: auto;
     transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
     z-index: 1;
   }
@@ -133,175 +277,152 @@
   .p-status {
     height: 44px; display: flex; align-items: center;
     justify-content: space-between; padding: 12px 22px 0;
-    font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85);
+    font-size: 13px; font-weight: 600; color: #1c1c1e;
+    background: var(--white);
   }
 
-  /* ===== SCREEN 1 ===== */
-  .s1-bg { min-height: 100%; padding-bottom: 24px; }
+  /* SCREEN 1 */
+  .s1-bg { min-height: 100%; background: #f5f5f7; padding-bottom: 24px; }
+  .s1-header { background: var(--white); padding: 6px 20px 16px; }
+  .s1-greeting { font-size: 12px; color: #8e8e93; }
+  .s1-title { font-size: 26px; font-weight: 800; color: #1c1c1e; margin-top: 1px; letter-spacing: -0.5px; }
 
-  .s1-header { padding: 2px 20px 18px; }
-  .s1-greeting { font-size: 12px; color: rgba(255,255,255,0.35); font-weight: 400; }
-  .s1-title { font-size: 26px; font-weight: 800; color: #fff; margin-top: 1px; letter-spacing: -0.5px; }
-
-  /* Balance card */
+  /* Balance card — Wise lime green */
   .s1-balance {
-    margin: 0 14px 14px;
-    background: rgba(255,255,255,0.07);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.11);
-    border-radius: 22px; padding: 20px; position: relative; overflow: hidden;
+    margin: 12px 14px;
+    background: var(--navy); border-radius: 20px; padding: 20px;
+    position: relative; overflow: hidden;
   }
   .s1-balance::before {
-    content: ''; position: absolute; top: -30px; right: -20px;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle, rgba(159,232,112,0.13) 0%, transparent 70%);
-    pointer-events: none;
+    content: ''; position: absolute; top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(159,232,112,0.2) 0%, transparent 70%);
   }
-  .s1-bal-lbl { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 500; letter-spacing: 0.3px; }
-  .s1-bal-amt { font-size: 38px; font-weight: 700; color: #fff; margin-top: 4px; letter-spacing: -1px; }
-  .s1-bal-sub { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 6px; }
+  .s1-bal-lbl { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; }
+  .s1-bal-amt { font-size: 38px; font-weight: 800; color: var(--white); margin-top: 4px; letter-spacing: -1px; }
+  .s1-bal-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 5px; }
 
-  /* Action pill buttons */
-  .s1-actions { display: flex; gap: 8px; margin: 0 14px 20px; }
+  /* Pill buttons */
+  .s1-actions { display: flex; gap: 8px; margin: 10px 14px 16px; }
   .s1-action-btn {
     flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px;
-    background: rgba(255,255,255,0.09);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 40px; padding: 10px 8px;
-    font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.8);
-    cursor: pointer; font-family: inherit; transition: background 0.2s;
+    background: var(--white); border: 1px solid #e5e5ea;
+    border-radius: 9999px; padding: 10px 8px;
+    font-size: 12px; font-weight: 600; color: #1c1c1e;
+    cursor: pointer; font-family: inherit;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   }
-  .s1-action-btn:active { background: rgba(255,255,255,0.16); }
 
-  /* Section label */
   .s1-sect-lbl {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.7px; color: rgba(255,255,255,0.25);
-    padding: 0 20px 10px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: #8e8e93;
+    padding: 0 20px 8px;
   }
-
-  /* TX list */
   .s1-txlist {
     margin: 0 14px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px; overflow: hidden;
+    background: var(--white); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
   }
   .s1-tx {
     display: flex; align-items: center;
     padding: 13px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid #f2f2f5;
     cursor: pointer; transition: background 0.15s;
   }
   .s1-tx:last-child { border-bottom: none; }
-  .s1-tx:active { background: rgba(255,255,255,0.04); }
+  .s1-tx:active { background: #f9f9f9; }
   .s1-tx-ico {
     width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: #f5f5f7; border: 1px solid #e5e5ea;
     display: flex; align-items: center; justify-content: center;
     font-size: 22px; flex-shrink: 0;
   }
   .s1-tx-info { flex: 1; margin: 0 12px; }
-  .s1-tx-name { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.9); }
-  .s1-tx-meta { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+  .s1-tx-name { font-size: 14px; font-weight: 600; color: #1c1c1e; }
+  .s1-tx-meta { font-size: 12px; color: #8e8e93; margin-top: 2px; }
   .s1-tx-badge {
     display: inline-flex; align-items: center; gap: 4px;
-    background: rgba(255,149,0,0.12);
-    border: 1px solid rgba(255,149,0,0.25);
+    background: #fff3e0; border: 1px solid #ffcc80;
     border-radius: 5px; padding: 2px 7px;
-    font-size: 10px; font-weight: 700; color: #FF9500; margin-top: 4px;
+    font-size: 10px; font-weight: 700; color: #e65100; margin-top: 4px;
   }
   .s1-tx-right { text-align: right; flex-shrink: 0; }
-  .s1-tx-val { font-size: 14px; font-weight: 600; color: #fff; }
-  .s1-tx-ok { font-size: 11px; color: #9FE870; font-weight: 600; margin-top: 2px; }
-  .s1-tx-delay { font-size: 11px; color: #FF9500; font-weight: 600; margin-top: 2px; }
+  .s1-tx-val { font-size: 14px; font-weight: 600; color: #1c1c1e; }
+  .s1-tx-ok { font-size: 11px; color: #34c759; font-weight: 600; margin-top: 2px; }
+  .s1-tx-delay { font-size: 11px; color: #ff9500; font-weight: 600; margin-top: 2px; }
 
-  /* ===== SCREEN 2 ===== */
-  .s2-bg { min-height: 100%; padding-bottom: 24px; }
-
+  /* SCREEN 2 */
+  .s2-bg { min-height: 100%; background: #f5f5f7; padding-bottom: 24px; }
   .p-nav {
     display: flex; align-items: center;
-    padding: 6px 16px 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 6px 16px 14px; background: var(--white);
+    border-bottom: 1px solid #f0f0f0;
   }
   .p-back {
-    color: #9FE870; font-size: 14px; font-weight: 500;
+    color: var(--teal); font-size: 14px; font-weight: 500;
     cursor: pointer; background: none; border: none;
     font-family: inherit; display: flex; align-items: center; gap: 4px; padding: 0;
   }
-  .p-nav-t { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: #fff; }
+  .p-nav-t { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: #1c1c1e; }
   .p-nav-sp { width: 60px; }
 
   .tx-hero { padding: 24px 20px 16px; text-align: center; }
   .tx-hero-flag {
     width: 68px; height: 68px; border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--white); border: 1px solid #e5e5ea;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     display: flex; align-items: center; justify-content: center;
     font-size: 34px; margin: 0 auto 12px;
   }
-  .tx-hero-amt { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-  .tx-hero-to { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+  .tx-hero-amt { font-size: 34px; font-weight: 800; color: #1c1c1e; letter-spacing: -0.5px; }
+  .tx-hero-to { font-size: 13px; color: #8e8e93; margin-top: 4px; }
   .tx-spill {
     display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(255,149,0,0.1);
-    border: 1px solid rgba(255,149,0,0.22);
-    border-radius: 40px; padding: 5px 14px;
-    margin-top: 10px; font-size: 12px; font-weight: 600; color: #FF9500;
+    background: #fff3e0; border: 1px solid #ffcc80;
+    border-radius: 9999px; padding: 5px 14px;
+    margin-top: 10px; font-size: 12px; font-weight: 600; color: #e65100;
   }
-  .tx-spill-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #FF9500; animation: blink 1.4s infinite;
-  }
+  .tx-spill-dot { width: 7px; height: 7px; border-radius: 50%; background: #ff9500; animation: blink 1.4s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   .tx-rows {
     margin: 0 14px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 18px; overflow: hidden;
+    background: var(--white); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
   .tx-row {
     display: flex; justify-content: space-between;
-    padding: 13px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 13px;
+    padding: 13px 16px; border-bottom: 1px solid #f2f2f5; font-size: 13px;
   }
   .tx-row:last-child { border-bottom: none; }
-  .tx-row-lbl { color: rgba(255,255,255,0.3); }
-  .tx-row-val { font-weight: 600; color: rgba(255,255,255,0.9); }
+  .tx-row-lbl { color: #8e8e93; }
+  .tx-row-val { font-weight: 600; color: #1c1c1e; }
 
   /* Wise CTA card */
   .wpt-cta {
     margin: 14px 14px 0;
-    background: rgba(159,232,112,0.06);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(159,232,112,0.18);
+    background: var(--white);
+    border: 1.5px solid var(--border);
     border-radius: 18px; padding: 14px;
-    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    cursor: pointer; transition: border-color 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
-  .wpt-cta:active { background: rgba(159,232,112,0.1); }
+  .wpt-cta:hover { border-color: var(--navy); }
   .wpt-cta-row { display: flex; align-items: center; gap: 12px; }
   .wpt-cta-ico {
     width: 44px; height: 44px;
-    background: rgba(22,51,0,0.7);
-    border: 1px solid rgba(159,232,112,0.25);
-    border-radius: 12px;
+    background: var(--navy); border-radius: 12px;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .wpt-cta-txt h4 { font-size: 14px; font-weight: 700; color: #fff; }
-  .wpt-cta-txt p { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 2px; }
-  .wpt-cta-arr { margin-left: auto; font-size: 20px; color: rgba(255,255,255,0.2); }
+  .wpt-cta-txt h4 { font-size: 14px; font-weight: 700; color: #1c1c1e; }
+  .wpt-cta-txt p { font-size: 12px; color: #8e8e93; margin-top: 2px; }
+  .wpt-cta-arr { margin-left: auto; font-size: 20px; color: #c0c0c0; }
   .wpt-powered { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
   .wpt-badge-sm {
-    background: rgba(22,51,0,0.85); color: #9FE870;
-    font-size: 9px; font-weight: 800; padding: 2px 6px;
-    border-radius: 4px; border: 1px solid rgba(159,232,112,0.25);
+    background: var(--navy); color: var(--lime);
+    font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;
   }
-  .wpt-powered-txt { font-size: 11px; color: rgba(255,255,255,0.22); }
+  .wpt-powered-txt { font-size: 11px; color: #aaa; }
 
   /* ===== OVERLAY + BOTTOM SHEET ===== */
   .p-overlay {
@@ -309,23 +430,21 @@
     background: rgba(0,0,0,0); pointer-events: none;
     transition: background 0.3s; z-index: 20;
   }
-  .p-overlay.open { background: rgba(0,0,0,0.6); pointer-events: all; }
+  .p-overlay.open { background: rgba(0,0,0,0.4); pointer-events: all; }
   .p-sheet {
     position: absolute; bottom: 0; left: 0; right: 0;
-    background: rgba(12, 18, 32, 0.94);
-    backdrop-filter: blur(32px);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: var(--white);
     border-radius: 24px 24px 0 0;
     transform: translateY(100%);
     transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
     max-height: 92%; overflow: hidden;
     display: flex; flex-direction: column;
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
   }
   .p-overlay.open .p-sheet { transform: translateY(0); }
 
   .p-sheet-drag {
-    width: 36px; height: 4px;
-    background: rgba(255,255,255,0.18); border-radius: 2px;
+    width: 36px; height: 4px; background: #e0e0e0; border-radius: 2px;
     margin: 10px auto 0; flex-shrink: 0;
   }
   .p-sheet-top {
@@ -335,50 +454,33 @@
   }
   .wpt-brand { display: flex; align-items: center; gap: 8px; }
   .wpt-brand-ico {
-    width: 28px; height: 28px;
-    background: rgba(22,51,0,0.9);
-    border: 1px solid rgba(159,232,112,0.3);
-    border-radius: 7px;
+    width: 28px; height: 28px; background: var(--navy); border-radius: 7px;
     display: flex; align-items: center; justify-content: center;
   }
-  .wpt-brand-lbl { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); }
+  .wpt-brand-lbl { font-size: 11px; font-weight: 700; color: var(--navy); }
   .p-sheet-x {
-    width: 26px; height: 26px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 50%; cursor: pointer;
-    font-size: 12px; color: rgba(255,255,255,0.45);
+    width: 26px; height: 26px; background: #f0f0f0; border-radius: 50%;
+    border: none; cursor: pointer; font-size: 12px; color: #666;
     display: flex; align-items: center; justify-content: center;
   }
 
   .p-sheet-body { padding: 0 16px 32px; overflow-y: auto; flex: 1; }
+  .wpt-h1 { font-size: 20px; font-weight: 800; color: var(--navy); margin-top: 14px; line-height: 1.25; letter-spacing: -0.3px; }
+  .wpt-h2 { font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.55; }
 
-  .wpt-h1 {
-    font-size: 20px; font-weight: 800; color: #fff;
-    margin-top: 14px; line-height: 1.25; letter-spacing: -0.3px;
-  }
-  .wpt-h2 { font-size: 13px; color: rgba(255,255,255,0.38); margin-top: 5px; line-height: 1.55; }
-
-  /* Diagnosis block */
+  /* Diagnosis */
   .wpt-diag {
-    background: rgba(0,185,169,0.07);
-    border: 1px solid rgba(0,185,169,0.18);
-    border-left: 3px solid rgba(0,185,169,0.5);
-    border-radius: 14px; padding: 14px; margin-top: 14px;
+    background: #f0faf8; border: 1px solid #b2e8e3;
+    border-left: 3px solid var(--teal);
+    border-radius: 12px; padding: 14px; margin-top: 14px;
   }
-  .wpt-diag-tag {
-    font-size: 9px; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.8px; color: rgba(0,185,169,0.75);
-  }
-  .wpt-diag-title { font-size: 14px; font-weight: 700; color: #fff; margin-top: 5px; }
-  .wpt-diag-body { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 6px; line-height: 1.65; }
+  .wpt-diag-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--teal); }
+  .wpt-diag-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-top: 5px; }
+  .wpt-diag-body { font-size: 12px; color: #1a4040; margin-top: 6px; line-height: 1.65; }
 
   /* Timeline */
   .wpt-tl { margin-top: 18px; }
-  .wpt-tl-hdr {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.5px; color: rgba(255,255,255,0.22); margin-bottom: 14px;
-  }
+  .wpt-tl-hdr { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #8e8e93; margin-bottom: 14px; }
   .wpt-tl-row { display: flex; gap: 10px; margin-bottom: 12px; }
   .wpt-tl-side { display: flex; flex-direction: column; align-items: center; }
   .wpt-dot {
@@ -386,363 +488,533 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 700; flex-shrink: 0;
   }
-  .wpt-dot.d { background: rgba(159,232,112,0.15); color: #9FE870; border: 1px solid rgba(159,232,112,0.35); }
-  .wpt-dot.a { background: rgba(255,149,0,0.15); color: #FF9500; border: 1px solid rgba(255,149,0,0.35); animation: dotpulse 1.5s infinite; }
-  .wpt-dot.p { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.09); }
-  @keyframes dotpulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,149,0,.35)} 50%{box-shadow:0 0 0 6px rgba(255,149,0,0)} }
-  .wpt-tl-ln { width: 1px; flex: 1; min-height: 10px; margin: 3px auto 0; }
-  .wpt-tl-ln.d { background: rgba(159,232,112,0.25); }
-  .wpt-tl-ln.p { background: rgba(255,255,255,0.07); }
+  .wpt-dot.d { background: var(--navy); color: var(--lime); }
+  .wpt-dot.a { background: #ff9500; color: #fff; animation: dotpulse 1.5s infinite; }
+  .wpt-dot.p { background: #e5e5ea; color: #8e8e93; }
+  @keyframes dotpulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,149,0,.4)} 50%{box-shadow:0 0 0 6px rgba(255,149,0,0)} }
+  .wpt-tl-ln { width: 2px; flex: 1; min-height: 10px; margin: 3px auto 0; }
+  .wpt-tl-ln.d { background: var(--navy); }
+  .wpt-tl-ln.p { background: #e5e5ea; }
   .wpt-tl-content { padding-top: 2px; }
-  .wpt-step-n { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); }
-  .wpt-step-d { font-size: 12px; color: rgba(255,255,255,0.32); margin-top: 1px; }
+  .wpt-step-n { font-size: 13px; font-weight: 600; color: #1c1c1e; }
+  .wpt-step-d { font-size: 12px; color: #8e8e93; margin-top: 1px; }
   .wpt-eta {
-    display: inline-block;
-    background: rgba(255,149,0,0.1);
-    border: 1px solid rgba(255,149,0,0.22);
-    color: #FF9500; border-radius: 5px;
+    display: inline-block; background: #fff3e0; border: 1px solid #ffcc80;
+    color: #e65100; border-radius: 5px;
     padding: 2px 8px; font-size: 11px; font-weight: 700; margin-top: 4px;
   }
 
   /* Action card */
   .wpt-act {
-    background: rgba(159,232,112,0.06);
-    border: 1px solid rgba(159,232,112,0.18);
-    border-radius: 14px; padding: 14px; margin-top: 14px;
+    background: var(--navy); border-radius: 14px; padding: 14px; margin-top: 14px;
   }
-  .wpt-act-lbl {
-    font-size: 9px; font-weight: 800; text-transform: uppercase;
-    letter-spacing: 0.8px; color: rgba(159,232,112,0.65);
-  }
+  .wpt-act-lbl { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--lime); opacity: 0.8; }
   .wpt-act-txt { font-size: 14px; font-weight: 700; color: #fff; margin-top: 5px; line-height: 1.4; }
   .wpt-act-btn {
     display: block; width: 100%;
-    background: rgba(159,232,112,0.9); color: #163300;
-    border: none; border-radius: 40px;
+    background: var(--lime); color: var(--navy);
+    border: none; border-radius: 9999px;
     padding: 13px; font-size: 14px; font-weight: 800;
     font-family: inherit; cursor: pointer; margin-top: 12px;
-    transition: background 0.2s;
   }
-  .wpt-act-btn:active { background: #9FE870; }
 
   /* OK card */
   .wpt-ok-card {
     display: flex; gap: 12px; align-items: flex-start;
-    background: rgba(0,185,169,0.06);
-    border: 1px solid rgba(0,185,169,0.18);
+    background: #f0faf8; border: 1px solid #b2e8e3;
     border-radius: 14px; padding: 14px; margin-top: 14px;
   }
   .wpt-ok-ico { font-size: 22px; flex-shrink: 0; }
-  .wpt-ok-ttl { font-size: 13px; font-weight: 700; color: #fff; }
-  .wpt-ok-txt { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; line-height: 1.55; }
+  .wpt-ok-ttl { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .wpt-ok-txt { font-size: 12px; color: #1a4040; margin-top: 4px; line-height: 1.55; }
 
   /* Escalation */
   .wpt-esc {
     margin-top: 18px; padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    text-align: center; font-size: 12px; color: rgba(255,255,255,0.28);
+    border-top: 1px solid #f0f0f0;
+    text-align: center; font-size: 12px; color: #8e8e93;
   }
-  .wpt-esc a { color: rgba(255,255,255,0.65); font-weight: 700; text-decoration: underline; cursor: pointer; }
+  .wpt-esc a { color: var(--navy); font-weight: 700; text-decoration: underline; cursor: pointer; }
   .wpt-foot {
     display: flex; align-items: center; justify-content: center;
-    gap: 6px; margin-top: 10px; font-size: 11px; color: rgba(255,255,255,0.18);
+    gap: 6px; margin-top: 10px; font-size: 11px; color: #ccc;
   }
 
   .wpt-scen { display: none; }
   .wpt-scen.on { display: block; }
 
+  /* ===== FEATURES GRID ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2rem; }
+  .feature-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.5rem;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .feature-card:hover { box-shadow: 0 4px 20px rgba(22,51,0,0.08); border-color: #c8c8c0; }
+  .feature-ico {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(22,51,0,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 1rem;
+  }
+  .feature-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
+  .feature-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+  /* ===== FOOTER STRIP ===== */
+  .footer-strip {
+    background: var(--navy); padding: 2rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-strip-left h3 { font-size: 1.1rem; font-weight: 800; color: var(--white); }
+  .footer-strip-left p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .footer-strip-btn {
+    background: var(--lime); color: var(--navy);
+    border: none; border-radius: 9999px;
+    padding: 0.6rem 1.4rem; font-size: 0.9rem; font-weight: 800;
+    cursor: pointer; font-family: inherit;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .demo-layout { grid-template-columns: 1fr; }
+    .phone-wrap { position: static; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 640px) {
     * { -webkit-tap-highlight-color: transparent; }
-    nav { padding: 0 1rem; height: 52px; }
-    .nav-tagline { display: none; }
-    .main { padding: 0.75rem; }
-    .demo-phone { transform: scale(0.86); transform-origin: top center; }
-    .phone-wrap { height: 670px; overflow: hidden; }
+    nav { padding: 0 1rem; height: 56px; }
+    .hero { padding: 3rem 1.25rem 3.5rem; }
+    .section { padding: 3rem 1.25rem; }
+    .stats-row { padding: 1.5rem 1rem; gap: 0; }
+    .stat-item { padding: 0 1rem; min-width: 120px; }
+    .demo-phone { transform: scale(0.88); transform-origin: top center; }
+    .phone-wrap { height: 686px; overflow: hidden; }
+    .features-grid { grid-template-columns: 1fr; }
+    .footer-strip { padding: 1.5rem 1.25rem; }
+    .trust-bar { gap: 1rem; padding: 1rem 1.25rem 0; }
   }
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <div class="logo">Wise<span class="logo-dot"> ·</span> Platform</div>
-  <div class="nav-tagline">Support Widget Demo</div>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-mark">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M4 6l5 12 3-7 3 7 5-12" stroke="#9FE870" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    Wise Platform
+  </a>
+  <div class="nav-links">
+    <button class="nav-link">Solutions</button>
+    <button class="nav-link">API Docs</button>
+    <button class="nav-link">Pricing</button>
+  </div>
+  <button class="nav-cta">Get in touch</button>
 </nav>
 
-<div class="main">
-
-  <div class="section-header">
-    <h2>Wise Platform Support Widget</h2>
-    <p>An embeddable support layer for Wise Platform partners. When a transfer is delayed, users get a personalised, corridor-aware explanation — without ever leaving the partner app.</p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Wise Platform</div>
+  <h1>The infrastructure to power<br><em>your money movement</em></h1>
+  <p class="hero-sub">Embed fast, low-cost international payments into your product. Wise handles the corridors, compliance, and FX — your users never hit a wall.</p>
+  <div class="hero-actions">
+    <button class="btn-primary">Get in touch</button>
+    <button class="btn-ghost">Explore the API →</button>
   </div>
-
-  <div class="desc-card">
-    <div class="desc-icon">🔌</div>
-    <div>
-      <div class="desc-title">How Wise Platform partners use this</div>
-      <div class="desc-body">Partners like Monzo embed one widget. When a user's transfer is delayed, it diagnoses the root cause — Thai AML routing, RBI purpose codes, ACH windows — in plain language. Zero support tickets, full Wise branding control.</div>
+  <div class="trust-bar">
+    <span class="trust-lbl">Trusted by</span>
+    <div class="trust-partners">
+      <span class="trust-partner">Monzo</span>
+      <span class="trust-partner">N26</span>
+      <span class="trust-partner">Google Pay</span>
+      <span class="trust-partner">Nubank</span>
+      <span class="trust-partner">Standard Chartered</span>
     </div>
   </div>
+</section>
 
-  <div class="scenario-label">Demo — switch delay scenario</div>
-  <div class="support-scenario-bar">
-    <button class="support-scenario-btn active" onclick="setSupportScenario('thailand',this)">🇹🇭 Thailand · AML routing</button>
-    <button class="support-scenario-btn" onclick="setSupportScenario('india',this)">🇮🇳 India · Action needed</button>
-    <button class="support-scenario-btn" onclick="setSupportScenario('us',this)">🇺🇸 US · ACH delay</button>
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-item">
+    <div class="stat-val">£<span>145</span>BN</div>
+    <div class="stat-lbl">Global FX volumes</div>
   </div>
+  <div class="stat-item">
+    <div class="stat-val"><span>160</span>+</div>
+    <div class="stat-lbl">Countries covered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val"><span>40</span>+</div>
+    <div class="stat-lbl">Currencies supported</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val"><span>70</span>+</div>
+    <div class="stat-lbl">Regulatory licences</div>
+  </div>
+</div>
 
-  <div class="phone-wrap">
-    <div class="demo-phone" id="demo-phone">
+<!-- DEMO SECTION -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="demo-layout">
+      <div class="demo-left">
+        <span class="section-tag">Live Demo</span>
+        <h2 class="section-h2">Support widget that <em>deflects tickets</em></h2>
+        <p class="section-sub">When a transfer is delayed, your users get a corridor-aware explanation right inside your app — without ever contacting support.</p>
 
-      <!-- SCREEN 1: Transfer List -->
-      <div class="p-screen" id="p-s1">
-        <div class="s1-bg">
-          <div class="p-status">
-            <span>9:41</span><span style="font-size:12px;opacity:0.5">●●●</span>
-          </div>
-          <div class="s1-header">
-            <div class="s1-greeting">Good morning</div>
-            <div class="s1-title">Payments</div>
-          </div>
-          <div class="s1-balance">
-            <div class="s1-bal-lbl">Account balance</div>
-            <div class="s1-bal-amt">£4,287.50</div>
-            <div class="s1-bal-sub">Hot Coral Current Account</div>
-          </div>
-          <div class="s1-actions">
-            <button class="s1-action-btn">↑ Send</button>
-            <button class="s1-action-btn">↓ Receive</button>
-            <button class="s1-action-btn">⇄ Exchange</button>
-          </div>
-          <div class="s1-sect-lbl">International transfers</div>
-          <div class="s1-txlist">
-            <div class="s1-tx" onclick="pGo('p-s1','p-s2')">
-              <div class="s1-tx-ico">🇹🇭</div>
-              <div class="s1-tx-info">
-                <div class="s1-tx-name">Somsak Chai</div>
-                <div class="s1-tx-meta">Bangkok · 2 days ago</div>
-                <div class="s1-tx-badge">⏳ Delayed</div>
-              </div>
-              <div class="s1-tx-right">
-                <div class="s1-tx-val">−£850.00</div>
-                <div class="s1-tx-delay">In progress</div>
-              </div>
+        <div class="how-list">
+          <div class="how-item">
+            <div class="how-num">1</div>
+            <div class="how-text">
+              <h4>Partner detects a delayed transfer</h4>
+              <p>Your app queries the Wise Platform API for transfer status and corridor metadata.</p>
             </div>
-            <div class="s1-tx">
-              <div class="s1-tx-ico">🇪🇺</div>
-              <div class="s1-tx-info">
-                <div class="s1-tx-name">Marta Kowalski</div>
-                <div class="s1-tx-meta">Warsaw · Last week</div>
-              </div>
-              <div class="s1-tx-right">
-                <div class="s1-tx-val">−£320.00</div>
-                <div class="s1-tx-ok">Delivered</div>
-              </div>
+          </div>
+          <div class="how-item">
+            <div class="how-num">2</div>
+            <div class="how-text">
+              <h4>Widget renders the right explanation</h4>
+              <p>Thai AML, RBI purpose codes, ACH windows — Wise knows why and tells your user in plain English.</p>
             </div>
-            <div class="s1-tx">
-              <div class="s1-tx-ico">🇺🇸</div>
-              <div class="s1-tx-info">
-                <div class="s1-tx-name">James Wilson</div>
-                <div class="s1-tx-meta">New York · 2 weeks ago</div>
-              </div>
-              <div class="s1-tx-right">
-                <div class="s1-tx-val">−£1,200.00</div>
-                <div class="s1-tx-ok">Delivered</div>
-              </div>
-            </div>
-            <div class="s1-tx">
-              <div class="s1-tx-ico">🇮🇳</div>
-              <div class="s1-tx-info">
-                <div class="s1-tx-name">Priya Sharma</div>
-                <div class="s1-tx-meta">Mumbai · Last month</div>
-              </div>
-              <div class="s1-tx-right">
-                <div class="s1-tx-val">−£500.00</div>
-                <div class="s1-tx-ok">Delivered</div>
-              </div>
+          </div>
+          <div class="how-item">
+            <div class="how-num">3</div>
+            <div class="how-text">
+              <h4>Actionable or informational — zero tickets</h4>
+              <p>If action is needed, users resolve it in-app. If not, they're reassured. Support queue stays quiet.</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- SCREEN 2: Transfer Detail -->
-      <div class="p-screen slide-right" id="p-s2">
-        <div class="s2-bg">
-          <div class="p-status"><span>9:41</span><span style="font-size:12px;opacity:0.5">●●●</span></div>
-          <div class="p-nav">
-            <button class="p-back" onclick="pBack('p-s2','p-s1')">← Back</button>
-            <div class="p-nav-t">Transfer</div>
-            <div class="p-nav-sp"></div>
+        <div style="margin-top: 2rem;">
+          <div class="scenario-lbl">Switch delay scenario</div>
+          <div class="scenario-bar">
+            <button class="scenario-btn active" onclick="setSupportScenario('thailand',this)">🇹🇭 Thailand · AML routing</button>
+            <button class="scenario-btn" onclick="setSupportScenario('india',this)">🇮🇳 India · Action needed</button>
+            <button class="scenario-btn" onclick="setSupportScenario('us',this)">🇺🇸 US · ACH delay</button>
           </div>
-          <div class="tx-hero">
-            <div class="tx-hero-flag">🇹🇭</div>
-            <div class="tx-hero-amt">£850.00</div>
-            <div class="tx-hero-to">to Somsak Chai · Thailand</div>
-            <div class="tx-spill">
-              <div class="tx-spill-dot"></div>
-              Delayed · 2 days
-            </div>
+        </div>
+
+        <div class="api-callout">
+          <div class="api-callout-ico">⚡</div>
+          <div>
+            <h4>One API call. Full context.</h4>
+            <p>GET /v1/transfers/{id}/delay-context returns corridor reason, ETA, and required actions.</p>
           </div>
-          <div class="tx-rows">
-            <div class="tx-row"><span class="tx-row-lbl">They receive</span><span class="tx-row-val">฿38,240 THB</span></div>
-            <div class="tx-row"><span class="tx-row-lbl">Rate</span><span class="tx-row-val">1 GBP = 45.00 THB</span></div>
-            <div class="tx-row"><span class="tx-row-lbl">Fee</span><span class="tx-row-val">£4.80</span></div>
-            <div class="tx-row"><span class="tx-row-lbl">Started</span><span class="tx-row-val">Mon, 9 Mar</span></div>
-            <div class="tx-row"><span class="tx-row-lbl">Ref</span><span class="tx-row-val" style="font-family:monospace;font-size:11px">TRF-7823-THB</span></div>
-          </div>
-          <div class="wpt-cta" onclick="pOpenSheet()">
-            <div class="wpt-cta-row">
-              <div class="wpt-cta-ico">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="#9FE870" stroke-width="2"/>
-                  <path d="M12 8v4M12 16h.01" stroke="#9FE870" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div class="wpt-cta-txt">
-                <h4>Why is this delayed?</h4>
-                <p>Get a personalised explanation</p>
-              </div>
-              <div class="wpt-cta-arr">›</div>
-            </div>
-            <div class="wpt-powered">
-              <span class="wpt-badge-sm">WISE</span>
-              <span class="wpt-powered-txt">Powered by Wise Platform</span>
-            </div>
-          </div>
-          <div style="height:20px"></div>
+          <button class="api-callout-btn">View docs</button>
         </div>
       </div>
 
-      <!-- OVERLAY + BOTTOM SHEET -->
-      <div class="p-overlay" id="p-overlay" onclick="pCloseSheet()">
-        <div class="p-sheet" onclick="event.stopPropagation()">
-          <div class="p-sheet-drag"></div>
-          <div class="p-sheet-top">
-            <div class="wpt-brand">
-              <div class="wpt-brand-ico">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 6l5 12 3-7 3 7 5-12" stroke="#9FE870" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <span class="wpt-brand-lbl">Wise Transfer Support</span>
-            </div>
-            <button class="p-sheet-x" onclick="pCloseSheet()">✕</button>
-          </div>
-          <div class="p-sheet-body">
-            <div class="wpt-h1" id="wpt-title">Your transfer to Thailand is delayed</div>
-            <div class="wpt-h2">Here's exactly what's happening and what to expect.</div>
+      <div class="phone-wrap">
+        <div class="demo-phone" id="demo-phone">
 
-            <!-- Scenario: Thailand -->
-            <div class="wpt-scen on" id="wpt-thailand">
-              <div class="wpt-diag">
-                <div class="wpt-diag-tag">Diagnosis</div>
-                <div class="wpt-diag-title">Thai AML compliance routing</div>
-                <div class="wpt-diag-body">Thailand requires transfers over ฿30,000 to pass through an enhanced compliance check. Your transfer is in this queue — no action needed from you.</div>
+          <!-- SCREEN 1 -->
+          <div class="p-screen" id="p-s1">
+            <div class="s1-bg">
+              <div class="p-status" style="background:#f5f5f7">
+                <span>9:41</span><span style="font-size:12px">●●●</span>
               </div>
-              <div class="wpt-tl">
-                <div class="wpt-tl-hdr">Transfer progress</div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Payment received</div><div class="wpt-step-d">Mon 9 Mar, 10:24am</div></div>
-                </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Converted to THB</div><div class="wpt-step-d">Rate locked at 45.00</div></div>
-                </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot a">⏳</div><div class="wpt-tl-ln p"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Thai compliance check</div><div class="wpt-step-d">Required for transfers over ฿30,000</div><div class="wpt-eta">Est. 1–2 more days</div></div>
-                </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Delivered to Somsak</div><div class="wpt-step-d">Expected Thu 13 Mar</div></div>
-                </div>
+              <div class="s1-header">
+                <div class="s1-greeting">Good morning</div>
+                <div class="s1-title">Payments</div>
               </div>
-              <div class="wpt-ok-card">
-                <div class="wpt-ok-ico">✅</div>
-                <div><div class="wpt-ok-ttl">Nothing to do</div><div class="wpt-ok-txt">Wise will notify you when it's delivered. Your rate is already locked.</div></div>
+              <div class="s1-balance">
+                <div class="s1-bal-lbl">Account balance</div>
+                <div class="s1-bal-amt">£4,287.50</div>
+                <div class="s1-bal-sub">Current Account</div>
               </div>
-            </div>
-
-            <!-- Scenario: India -->
-            <div class="wpt-scen" id="wpt-india">
-              <div class="wpt-diag">
-                <div class="wpt-diag-tag">Diagnosis</div>
-                <div class="wpt-diag-title">RBI purpose code required</div>
-                <div class="wpt-diag-body">India's Reserve Bank requires every international transfer to declare its purpose. Your transfer is on hold until you confirm this.</div>
+              <div class="s1-actions">
+                <button class="s1-action-btn">↑ Send</button>
+                <button class="s1-action-btn">↓ Receive</button>
+                <button class="s1-action-btn">⇄ Exchange</button>
               </div>
-              <div class="wpt-tl">
-                <div class="wpt-tl-hdr">Transfer progress</div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Payment received</div><div class="wpt-step-d">Mon 9 Mar, 2:11pm</div></div>
+              <div class="s1-sect-lbl">International transfers</div>
+              <div class="s1-txlist">
+                <div class="s1-tx" onclick="pGo('p-s1','p-s2')">
+                  <div class="s1-tx-ico">🇹🇭</div>
+                  <div class="s1-tx-info">
+                    <div class="s1-tx-name">Somsak Chai</div>
+                    <div class="s1-tx-meta">Bangkok · 2 days ago</div>
+                    <div class="s1-tx-badge">⏳ Delayed</div>
+                  </div>
+                  <div class="s1-tx-right">
+                    <div class="s1-tx-val">−£850.00</div>
+                    <div class="s1-tx-delay">In progress</div>
+                  </div>
                 </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot a">!</div><div class="wpt-tl-ln p"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Action required</div><div class="wpt-step-d">Confirm purpose of transfer</div><div class="wpt-eta">Waiting on you</div></div>
+                <div class="s1-tx">
+                  <div class="s1-tx-ico">🇪🇺</div>
+                  <div class="s1-tx-info">
+                    <div class="s1-tx-name">Marta Kowalski</div>
+                    <div class="s1-tx-meta">Warsaw · Last week</div>
+                  </div>
+                  <div class="s1-tx-right">
+                    <div class="s1-tx-val">−£320.00</div>
+                    <div class="s1-tx-ok">Delivered</div>
+                  </div>
                 </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot p">3</div><div class="wpt-tl-ln p"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Converted to INR</div><div class="wpt-step-d">Rate locked after confirmation</div></div>
+                <div class="s1-tx">
+                  <div class="s1-tx-ico">🇺🇸</div>
+                  <div class="s1-tx-info">
+                    <div class="s1-tx-name">James Wilson</div>
+                    <div class="s1-tx-meta">New York · 2 weeks ago</div>
+                  </div>
+                  <div class="s1-tx-right">
+                    <div class="s1-tx-val">−£1,200.00</div>
+                    <div class="s1-tx-ok">Delivered</div>
+                  </div>
                 </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Delivered</div><div class="wpt-step-d">1–2 days after you confirm</div></div>
+                <div class="s1-tx">
+                  <div class="s1-tx-ico">🇮🇳</div>
+                  <div class="s1-tx-info">
+                    <div class="s1-tx-name">Priya Sharma</div>
+                    <div class="s1-tx-meta">Mumbai · Last month</div>
+                  </div>
+                  <div class="s1-tx-right">
+                    <div class="s1-tx-val">−£500.00</div>
+                    <div class="s1-tx-ok">Delivered</div>
+                  </div>
                 </div>
-              </div>
-              <div class="wpt-act">
-                <div class="wpt-act-lbl">Action required</div>
-                <div class="wpt-act-txt">Select the purpose of your transfer to India</div>
-                <button class="wpt-act-btn" onclick="alert('In a full integration, this opens the RBI purpose code selector via Wise Platform API.')">Confirm transfer purpose →</button>
-              </div>
-            </div>
-
-            <!-- Scenario: US ACH -->
-            <div class="wpt-scen" id="wpt-us">
-              <div class="wpt-diag">
-                <div class="wpt-diag-tag">Diagnosis</div>
-                <div class="wpt-diag-title">US bank ACH settlement window</div>
-                <div class="wpt-diag-body">ACH transfers in the US settle in batches, not instantly. Your bank submitted the debit on Monday — settlement takes 1–3 business days.</div>
-              </div>
-              <div class="wpt-tl">
-                <div class="wpt-tl-hdr">Transfer progress</div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Transfer initiated</div><div class="wpt-step-d">Mon 9 Mar — ACH debit sent</div></div>
-                </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot a">⏳</div><div class="wpt-tl-ln p"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Bank ACH settlement</div><div class="wpt-step-d">Your bank is processing the debit</div><div class="wpt-eta">Clears Wed 11 Mar</div></div>
-                </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot p">3</div><div class="wpt-tl-ln p"></div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Wise converts & sends</div><div class="wpt-step-d">Same day ACH settles</div></div>
-                </div>
-                <div class="wpt-tl-row">
-                  <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
-                  <div class="wpt-tl-content"><div class="wpt-step-n">Delivered to recipient</div><div class="wpt-step-d">Expected Thu 12 Mar</div></div>
-                </div>
-              </div>
-              <div class="wpt-ok-card">
-                <div class="wpt-ok-ico">🏦</div>
-                <div><div class="wpt-ok-ttl">This is normal for US bank transfers</div><div class="wpt-ok-txt">Tip: next time fund your transfer with a debit card to skip ACH and send instantly.</div></div>
-              </div>
-            </div>
-
-            <div class="wpt-esc">
-              Expected time has passed?
-              <a onclick="alert('Escalates to Wise support with full transfer context pre-filled — no form filling.')">Contact support →</a>
-              <div class="wpt-foot">
-                <span class="wpt-badge-sm">WISE</span>
-                <span>Transfer support powered by Wise Platform</span>
               </div>
             </div>
           </div>
+
+          <!-- SCREEN 2 -->
+          <div class="p-screen slide-right" id="p-s2">
+            <div class="s2-bg">
+              <div class="p-status" style="background:#fff">
+                <span>9:41</span><span style="font-size:12px">●●●</span>
+              </div>
+              <div class="p-nav">
+                <button class="p-back" onclick="pBack('p-s2','p-s1')">← Back</button>
+                <div class="p-nav-t">Transfer</div>
+                <div class="p-nav-sp"></div>
+              </div>
+              <div class="tx-hero">
+                <div class="tx-hero-flag">🇹🇭</div>
+                <div class="tx-hero-amt">£850.00</div>
+                <div class="tx-hero-to">to Somsak Chai · Thailand</div>
+                <div class="tx-spill">
+                  <div class="tx-spill-dot"></div>
+                  Delayed · 2 days
+                </div>
+              </div>
+              <div class="tx-rows">
+                <div class="tx-row"><span class="tx-row-lbl">They receive</span><span class="tx-row-val">฿38,240 THB</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Rate</span><span class="tx-row-val">1 GBP = 45.00 THB</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Fee</span><span class="tx-row-val">£4.80</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Started</span><span class="tx-row-val">Mon, 9 Mar</span></div>
+                <div class="tx-row"><span class="tx-row-lbl">Ref</span><span class="tx-row-val" style="font-family:monospace;font-size:11px">TRF-7823-THB</span></div>
+              </div>
+              <div class="wpt-cta" onclick="pOpenSheet()">
+                <div class="wpt-cta-row">
+                  <div class="wpt-cta-ico">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="#9FE870" stroke-width="2"/>
+                      <path d="M12 8v4M12 16h.01" stroke="#9FE870" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <div class="wpt-cta-txt">
+                    <h4>Why is this delayed?</h4>
+                    <p>Get a personalised explanation</p>
+                  </div>
+                  <div class="wpt-cta-arr">›</div>
+                </div>
+                <div class="wpt-powered">
+                  <span class="wpt-badge-sm">WISE</span>
+                  <span class="wpt-powered-txt">Powered by Wise Platform</span>
+                </div>
+              </div>
+              <div style="height:20px"></div>
+            </div>
+          </div>
+
+          <!-- OVERLAY + BOTTOM SHEET -->
+          <div class="p-overlay" id="p-overlay" onclick="pCloseSheet()">
+            <div class="p-sheet" onclick="event.stopPropagation()">
+              <div class="p-sheet-drag"></div>
+              <div class="p-sheet-top">
+                <div class="wpt-brand">
+                  <div class="wpt-brand-ico">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 6l5 12 3-7 3 7 5-12" stroke="#9FE870" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="wpt-brand-lbl">Wise Transfer Support</span>
+                </div>
+                <button class="p-sheet-x" onclick="pCloseSheet()">✕</button>
+              </div>
+              <div class="p-sheet-body">
+                <div class="wpt-h1" id="wpt-title">Your transfer to Thailand is delayed</div>
+                <div class="wpt-h2">Here's exactly what's happening and what to expect.</div>
+
+                <!-- Scenario: Thailand -->
+                <div class="wpt-scen on" id="wpt-thailand">
+                  <div class="wpt-diag">
+                    <div class="wpt-diag-tag">Diagnosis</div>
+                    <div class="wpt-diag-title">Thai AML compliance routing</div>
+                    <div class="wpt-diag-body">Thailand requires transfers over ฿30,000 to pass through an enhanced compliance check. Your transfer is in this queue — no action needed from you.</div>
+                  </div>
+                  <div class="wpt-tl">
+                    <div class="wpt-tl-hdr">Transfer progress</div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Payment received</div><div class="wpt-step-d">Mon 9 Mar, 10:24am</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Converted to THB</div><div class="wpt-step-d">Rate locked at 45.00</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot a">⏳</div><div class="wpt-tl-ln p"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Thai compliance check</div><div class="wpt-step-d">Required for transfers over ฿30,000</div><div class="wpt-eta">Est. 1–2 more days</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Delivered to Somsak</div><div class="wpt-step-d">Expected Thu 13 Mar</div></div>
+                    </div>
+                  </div>
+                  <div class="wpt-ok-card">
+                    <div class="wpt-ok-ico">✅</div>
+                    <div><div class="wpt-ok-ttl">Nothing to do</div><div class="wpt-ok-txt">Wise will notify you when it's delivered. Your rate is already locked.</div></div>
+                  </div>
+                </div>
+
+                <!-- Scenario: India -->
+                <div class="wpt-scen" id="wpt-india">
+                  <div class="wpt-diag">
+                    <div class="wpt-diag-tag">Diagnosis</div>
+                    <div class="wpt-diag-title">RBI purpose code required</div>
+                    <div class="wpt-diag-body">India's Reserve Bank requires every international transfer to declare its purpose. Your transfer is on hold until you confirm this.</div>
+                  </div>
+                  <div class="wpt-tl">
+                    <div class="wpt-tl-hdr">Transfer progress</div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Payment received</div><div class="wpt-step-d">Mon 9 Mar, 2:11pm</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot a">!</div><div class="wpt-tl-ln p"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Action required</div><div class="wpt-step-d">Confirm purpose of transfer</div><div class="wpt-eta">Waiting on you</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot p">3</div><div class="wpt-tl-ln p"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Converted to INR</div><div class="wpt-step-d">Rate locked after confirmation</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Delivered</div><div class="wpt-step-d">1–2 days after you confirm</div></div>
+                    </div>
+                  </div>
+                  <div class="wpt-act">
+                    <div class="wpt-act-lbl">Action required</div>
+                    <div class="wpt-act-txt">Select the purpose of your transfer to India</div>
+                    <button class="wpt-act-btn" onclick="alert('In a full integration, this opens the RBI purpose code selector via Wise Platform API.')">Confirm transfer purpose →</button>
+                  </div>
+                </div>
+
+                <!-- Scenario: US ACH -->
+                <div class="wpt-scen" id="wpt-us">
+                  <div class="wpt-diag">
+                    <div class="wpt-diag-tag">Diagnosis</div>
+                    <div class="wpt-diag-title">US bank ACH settlement window</div>
+                    <div class="wpt-diag-body">ACH transfers in the US settle in batches, not instantly. Your bank submitted the debit on Monday — settlement takes 1–3 business days.</div>
+                  </div>
+                  <div class="wpt-tl">
+                    <div class="wpt-tl-hdr">Transfer progress</div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Transfer initiated</div><div class="wpt-step-d">Mon 9 Mar — ACH debit sent</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot a">⏳</div><div class="wpt-tl-ln p"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Bank ACH settlement</div><div class="wpt-step-d">Your bank is processing the debit</div><div class="wpt-eta">Clears Wed 11 Mar</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot p">3</div><div class="wpt-tl-ln p"></div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Wise converts & sends</div><div class="wpt-step-d">Same day ACH settles</div></div>
+                    </div>
+                    <div class="wpt-tl-row">
+                      <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Delivered to recipient</div><div class="wpt-step-d">Expected Thu 12 Mar</div></div>
+                    </div>
+                  </div>
+                  <div class="wpt-ok-card">
+                    <div class="wpt-ok-ico">🏦</div>
+                    <div><div class="wpt-ok-ttl">This is normal for US bank transfers</div><div class="wpt-ok-txt">Tip: next time fund your transfer with a debit card to skip ACH and send instantly.</div></div>
+                  </div>
+                </div>
+
+                <div class="wpt-esc">
+                  Expected time has passed?
+                  <a onclick="alert('Escalates to Wise support with full transfer context pre-filled — no form filling.')">Contact support →</a>
+                  <div class="wpt-foot">
+                    <span class="wpt-badge-sm">WISE</span>
+                    <span>Transfer support powered by Wise Platform</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-
     </div>
   </div>
+</section>
 
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-inner">
+    <span class="section-tag">Platform capabilities</span>
+    <h2 class="section-h2">Everything a partner needs — <em>nothing they don't</em></h2>
+    <p class="section-sub">Wise Platform exposes modular APIs. Embed only what your product needs.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-ico">🌍</div>
+        <h3>160+ country coverage</h3>
+        <p>Send to bank accounts, mobile wallets, and cash pick-up in markets your users care about.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-ico">⚡</div>
+        <h3>Real-time FX rates</h3>
+        <p>Lock in the mid-market rate at point of quote with transparent, low fees baked in.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-ico">🔍</div>
+        <h3>Corridor intelligence</h3>
+        <p>Delay reasons, STP rates, compliance requirements — all surfaced via API so your support team stays quiet.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-ico">🛡️</div>
+        <h3>70+ licences</h3>
+        <p>Wise holds regulatory permissions across every major market. You inherit compliance, not risk.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-ico">🔗</div>
+        <h3>Deep link escalation</h3>
+        <p>When a support ticket does need a human, context is pre-filled. No forms, no friction.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-ico">📊</div>
+        <h3>Partner dashboard</h3>
+        <p>Volume, conversion rates, delay metrics, and support deflection data — all in one place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER STRIP -->
+<div class="footer-strip">
+  <div class="footer-strip-left">
+    <h3>Ready to embed Wise into your product?</h3>
+    <p>Talk to our partnership team and get API access within days.</p>
+  </div>
+  <button class="footer-strip-btn">Get in touch →</button>
 </div>
 
 <script>
@@ -762,14 +1034,14 @@ function pCloseSheet() {
   document.getElementById('p-overlay').classList.remove('open');
 }
 function setSupportScenario(name, btn) {
-  document.querySelectorAll('.support-scenario-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.wpt-scen').forEach(s => s.classList.remove('on'));
   document.getElementById('wpt-' + name).classList.add('on');
   const titles = {
     thailand: 'Your transfer to Thailand is delayed',
-    india: 'Your transfer to India needs attention',
-    us: 'Your US transfer is processing'
+    india:    'Your transfer to India needs attention',
+    us:       'Your US transfer is processing'
   };
   document.getElementById('wpt-title').textContent = titles[name];
   document.getElementById('p-s1').classList.add('slide-left');
