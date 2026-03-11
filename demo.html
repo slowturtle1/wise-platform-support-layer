@@ -351,6 +351,103 @@
   .s1-tx-ok { font-size: 11px; color: #34c759; font-weight: 600; margin-top: 2px; }
   .s1-tx-delay { font-size: 11px; color: #ff9500; font-weight: 600; margin-top: 2px; }
 
+  /* Impact banner in Screen 1 */
+  .s1-impact-banner {
+    margin: 12px 14px 0;
+    background: var(--navy); border-radius: 16px; padding: 13px 15px;
+    cursor: pointer; display: flex; align-items: center; gap: 12px;
+    transition: opacity 0.15s;
+  }
+  .s1-impact-banner:active { opacity: 0.85; }
+  .s1-impact-ico {
+    width: 38px; height: 38px; background: rgba(159,232,112,0.15);
+    border: 1px solid rgba(159,232,112,0.25);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .s1-impact-txt h5 { font-size: 12px; font-weight: 700; color: #fff; }
+  .s1-impact-txt p  { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+  .s1-impact-arr { margin-left: auto; font-size: 16px; color: var(--lime); }
+
+  /* ===== SCREEN 3: PARTNER DASHBOARD ===== */
+  .s3-bg {
+    min-height: 100%;
+    background: var(--navy);
+    padding-bottom: 28px;
+  }
+  .s3-status { display: flex; justify-content: space-between; padding: 12px 20px 0; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); }
+  .s3-nav {
+    display: flex; align-items: center; padding: 8px 16px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .s3-back {
+    color: var(--lime); font-size: 14px; font-weight: 500;
+    cursor: pointer; background: none; border: none;
+    font-family: inherit; display: flex; align-items: center; gap: 4px; padding: 0;
+  }
+  .s3-nav-t { flex: 1; text-align: center; font-size: 15px; font-weight: 700; color: #fff; }
+  .s3-nav-sp { width: 56px; }
+
+  .s3-header { padding: 16px 18px 8px; }
+  .s3-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(159,232,112,0.7); }
+  .s3-title { font-size: 20px; font-weight: 800; color: #fff; margin-top: 3px; letter-spacing: -0.3px; }
+  .s3-period { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+  /* Stat cards row */
+  .s3-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 14px 0; }
+  .s3-stat {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px; padding: 13px;
+  }
+  .s3-stat-val { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+  .s3-stat-val.green { color: var(--lime); }
+  .s3-stat-lbl { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; line-height: 1.4; }
+
+  /* Mini bar chart inside phone */
+  .s3-chart-wrap {
+    margin: 10px 14px 0;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; padding: 12px;
+  }
+  .s3-chart-lbl { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 10px; }
+  .s3-bars { display: flex; align-items: flex-end; gap: 5px; height: 52px; }
+  .s3-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .s3-bar { width: 100%; border-radius: 3px 3px 0 0; }
+  .s3-bar.grey { background: rgba(255,255,255,0.15); }
+  .s3-bar.lime { background: var(--lime); }
+  .s3-bar-wk { font-size: 8px; color: rgba(255,255,255,0.3); }
+
+  /* Deflected transfers list */
+  .s3-sect-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.3); padding: 12px 18px 6px; }
+  .s3-list {
+    margin: 0 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; overflow: hidden;
+  }
+  .s3-item {
+    display: flex; align-items: center; padding: 11px 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 12px;
+  }
+  .s3-item:last-child { border-bottom: none; }
+  .s3-item-flag { font-size: 18px; margin-right: 10px; }
+  .s3-item-info { flex: 1; }
+  .s3-item-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
+  .s3-item-type { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+  .s3-item-tag {
+    font-size: 9px; font-weight: 700; padding: 2px 7px;
+    border-radius: 4px; background: rgba(159,232,112,0.12);
+    border: 1px solid rgba(159,232,112,0.25); color: var(--lime);
+  }
+
+  .s3-wise-foot {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin: 14px 0 0; font-size: 10px; color: rgba(255,255,255,0.2);
+  }
+
   /* SCREEN 2 */
   .s2-bg { min-height: 100%; background: #f5f5f7; padding-bottom: 24px; }
   .p-nav {
@@ -935,6 +1032,109 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Impact banner -->
+              <div class="s1-impact-banner" onclick="pGo('p-s1','p-s3')">
+                <div class="s1-impact-ico">📊</div>
+                <div class="s1-impact-txt">
+                  <h5>47 tickets deflected this week</h5>
+                  <p>View partner impact dashboard →</p>
+                </div>
+                <div class="s1-impact-arr">›</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREEN 3: PARTNER DASHBOARD -->
+          <div class="p-screen slide-right" id="p-s3">
+            <div class="s3-bg">
+              <div class="s3-status">
+                <span>9:41</span><span style="font-size:12px;opacity:0.5">●●●</span>
+              </div>
+              <div class="s3-nav">
+                <button class="s3-back" onclick="pBack('p-s3','p-s1')">← Back</button>
+                <div class="s3-nav-t">Partner Dashboard</div>
+                <div class="s3-nav-sp"></div>
+              </div>
+
+              <div class="s3-header">
+                <div class="s3-eyebrow">Wise Platform · Monzo integration</div>
+                <div class="s3-title">Support deflection</div>
+                <div class="s3-period">Last 7 days · 3 corridors active</div>
+              </div>
+
+              <div class="s3-stats">
+                <div class="s3-stat">
+                  <div class="s3-stat-val green">47</div>
+                  <div class="s3-stat-lbl">Tickets deflected this week</div>
+                </div>
+                <div class="s3-stat">
+                  <div class="s3-stat-val green">76%</div>
+                  <div class="s3-stat-lbl">Deflection rate vs baseline</div>
+                </div>
+                <div class="s3-stat">
+                  <div class="s3-stat-val">£376</div>
+                  <div class="s3-stat-lbl">Saved this week @ £8/ticket</div>
+                </div>
+                <div class="s3-stat">
+                  <div class="s3-stat-val green">+18</div>
+                  <div class="s3-stat-lbl">NPS lift on delayed transfers</div>
+                </div>
+              </div>
+
+              <div class="s3-chart-wrap">
+                <div class="s3-chart-lbl">Daily deflected tickets</div>
+                <div class="s3-bars">
+                  <div class="s3-bar-wrap"><div class="s3-bar grey" style="height:28px"></div><div class="s3-bar-wk">M</div></div>
+                  <div class="s3-bar-wrap"><div class="s3-bar grey" style="height:34px"></div><div class="s3-bar-wk">T</div></div>
+                  <div class="s3-bar-wrap"><div class="s3-bar lime" style="height:42px"></div><div class="s3-bar-wk">W</div></div>
+                  <div class="s3-bar-wrap"><div class="s3-bar lime" style="height:38px"></div><div class="s3-bar-wk">T</div></div>
+                  <div class="s3-bar-wrap"><div class="s3-bar lime" style="height:46px"></div><div class="s3-bar-wk">F</div></div>
+                  <div class="s3-bar-wrap"><div class="s3-bar lime" style="height:30px"></div><div class="s3-bar-wk">S</div></div>
+                  <div class="s3-bar-wrap"><div class="s3-bar lime" style="height:22px"></div><div class="s3-bar-wk">S</div></div>
+                </div>
+              </div>
+
+              <div class="s3-sect-lbl">Recently deflected</div>
+              <div class="s3-list">
+                <div class="s3-item">
+                  <div class="s3-item-flag">🇹🇭</div>
+                  <div class="s3-item-info">
+                    <div class="s3-item-name">Thailand · AML routing</div>
+                    <div class="s3-item-type">฿30,000+ compliance check</div>
+                  </div>
+                  <div class="s3-item-tag">Deflected</div>
+                </div>
+                <div class="s3-item">
+                  <div class="s3-item-flag">🇮🇳</div>
+                  <div class="s3-item-info">
+                    <div class="s3-item-name">India · RBI purpose code</div>
+                    <div class="s3-item-type">Action completed in-app</div>
+                  </div>
+                  <div class="s3-item-tag">Resolved</div>
+                </div>
+                <div class="s3-item">
+                  <div class="s3-item-flag">🇺🇸</div>
+                  <div class="s3-item-info">
+                    <div class="s3-item-name">US · ACH settlement</div>
+                    <div class="s3-item-type">User reassured, no ticket</div>
+                  </div>
+                  <div class="s3-item-tag">Deflected</div>
+                </div>
+                <div class="s3-item">
+                  <div class="s3-item-flag">🇹🇭</div>
+                  <div class="s3-item-info">
+                    <div class="s3-item-name">Thailand · AML routing</div>
+                    <div class="s3-item-type">฿30,000+ compliance check</div>
+                  </div>
+                  <div class="s3-item-tag">Deflected</div>
+                </div>
+              </div>
+
+              <div class="s3-wise-foot">
+                <span style="background:var(--navy);color:var(--lime);font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;border:1px solid rgba(159,232,112,0.3)">WISE</span>
+                <span>Powered by Wise Platform API</span>
+              </div>
             </div>
           </div>
 
@@ -1343,6 +1543,11 @@ function pGo(from, to) {
   document.getElementById(from).classList.add('slide-left');
   document.getElementById(to).classList.remove('slide-right');
 }
+function pBack(from, to) {
+  pCloseSheet();
+  document.getElementById(from).classList.add('slide-right');
+  document.getElementById(to).classList.remove('slide-left');
+}
 function pOpenSheet() { document.getElementById('p-overlay').classList.add('open'); }
 function pCloseSheet() { document.getElementById('p-overlay').classList.remove('open'); }
 
@@ -1381,9 +1586,10 @@ function updateScreen2(name) {
 function resetToLockScreen() {
   pCloseSheet();
   fromNotif = false;
-  ['p-s0','p-s1','p-s2'].forEach(id => document.getElementById(id).classList.remove('slide-left'));
+  ['p-s0','p-s1','p-s2','p-s3'].forEach(id => document.getElementById(id).classList.remove('slide-left'));
   document.getElementById('p-s1').classList.add('slide-right');
   document.getElementById('p-s2').classList.add('slide-right');
+  document.getElementById('p-s3').classList.add('slide-right');
   var notif = document.getElementById('s0-notif');
   notif.classList.remove('show');
   setTimeout(() => notif.classList.add('show'), 700);
