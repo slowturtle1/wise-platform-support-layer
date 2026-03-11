@@ -1049,7 +1049,7 @@
         <div style="margin-top: 2rem;">
           <div class="scenario-lbl">Switch delay scenario</div>
           <div class="scenario-bar">
-            <button class="scenario-btn active" onclick="setSupportScenario('thailand',this)">🇹🇭 Thailand · AML routing</button>
+            <button class="scenario-btn active" onclick="setSupportScenario('eu',this)">🇩🇪 EU · SEPA cutoff</button>
             <button class="scenario-btn" onclick="setSupportScenario('india',this)">🇮🇳 India · Action needed</button>
             <button class="scenario-btn" onclick="setSupportScenario('us',this)">🇺🇸 US · ACH delay</button>
           </div>
@@ -1085,8 +1085,8 @@
                       <span class="s0-notif-app-name" id="s0-notif-appname">Monzo</span>
                       <span class="s0-notif-time">now</span>
                     </div>
-                    <div class="s0-notif-title" id="s0-notif-title">Transfer to Thailand delayed</div>
-                    <div class="s0-notif-body" id="s0-notif-body">Your £850 to Somsak Chai is held for AML compliance. Tap to find out why.</div>
+                    <div class="s0-notif-title" id="s0-notif-title">Transfer to Germany delayed</div>
+                    <div class="s0-notif-body" id="s0-notif-body">Your £750 to Klaus Müller missed today's SEPA batch. Tap for details.</div>
                   </div>
                 </div>
                 <div class="s0-notif-wise">
@@ -1122,14 +1122,14 @@
               <div class="s1-sect-lbl">International transfers</div>
               <div class="s1-txlist">
                 <div class="s1-tx" onclick="pGo('p-s1','p-s2')">
-                  <div class="s1-tx-ico">🇹🇭</div>
+                  <div class="s1-tx-ico">🇩🇪</div>
                   <div class="s1-tx-info">
-                    <div class="s1-tx-name">Somsak Chai</div>
-                    <div class="s1-tx-meta">Bangkok · 2 days ago</div>
+                    <div class="s1-tx-name">Klaus Müller</div>
+                    <div class="s1-tx-meta">Berlin · 1 day ago</div>
                     <div class="s1-tx-badge">⏳ Delayed</div>
                   </div>
                   <div class="s1-tx-right">
-                    <div class="s1-tx-val">−£850.00</div>
+                    <div class="s1-tx-val">−£750.00</div>
                     <div class="s1-tx-delay">In progress</div>
                   </div>
                 </div>
@@ -1339,7 +1339,7 @@
                 <button class="p-sheet-x" onclick="pCloseSheet()">✕</button>
               </div>
               <div class="p-sheet-body">
-                <div class="wpt-h1" id="wpt-title">Your transfer to Thailand is delayed</div>
+                <div class="wpt-h1" id="wpt-title">Your transfer to Germany is delayed</div>
                 <div class="wpt-h2">Here's exactly what's happening and what to expect.</div>
 
                 <!-- AI Explanation -->
@@ -1351,35 +1351,35 @@
                   <div class="ai-explain-text" id="ai-explain-text"><span class="ai-cursor"></span></div>
                 </div>
 
-                <!-- Scenario: Thailand -->
-                <div class="wpt-scen on" id="wpt-thailand">
+                <!-- Scenario: EU / Germany -->
+                <div class="wpt-scen on" id="wpt-eu">
                   <div class="wpt-diag">
                     <div class="wpt-diag-tag">Diagnosis</div>
-                    <div class="wpt-diag-title">Thai AML compliance routing</div>
-                    <div class="wpt-diag-body">Thailand requires transfers over ฿30,000 to pass through an enhanced compliance check. Your transfer is in this queue — no action needed from you.</div>
+                    <div class="wpt-diag-title">SEPA batch processing window</div>
+                    <div class="wpt-diag-body">Transfers submitted after 14:00 CET miss the daily SEPA batch and are queued for the next business day. Your transfer arrived at 15:42 — just under 2 hours after the cutoff.</div>
                   </div>
                   <div class="wpt-tl">
                     <div class="wpt-tl-hdr">Transfer progress</div>
                     <div class="wpt-tl-row">
                       <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
-                      <div class="wpt-tl-content"><div class="wpt-step-n">Payment received</div><div class="wpt-step-d">Mon 9 Mar, 10:24am</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Payment received</div><div class="wpt-step-d">Mon 9 Mar, 3:42pm</div></div>
                     </div>
                     <div class="wpt-tl-row">
                       <div class="wpt-tl-side"><div class="wpt-dot d">✓</div><div class="wpt-tl-ln d"></div></div>
-                      <div class="wpt-tl-content"><div class="wpt-step-n">Converted to THB</div><div class="wpt-step-d">Rate locked at 45.00</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Missed today's SEPA batch</div><div class="wpt-step-d">Cutoff was 14:00 CET — queued for tomorrow</div></div>
                     </div>
                     <div class="wpt-tl-row">
                       <div class="wpt-tl-side"><div class="wpt-dot a">⏳</div><div class="wpt-tl-ln p"></div></div>
-                      <div class="wpt-tl-content"><div class="wpt-step-n">Thai compliance check</div><div class="wpt-step-d">Required for transfers over ฿30,000</div><div class="wpt-eta">Est. 1–2 more days</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Processing in next batch</div><div class="wpt-step-d">SEPA credit transfer sent Tue morning</div><div class="wpt-eta">Clears Tue 10 Mar, ~9am CET</div></div>
                     </div>
                     <div class="wpt-tl-row">
                       <div class="wpt-tl-side"><div class="wpt-dot p">4</div></div>
-                      <div class="wpt-tl-content"><div class="wpt-step-n">Delivered to Somsak</div><div class="wpt-step-d">Expected Thu 13 Mar</div></div>
+                      <div class="wpt-tl-content"><div class="wpt-step-n">Delivered to Klaus</div><div class="wpt-step-d">Expected Tue 10 Mar by 3pm CET</div></div>
                     </div>
                   </div>
                   <div class="wpt-ok-card">
                     <div class="wpt-ok-ico">✅</div>
-                    <div><div class="wpt-ok-ttl">Nothing to do</div><div class="wpt-ok-txt">Wise will notify you when it's delivered. Your rate is already locked.</div></div>
+                    <div><div class="wpt-ok-ttl">Nothing to do</div><div class="wpt-ok-txt">Your rate of 1.167 EUR/GBP is already locked. Wise will notify you when Klaus receives the funds.</div></div>
                   </div>
                 </div>
 
@@ -1479,11 +1479,11 @@
 
                     <div class="support-field">
                       <div class="support-field-lbl">Transfer reference</div>
-                      <div class="support-field-val mono" id="sp-ref">TRF-7823-THB</div>
+                      <div class="support-field-val mono" id="sp-ref">TRF-3344-EUR</div>
                     </div>
                     <div class="support-field">
                       <div class="support-field-lbl">Transfer</div>
-                      <div class="support-field-val" id="sp-transfer">£850.00 → ฿38,240 THB · to Somsak Chai</div>
+                      <div class="support-field-val" id="sp-transfer">£750.00 → €875.25 EUR · to Klaus Müller</div>
                     </div>
                     <div class="support-field">
                       <div class="support-field-lbl">Corridor</div>
@@ -1499,7 +1499,7 @@
                     </div>
                     <div class="support-field">
                       <div class="support-field-lbl">Auto-generated description</div>
-                      <div class="support-field-val desc" id="sp-desc">Transfer TRF-7823-THB (£850.00 to Somsak Chai, Thailand) has been delayed beyond expected ETA. Delay reason: Thai AML compliance — transfer exceeds ฿30,000 threshold. Expected resolution: 1–2 additional business days. Customer contacted support after reviewing widget explanation.</div>
+                      <div class="support-field-val desc" id="sp-desc">Transfer TRF-3344-EUR (£750.00 to Klaus Müller, Germany) has been delayed beyond expected ETA. Delay reason: SEPA batch cut-off — transfer submitted after 14:00 CET processing window. Expected resolution: Tomorrow by 3pm CET. Customer contacted support after reviewing widget explanation.</div>
                     </div>
                     <div class="support-field">
                       <div class="support-field-lbl">Partner</div>
@@ -1715,17 +1715,17 @@
 </div>
 
 <script>
-var currentScenario = 'thailand';
+var currentScenario = 'eu';
 var fromNotif = false;
 
 var scenarioData = {
-  thailand: {
-    flag: '🇹🇭', amt: '£850.00', to: 'to Somsak Chai · Thailand',
-    receive: '฿38,240 THB', rate: '1 GBP = 45.00 THB', fee: '£4.80',
-    ref: 'TRF-7823-THB', spill: 'Delayed · 2 days',
-    wptTitle: 'Your transfer to Thailand is delayed',
-    notifTitle: 'Transfer to Thailand delayed',
-    notifBody: 'Your £850 to Somsak Chai is held for AML compliance. Tap to find out why.'
+  eu: {
+    flag: '🇩🇪', amt: '£750.00', to: 'to Klaus Müller · Germany',
+    receive: '€875.25 EUR', rate: '1 GBP = 1.167 EUR', fee: '£3.20',
+    ref: 'TRF-3344-EUR', spill: 'Delayed · SEPA cutoff',
+    wptTitle: 'Your transfer to Germany is delayed',
+    notifTitle: 'Transfer to Germany delayed',
+    notifBody: 'Your £750 to Klaus Müller missed today\'s SEPA batch. Tap for details.'
   },
   india: {
     flag: '🇮🇳', amt: '£500.00', to: 'to Priya Sharma · India',
@@ -1824,10 +1824,10 @@ var chatHistory = [];
 var isStreaming = false;
 
 var scenarioTransfers = {
-  thailand: {
-    corridor: 'GBP → THB (Thailand)', amount: '£850.00', recipient: 'Somsak Chai',
-    status: 'Delayed', eta: '1–2 additional business days',
-    reason: 'Thai AML compliance — transfer exceeds ฿30,000 threshold, routed for enhanced compliance screening',
+  eu: {
+    corridor: 'GBP → EUR (Germany)', amount: '£750.00', recipient: 'Klaus Müller',
+    status: 'Delayed', eta: 'Tomorrow by 3pm CET',
+    reason: 'SEPA batch cut-off — transfer submitted at 15:42, after the 14:00 CET daily processing window, queued for next business day batch',
     action: 'None — customer just needs to wait'
   },
   india: {
@@ -1845,7 +1845,7 @@ var scenarioTransfers = {
 };
 
 var simulatedExplanations = {
-  thailand: "Your transfer is held because Thailand's central bank requires all incoming transfers above ฿30,000 to pass an enhanced compliance review — this is a standard regulatory requirement, not specific to you or your account. Wise has already submitted it for review. No action is needed; your exchange rate of 45.00 THB/GBP is locked.",
+  eu: "Your £750 transfer to Klaus missed today's SEPA batch processing window by under 2 hours — transfers submitted after 14:00 CET are queued for the next business day. This is a normal part of how bank-funded SEPA transfers work. No action is needed; your exchange rate of 1.167 EUR/GBP is already locked and delivery is expected tomorrow by 3pm CET.",
   india: "India's Reserve Bank (RBI) requires every international transfer to declare its purpose — this is mandatory for all inbound transfers, not a flag on your account. Your £500 to Priya is on hold until you select a purpose code below. Once confirmed, Wise will process and deliver within 1–2 business days.",
   us: "This is a normal part of how US bank transfers work. Your bank submitted the ACH debit on Monday, but US ACH payments settle in daily batches — typically 1–3 business days. Wise will convert and send your dollars the same day ACH settles, expected Wednesday, with delivery Thursday."
 };
@@ -1868,7 +1868,7 @@ function buildExplainPrompt(scenario) {
 }
 
 var issueCategories = {
-  thailand: 'Transfer delay — AML compliance hold',
+  eu: 'Transfer delay — SEPA batch cut-off',
   india:    'Transfer on hold — missing RBI purpose code',
   us:       'Transfer delay — ACH bank settlement'
 };
@@ -2065,7 +2065,7 @@ function pickFallback(q, t) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  updateScreen2('thailand');
+  updateScreen2('eu');
   setTimeout(() => document.getElementById('s0-notif').classList.add('show'), 1200);
 });
 </script>
