@@ -864,6 +864,67 @@
   }
   .chat-send:hover { background: #1e4800; }
 
+  /* ===== SUPPORT PANEL ===== */
+  .support-panel {
+    position: absolute; inset: 0;
+    background: var(--white); border-radius: 24px 24px 0 0;
+    z-index: 10; display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.36s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .support-panel.open { transform: translateY(0); }
+  .support-panel-top {
+    padding: 14px 16px 10px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .support-back {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #f0f0f0; border: none; cursor: pointer;
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+  }
+  .support-panel-title { font-size: 15px; font-weight: 800; color: var(--navy); }
+  .support-panel-body { padding: 16px; overflow-y: auto; flex: 1; }
+  .support-context-label {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px;
+    color: var(--teal); margin-bottom: 10px;
+  }
+  .support-field {
+    margin-bottom: 12px;
+  }
+  .support-field-lbl {
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+  }
+  .support-field-val {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px;
+    font-size: 12.5px; color: var(--text); font-weight: 500; line-height: 1.5;
+  }
+  .support-field-val.mono { font-family: monospace; font-size: 12px; }
+  .support-field-val.issue { background: #fff8e6; border-color: #f0d080; color: #7a5500; }
+  .support-field-val.desc { min-height: 56px; white-space: pre-wrap; }
+  .support-send-btn {
+    width: 100%; background: var(--navy); color: var(--lime);
+    border: none; border-radius: 12px; padding: 13px;
+    font-size: 14px; font-weight: 800; font-family: inherit;
+    cursor: pointer; margin-top: 6px; transition: background 0.15s;
+  }
+  .support-send-btn:hover { background: #1e4800; }
+  .support-sent {
+    text-align: center; padding: 24px 16px;
+    display: none; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .support-sent.show { display: flex; }
+  .support-sent-ico { font-size: 36px; }
+  .support-sent-ttl { font-size: 16px; font-weight: 800; color: var(--navy); }
+  .support-sent-sub { font-size: 12px; color: var(--muted); line-height: 1.6; max-width: 240px; text-align: center; }
+  .support-ref-pill {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 6px 14px;
+    font-size: 11px; font-family: monospace; color: var(--navy); font-weight: 700;
+  }
+
   /* ===== AI KEY INPUT ===== */
   .ai-key-row {
     background: var(--bg); border: 1px solid var(--border);
@@ -1389,7 +1450,7 @@
 
                 <div class="wpt-esc">
                   Expected time has passed?
-                  <a onclick="alert('Escalates to Wise support with full transfer context pre-filled — no form filling.')">Contact support →</a>
+                  <a onclick="openSupportPanel()">Contact support →</a>
                   <div class="wpt-foot">
                     <span class="wpt-badge-sm">WISE</span>
                     <span>Transfer support powered by Wise Platform</span>
@@ -1406,6 +1467,58 @@
                   </div>
                 </div>
               </div>
+              <!-- SUPPORT PANEL (slides over sheet) -->
+              <div class="support-panel" id="support-panel">
+                <div class="support-panel-top">
+                  <button class="support-back" onclick="closeSupportPanel()">←</button>
+                  <span class="support-panel-title">Contact Wise Support</span>
+                </div>
+                <div class="support-panel-body">
+                  <div id="support-form-view">
+                    <div class="support-context-label">Transfer context — pre-filled by Wise Platform</div>
+
+                    <div class="support-field">
+                      <div class="support-field-lbl">Transfer reference</div>
+                      <div class="support-field-val mono" id="sp-ref">TRF-7823-THB</div>
+                    </div>
+                    <div class="support-field">
+                      <div class="support-field-lbl">Transfer</div>
+                      <div class="support-field-val" id="sp-transfer">£850.00 → ฿38,240 THB · to Somsak Chai</div>
+                    </div>
+                    <div class="support-field">
+                      <div class="support-field-lbl">Corridor</div>
+                      <div class="support-field-val" id="sp-corridor">GBP → THB (Thailand)</div>
+                    </div>
+                    <div class="support-field">
+                      <div class="support-field-lbl">Current status</div>
+                      <div class="support-field-val" id="sp-status">Delayed</div>
+                    </div>
+                    <div class="support-field">
+                      <div class="support-field-lbl">Issue category</div>
+                      <div class="support-field-val issue" id="sp-category">Transfer delay — AML compliance hold</div>
+                    </div>
+                    <div class="support-field">
+                      <div class="support-field-lbl">Auto-generated description</div>
+                      <div class="support-field-val desc" id="sp-desc">Transfer TRF-7823-THB (£850.00 to Somsak Chai, Thailand) has been delayed beyond expected ETA. Delay reason: Thai AML compliance — transfer exceeds ฿30,000 threshold. Expected resolution: 1–2 additional business days. Customer contacted support after reviewing widget explanation.</div>
+                    </div>
+                    <div class="support-field">
+                      <div class="support-field-lbl">Partner</div>
+                      <div class="support-field-val">Monzo · Platform API v2</div>
+                    </div>
+
+                    <button class="support-send-btn" onclick="submitSupportTicket()">Send to Wise Support →</button>
+                  </div>
+
+                  <div class="support-sent" id="support-sent-view">
+                    <div class="support-sent-ico">✅</div>
+                    <div class="support-sent-ttl">Ticket raised</div>
+                    <div class="support-sent-sub">Wise support has all the context and will respond within 2 hours. You'll be notified in Monzo.</div>
+                    <div class="support-ref-pill" id="sp-ticket-ref">SUP-00000</div>
+                    <button class="support-send-btn" style="margin-top:12px" onclick="closeSupportPanel()">Done</button>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -1754,6 +1867,43 @@ function buildExplainPrompt(scenario) {
     'Be specific to this corridor. Plain, calm language. Max 70 words. No bullet points or headers.';
 }
 
+var issueCategories = {
+  thailand: 'Transfer delay — AML compliance hold',
+  india:    'Transfer on hold — missing RBI purpose code',
+  us:       'Transfer delay — ACH bank settlement'
+};
+
+function openSupportPanel() {
+  var d  = scenarioData[currentScenario];
+  var t  = scenarioTransfers[currentScenario];
+
+  document.getElementById('sp-ref').textContent      = d.ref;
+  document.getElementById('sp-transfer').textContent = d.amt + ' → ' + d.receive + ' · ' + d.to;
+  document.getElementById('sp-corridor').textContent = t.corridor;
+  document.getElementById('sp-status').textContent   = t.status;
+  document.getElementById('sp-category').textContent = issueCategories[currentScenario];
+  document.getElementById('sp-desc').textContent =
+    'Transfer ' + d.ref + ' (' + d.amt + ' ' + d.to + ') has been delayed beyond expected ETA. ' +
+    'Delay reason: ' + t.reason + '. ' +
+    'Expected resolution: ' + t.eta + '. ' +
+    'Customer contacted support after reviewing widget explanation.';
+
+  document.getElementById('support-form-view').style.display = 'block';
+  document.getElementById('support-sent-view').classList.remove('show');
+  document.getElementById('support-panel').classList.add('open');
+}
+
+function closeSupportPanel() {
+  document.getElementById('support-panel').classList.remove('open');
+}
+
+function submitSupportTicket() {
+  var ticketRef = 'SUP-' + (Math.floor(Math.random() * 90000) + 10000);
+  document.getElementById('sp-ticket-ref').textContent = ticketRef;
+  document.getElementById('support-form-view').style.display = 'none';
+  document.getElementById('support-sent-view').classList.add('show');
+}
+
 function updateApiKey(val) {
   CLAUDE_API_KEY = val.trim();
   var status = document.getElementById('ai-key-status');
@@ -1911,7 +2061,7 @@ function pickFallback(q, t) {
   if (/safe|lost|scam|fraud/.test(lq)) return fallbackReplies.safe;
   if (/fee|cost|charge/.test(lq))  return fallbackReplies.fee;
   if (/long|when|time|how/.test(lq)) return "Based on current processing, expect resolution in " + t.eta + ". Wise will notify you as soon as the status changes.";
-  return "Your transfer is progressing as expected for the " + t.corridor + " corridor. If it doesn't resolve within " + t.eta + ", you can contact Wise support with full transfer context pre-filled.";
+  return "Your transfer is progressing as expected for the " + t.corridor + " corridor. If it doesn't resolve within " + t.eta + ", tap 'Contact support →' below — your transfer reference, corridor, and delay reason will be pre-filled automatically.";
 }
 
 window.addEventListener('DOMContentLoaded', () => {
