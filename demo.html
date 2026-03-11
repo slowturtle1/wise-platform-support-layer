@@ -944,28 +944,80 @@
   @keyframes ai-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
   .ai-explain-block.ai-done .ai-cursor { display: none; }
 
-  /* ===== CHAT SECTION ===== */
-  .chat-section { margin-top: 16px; border-top: 1px solid #f0f0f0; padding-top: 14px; }
-  .chat-divider { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; margin-bottom: 10px; }
-  .chat-msgs { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-  .chat-msg { font-size: 12px; line-height: 1.55; padding: 8px 11px; border-radius: 10px; max-width: 92%; }
-  .chat-msg-user { background: var(--navy); color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
-  .chat-msg-ai { background: #f0f0f0; color: var(--text); align-self: flex-start; border-bottom-left-radius: 3px; }
-  .chat-input-row { display: flex; gap: 8px; align-items: center; }
-  .chat-input {
+  /* ===== CHAT OPEN BUTTON ===== */
+  .chat-open-btn {
+    width: 100%; margin-top: 14px;
+    background: linear-gradient(135deg, #f0faf8, #e6f5f3);
+    border: 1.5px solid #b2e8e3; border-radius: 12px;
+    padding: 11px 14px; cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; gap: 9px;
+    font-size: 12.5px; font-weight: 600; color: #1a3a3a;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .chat-open-btn:hover { border-color: var(--teal); background: #d8f3ef; }
+  .chat-open-ico { font-size: 16px; flex-shrink: 0; }
+  .chat-open-arr { margin-left: auto; color: var(--teal); font-size: 16px; }
+
+  /* ===== CHAT POPUP ===== */
+  .chat-popup {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: white; border-radius: 24px 24px 0 0;
+    z-index: 40; display: flex; flex-direction: column;
+    height: 80%;
+    transform: translateY(100%);
+    transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: 0 -12px 48px rgba(0,0,0,0.22);
+  }
+  .chat-popup.open { transform: translateY(0); }
+  .chat-popup-hdr {
+    background: var(--teal); border-radius: 24px 24px 0 0;
+    padding: 14px 16px 12px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+  .chat-popup-avatar {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .chat-popup-brand { display: flex; align-items: center; gap: 10px; flex: 1; }
+  .chat-popup-title { font-size: 14px; font-weight: 800; color: white; }
+  .chat-popup-sub { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 1px; }
+  .chat-popup-close {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); border: none; cursor: pointer;
+    color: white; font-size: 12px; flex-shrink: 0;
+  }
+  .chat-popup-context {
+    background: #f0faf8; border-bottom: 1px solid #d0eeea;
+    padding: 8px 14px; flex-shrink: 0;
+    font-size: 10.5px; color: #1a3a3a; line-height: 1.4;
+    display: none;
+  }
+  .chat-popup-context.show { display: block; }
+  .chat-popup-context strong { font-weight: 700; color: var(--teal); }
+  .chat-popup-msgs {
+    flex: 1; overflow-y: auto; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .chat-msg { font-size: 12.5px; line-height: 1.55; padding: 9px 12px; border-radius: 14px; max-width: 88%; }
+  .chat-msg-user { background: var(--navy); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chat-msg-ai { background: #f0f0f2; color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .chat-msg-intro { background: #f0faf8; color: #1a3a3a; border: 1px solid #b2e8e3; align-self: stretch; border-radius: 12px; font-size: 12px; }
+  .chat-popup-input-row {
+    display: flex; gap: 8px; align-items: center;
+    padding: 10px 12px 14px; border-top: 1px solid #f0f0f0; flex-shrink: 0;
+  }
+  .chat-popup-input {
     flex: 1; border: 1.5px solid var(--border); border-radius: 20px;
-    padding: 7px 13px; font-size: 12px; font-family: inherit;
+    padding: 8px 14px; font-size: 12.5px; font-family: inherit;
     outline: none; background: white; transition: border-color 0.2s;
   }
-  .chat-input:focus { border-color: var(--teal); }
-  .chat-send {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--navy); color: var(--lime);
-    border: none; cursor: pointer; font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: background 0.15s;
+  .chat-popup-input:focus { border-color: var(--teal); }
+  .chat-popup-send {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--teal); color: white;
+    border: none; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .chat-send:hover { background: #1e4800; }
 
   /* ===== SUPPORT PANEL ===== */
   .support-panel {
@@ -1637,15 +1689,11 @@
                   </div>
                 </div>
 
-                <!-- AI Follow-up Chat -->
-                <div class="chat-section">
-                  <div class="chat-divider">Still have a question?</div>
-                  <div class="chat-msgs" id="chat-msgs"></div>
-                  <div class="chat-input-row">
-                    <input type="text" class="chat-input" id="chat-input" placeholder="Ask about your transfer…" onkeydown="if(event.key==='Enter') sendChatMessage()">
-                    <button class="chat-send" onclick="sendChatMessage()">➤</button>
-                  </div>
-                </div>
+                <button class="chat-open-btn" id="chat-open-btn" onclick="openChatPopup()">
+                  <span class="chat-open-ico">💬</span>
+                  <span>Still have a question? Chat with AI</span>
+                  <span class="chat-open-arr">›</span>
+                </button>
 
                 <div class="wpt-esc">
                   Expected time has passed?
@@ -1760,6 +1808,32 @@
                 </div>
               </div>
 
+            </div>
+          </div>
+
+          <!-- CHAT POPUP -->
+          <div class="chat-popup" id="chat-popup">
+            <div class="chat-popup-hdr">
+              <div class="chat-popup-brand">
+                <div class="chat-popup-avatar">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 6l5 12 3-7 3 7 5-12" stroke="#9FE870" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="chat-popup-title">Transfer Support Chat</div>
+                  <div class="chat-popup-sub" id="chat-popup-sub">Wise AI · Powered by Claude</div>
+                </div>
+              </div>
+              <button class="chat-popup-close" onclick="closeChatPopup()">✕</button>
+            </div>
+            <div class="chat-popup-context" id="chat-popup-context">
+              <!-- pre-filled context pill -->
+            </div>
+            <div class="chat-popup-msgs" id="chat-popup-msgs"></div>
+            <div class="chat-popup-input-row">
+              <input type="text" class="chat-popup-input" id="chat-popup-input" placeholder="Ask about your transfer…" onkeydown="if(event.key==='Enter') sendChatMessage()">
+              <button class="chat-popup-send" onclick="sendChatMessage()">➤</button>
             </div>
           </div>
 
@@ -2293,7 +2367,7 @@ function submitSupportTicket() {
 function populatePhone2(ticketRef) {
   var d = scenarioData[currentScenario];
   var t = scenarioTransfers[currentScenario];
-  var chatCount = Math.ceil(document.getElementById('chat-msgs').children.length / 2);
+  var chatCount = Math.ceil((document.getElementById('chat-popup-msgs').children.length - 1) / 2);
 
   // Inbox entry
   document.getElementById('p2-ticket-id').textContent    = ticketRef;
@@ -2349,7 +2423,7 @@ function openAgentPanel() {
   document.getElementById('ag-eta').textContent       = t.eta;
   document.getElementById('ag-suggestion').textContent = agentSuggestions[currentScenario];
 
-  var chatCount = document.getElementById('chat-msgs').children.length;
+  var chatCount = Math.ceil((document.getElementById('chat-popup-msgs').children.length - 1) / 2);
   var logChat = document.getElementById('ag-log-chat');
   if (chatCount > 0) {
     document.getElementById('ag-chat-count').textContent = Math.ceil(chatCount / 2);
@@ -2382,7 +2456,9 @@ async function startAIExplanation() {
   textEl.innerHTML = '<span class="ai-cursor"></span>';
   block.classList.remove('ai-done');
   chatHistory = [];
-  document.getElementById('chat-msgs').innerHTML = '';
+  document.getElementById('chat-popup-msgs').innerHTML = '';
+  document.getElementById('chat-popup-context').classList.remove('show');
+  document.getElementById('chat-popup').classList.remove('open');
 
   if (!CLAUDE_API_KEY) {
     modeEl.textContent = 'AI explanation (demo)';
@@ -2474,9 +2550,36 @@ async function simulateStream(text, targetEl) {
   }
 }
 
+function openChatPopup() {
+  var popup = document.getElementById('chat-popup');
+  popup.classList.add('open');
+
+  var msgs = document.getElementById('chat-popup-msgs');
+  if (msgs.children.length === 0) {
+    // Seed intro message
+    var t = scenarioTransfers[currentScenario];
+    var d = scenarioData[currentScenario];
+    var intro = document.createElement('div');
+    intro.className = 'chat-msg chat-msg-intro';
+    intro.innerHTML = '<strong>Hi! I\'m your Wise transfer assistant.</strong><br>I can see your ' + d.amt + ' transfer to ' + d.to.replace(/^to /, '') + ' is currently ' + t.status.toLowerCase() + '. Ask me anything about it.';
+    msgs.appendChild(intro);
+
+    // Show context pill
+    var ctx = document.getElementById('chat-popup-context');
+    ctx.innerHTML = '📎 Context: <strong>' + d.ref + '</strong> · ' + t.corridor + ' · ' + t.status;
+    ctx.classList.add('show');
+  }
+
+  setTimeout(() => document.getElementById('chat-popup-input').focus(), 400);
+}
+
+function closeChatPopup() {
+  document.getElementById('chat-popup').classList.remove('open');
+}
+
 async function sendChatMessage() {
-  var input = document.getElementById('chat-input');
-  var msgs  = document.getElementById('chat-msgs');
+  var input = document.getElementById('chat-popup-input');
+  var msgs  = document.getElementById('chat-popup-msgs');
   var msg   = input.value.trim();
   if (!msg || isStreaming) return;
   input.value = '';
@@ -2513,6 +2616,12 @@ async function sendChatMessage() {
 
   isStreaming = false;
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+function resetChatPopup() {
+  document.getElementById('chat-popup-msgs').innerHTML = '';
+  document.getElementById('chat-popup-context').classList.remove('show');
+  chatHistory = [];
 }
 
 function pickFallback(q, t) {
