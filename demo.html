@@ -925,6 +925,88 @@
     font-size: 11px; font-family: monospace; color: var(--navy); font-weight: 700;
   }
 
+  /* ===== AGENT PANEL ===== */
+  .agent-panel {
+    position: absolute; inset: 0;
+    background: #f0f2f5; border-radius: 24px 24px 0 0;
+    z-index: 30; display: flex; flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.36s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .agent-panel.open { transform: translateY(0); }
+  .agent-panel-top {
+    padding: 14px 14px 10px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid #dde1e8; flex-shrink: 0;
+    background: #1c1c2e;
+  }
+  .agent-panel-title { font-size: 13px; font-weight: 800; color: #fff; }
+  .agent-panel-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+  .agent-panel-top .support-back { background: rgba(255,255,255,0.1); color: #fff; }
+  .agent-badge {
+    background: var(--teal); color: white;
+    font-size: 8px; font-weight: 800; letter-spacing: 0.6px;
+    padding: 3px 8px; border-radius: 9999px; text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .agent-panel-body { padding: 14px; overflow-y: auto; flex: 1; }
+
+  .agent-ticket-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    background: white; border-radius: 10px; padding: 12px;
+    margin-bottom: 12px; border: 1px solid #dde1e8;
+  }
+  .agent-ticket-id { font-size: 15px; font-weight: 800; color: var(--navy); font-family: monospace; }
+  .agent-ticket-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .agent-status-pill {
+    background: #fef3c7; color: #92400e;
+    font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 9999px;
+    flex-shrink: 0;
+  }
+
+  .agent-section-lbl {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--muted); margin: 10px 0 6px; display: flex; align-items: center; gap: 6px;
+  }
+  .agent-auto-tag {
+    background: #e0f2fe; color: #0369a1;
+    font-size: 8px; font-weight: 700; padding: 1px 6px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .agent-fields {
+    background: white; border-radius: 10px; border: 1px solid #dde1e8; overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .agent-field {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 8px 12px; border-bottom: 1px solid #f0f2f5; font-size: 11.5px;
+  }
+  .agent-field:last-child { border-bottom: none; }
+  .agent-field-lbl { color: var(--muted); font-weight: 600; width: 56px; flex-shrink: 0; font-size: 10.5px; }
+  .agent-field-val { color: var(--text); font-weight: 500; flex: 1; }
+  .agent-field-val.mono { font-family: monospace; }
+  .agent-issue { color: #92400e; font-weight: 700; }
+
+  .agent-log {
+    background: #1c1c2e; border-radius: 10px; padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 5px; margin-bottom: 4px;
+  }
+  .agent-log-row { font-size: 11px; color: rgba(255,255,255,0.55); font-family: monospace; display: flex; align-items: center; gap: 6px; }
+  .agent-log-dot { color: var(--lime); font-size: 8px; }
+  .agent-log-esc .agent-log-dot { color: #f87171; }
+
+  .agent-suggestion {
+    background: white; border: 1px solid #dde1e8; border-left: 3px solid var(--teal);
+    border-radius: 10px; padding: 10px 12px;
+    font-size: 11.5px; color: var(--text); line-height: 1.6;
+  }
+  .agent-resolve-btn {
+    flex: 1; background: var(--navy); color: var(--lime);
+    border: none; border-radius: 10px; padding: 11px;
+    font-size: 12px; font-weight: 700; font-family: inherit;
+    cursor: pointer; transition: background 0.15s;
+  }
+
   /* ===== AI KEY INPUT ===== */
   .ai-key-row {
     background: var(--bg); border: 1px solid var(--border);
@@ -1448,15 +1530,6 @@
                   </div>
                 </div>
 
-                <div class="wpt-esc">
-                  Expected time has passed?
-                  <a onclick="openSupportPanel()">Contact support →</a>
-                  <div class="wpt-foot">
-                    <span class="wpt-badge-sm">WISE</span>
-                    <span>Transfer support powered by Wise Platform</span>
-                  </div>
-                </div>
-
                 <!-- AI Follow-up Chat -->
                 <div class="chat-section">
                   <div class="chat-divider">Still have a question?</div>
@@ -1464,6 +1537,15 @@
                   <div class="chat-input-row">
                     <input type="text" class="chat-input" id="chat-input" placeholder="Ask about your transfer…" onkeydown="if(event.key==='Enter') sendChatMessage()">
                     <button class="chat-send" onclick="sendChatMessage()">➤</button>
+                  </div>
+                </div>
+
+                <div class="wpt-esc">
+                  Expected time has passed?
+                  <a onclick="openSupportPanel()">Contact support →</a>
+                  <div class="wpt-foot">
+                    <span class="wpt-badge-sm">WISE</span>
+                    <span>Transfer support powered by Wise Platform</span>
                   </div>
                 </div>
               </div>
@@ -1487,7 +1569,7 @@
                     </div>
                     <div class="support-field">
                       <div class="support-field-lbl">Corridor</div>
-                      <div class="support-field-val" id="sp-corridor">GBP → THB (Thailand)</div>
+                      <div class="support-field-val" id="sp-corridor">GBP → EUR (Germany)</div>
                     </div>
                     <div class="support-field">
                       <div class="support-field-lbl">Current status</div>
@@ -1514,8 +1596,60 @@
                     <div class="support-sent-ttl">Ticket raised</div>
                     <div class="support-sent-sub">Wise support has all the context and will respond within 2 hours. You'll be notified in Monzo.</div>
                     <div class="support-ref-pill" id="sp-ticket-ref">SUP-00000</div>
-                    <button class="support-send-btn" style="margin-top:12px" onclick="closeSupportPanel()">Done</button>
+                    <button class="support-send-btn" style="margin-top:12px;background:var(--teal)" onclick="openAgentPanel()">See what Wise Support receives →</button>
+                    <button class="support-send-btn" style="margin-top:8px;background:transparent;color:var(--muted);border:1.5px solid var(--border)" onclick="closeSupportPanel()">Done</button>
                   </div>
+                </div>
+              </div>
+
+              <!-- AGENT VIEW PANEL (slides over support panel) -->
+              <div class="agent-panel" id="agent-panel">
+                <div class="agent-panel-top">
+                  <button class="support-back" onclick="closeAgentPanel()">←</button>
+                  <div style="flex:1">
+                    <div class="agent-panel-title">Wise Support — Agent View</div>
+                    <div class="agent-panel-sub">What the support agent receives</div>
+                  </div>
+                  <span class="agent-badge">INTERNAL</span>
+                </div>
+                <div class="agent-panel-body">
+
+                  <div class="agent-ticket-header">
+                    <div>
+                      <div class="agent-ticket-id" id="ag-ticket-id">SUP-00000</div>
+                      <div class="agent-ticket-meta">Raised via Monzo · Partner widget · just now</div>
+                    </div>
+                    <div class="agent-status-pill">New</div>
+                  </div>
+
+                  <div class="agent-section-lbl">Transfer context <span class="agent-auto-tag">auto-populated</span></div>
+                  <div class="agent-fields">
+                    <div class="agent-field"><span class="agent-field-lbl">Ref</span><span class="agent-field-val mono" id="ag-ref">TRF-3344-EUR</span></div>
+                    <div class="agent-field"><span class="agent-field-lbl">Transfer</span><span class="agent-field-val" id="ag-transfer">£750.00 → €875.25 · Klaus Müller</span></div>
+                    <div class="agent-field"><span class="agent-field-lbl">Corridor</span><span class="agent-field-val" id="ag-corridor">GBP → EUR (Germany)</span></div>
+                    <div class="agent-field"><span class="agent-field-lbl">Status</span><span class="agent-field-val" id="ag-status">Delayed</span></div>
+                    <div class="agent-field"><span class="agent-field-lbl">Issue</span><span class="agent-field-val agent-issue" id="ag-issue">Transfer delay — SEPA batch cut-off</span></div>
+                    <div class="agent-field"><span class="agent-field-lbl">ETA</span><span class="agent-field-val" id="ag-eta">Tomorrow by 3pm CET</span></div>
+                    <div class="agent-field"><span class="agent-field-lbl">Partner</span><span class="agent-field-val">Monzo · Platform API v2</span></div>
+                  </div>
+
+                  <div class="agent-section-lbl">Widget interaction log <span class="agent-auto-tag">live</span></div>
+                  <div class="agent-log">
+                    <div class="agent-log-row"><span class="agent-log-dot">●</span> AI explanation shown to customer</div>
+                    <div class="agent-log-row agent-log-chat" id="ag-log-chat" style="display:none"><span class="agent-log-dot">●</span> Customer used follow-up chat (<span id="ag-chat-count">0</span> message(s))</div>
+                    <div class="agent-log-row agent-log-esc"><span class="agent-log-dot" style="color:#f87171">●</span> Customer escalated to support</div>
+                  </div>
+
+                  <div class="agent-section-lbl">Suggested resolution <span class="agent-auto-tag">AI</span></div>
+                  <div class="agent-suggestion" id="ag-suggestion">
+                    Routine SEPA batch cutoff delay — no action required. Transfer will process in next batch (Tue ~9am CET). Advise customer delivery is expected Tue 10 Mar by 3pm CET. Rate already locked at 1.167 EUR/GBP.
+                  </div>
+
+                  <div style="display:flex;gap:8px;margin-top:14px">
+                    <button class="agent-resolve-btn" onclick="this.textContent='✓ Resolved';this.style.background='#d1fae5';this.style.color='#065f46'">Mark resolved</button>
+                    <button class="agent-resolve-btn" style="background:#f3f4f6;color:var(--muted)">Assign to team</button>
+                  </div>
+
                 </div>
               </div>
 
@@ -1894,14 +2028,52 @@ function openSupportPanel() {
 }
 
 function closeSupportPanel() {
+  closeAgentPanel();
   document.getElementById('support-panel').classList.remove('open');
 }
 
+var agentSuggestions = {
+  eu:    'Routine SEPA batch cutoff delay — no action required. Transfer will process in next batch (Tue ~9am CET). Advise customer delivery is expected Tue 10 Mar by 3pm CET. Rate already locked at 1.167 EUR/GBP.',
+  india: 'Transfer on hold pending RBI purpose code confirmation. Customer must select a purpose code via the Monzo app to release the transfer. ETA: 1–2 business days after confirmation. No rate lock until confirmed.',
+  us:    'Normal US ACH settlement delay — no action required. Debit submitted Monday, expected to clear Wednesday. Advise customer delivery expected Thursday. Optionally suggest debit card funding for future instant transfers.'
+};
+
+var lastTicketRef = 'SUP-00000';
+
 function submitSupportTicket() {
-  var ticketRef = 'SUP-' + (Math.floor(Math.random() * 90000) + 10000);
-  document.getElementById('sp-ticket-ref').textContent = ticketRef;
+  lastTicketRef = 'SUP-' + (Math.floor(Math.random() * 90000) + 10000);
+  document.getElementById('sp-ticket-ref').textContent = lastTicketRef;
   document.getElementById('support-form-view').style.display = 'none';
   document.getElementById('support-sent-view').classList.add('show');
+}
+
+function openAgentPanel() {
+  var d = scenarioData[currentScenario];
+  var t = scenarioTransfers[currentScenario];
+
+  document.getElementById('ag-ticket-id').textContent = lastTicketRef;
+  document.getElementById('ag-ref').textContent       = d.ref;
+  document.getElementById('ag-transfer').textContent  = d.amt + ' → ' + d.receive + ' · ' + d.to.replace(/^to /, '').split(' · ')[0];
+  document.getElementById('ag-corridor').textContent  = t.corridor;
+  document.getElementById('ag-status').textContent    = t.status;
+  document.getElementById('ag-issue').textContent     = issueCategories[currentScenario];
+  document.getElementById('ag-eta').textContent       = t.eta;
+  document.getElementById('ag-suggestion').textContent = agentSuggestions[currentScenario];
+
+  var chatCount = document.getElementById('chat-msgs').children.length;
+  var logChat = document.getElementById('ag-log-chat');
+  if (chatCount > 0) {
+    document.getElementById('ag-chat-count').textContent = Math.ceil(chatCount / 2);
+    logChat.style.display = 'flex';
+  } else {
+    logChat.style.display = 'none';
+  }
+
+  document.getElementById('agent-panel').classList.add('open');
+}
+
+function closeAgentPanel() {
+  document.getElementById('agent-panel').classList.remove('open');
 }
 
 function updateApiKey(val) {
