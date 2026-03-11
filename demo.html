@@ -190,10 +190,113 @@
   /* ===== DEMO LAYOUT ===== */
   .demo-layout {
     display: grid;
-    grid-template-columns: 1fr 420px;
-    gap: 4rem; align-items: start;
+    grid-template-columns: 1fr auto;
+    gap: 3rem; align-items: start;
   }
   .demo-left { padding-top: 0.5rem; }
+
+  /* Two-phone pair */
+  .phones-pair { display: flex; gap: 20px; align-items: flex-start; position: sticky; top: 88px; }
+  .phone-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .phone-col-lbl {
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.6px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .phone-col-lbl span {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 2px 8px; border-radius: 9999px;
+  }
+
+  /* Agent phone */
+  .demo-phone2 {
+    width: 340px; height: 780px;
+    background: #f0f2f5;
+    border-radius: 44px; overflow: hidden; position: relative;
+    box-shadow:
+      0 32px 72px rgba(22,51,0,0.18),
+      0 0 0 1px rgba(22,51,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.6);
+    flex-shrink: 0;
+  }
+
+  /* Agent inbox screen */
+  .a-status { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px 0; font-size: 13px; font-weight: 600; background: #1c1c2e; color: white; }
+  .a-inbox-hdr { background: #1c1c2e; padding: 4px 18px 16px; }
+  .a-inbox-title { font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.4px; }
+  .a-inbox-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+  .a-tabs { display: flex; gap: 0; padding: 0 18px 12px; }
+  .a-tab { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 9999px; color: rgba(255,255,255,0.45); cursor: pointer; }
+  .a-tab.active { background: rgba(159,232,112,0.15); color: var(--lime); }
+  .a-body { background: #f0f2f5; padding: 12px; overflow-y: auto; height: calc(780px - 44px - 82px - 38px); }
+
+  .a-ticket {
+    background: white; border-radius: 12px; padding: 12px;
+    margin-bottom: 8px; border: 1px solid #e4e6ea;
+    display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .a-ticket:hover { border-color: var(--teal); }
+  .a-ticket-new {
+    border-color: var(--teal); border-left: 3px solid var(--teal);
+    display: none;
+  }
+  .a-ticket-new.visible {
+    display: flex;
+    animation: ticketIn 0.45s cubic-bezier(0.32,0.72,0,1);
+  }
+  @keyframes ticketIn { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+  .a-new-badge {
+    background: var(--teal); color: white;
+    font-size: 8px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 2px 7px; border-radius: 9999px; text-transform: uppercase;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .a-ticket-body { flex: 1; }
+  .a-ticket-id-row { display: flex; align-items: center; justify-content: space-between; }
+  .a-ticket-id { font-size: 12px; font-weight: 800; color: var(--navy); font-family: monospace; }
+  .a-ticket-time { font-size: 10px; color: var(--muted); }
+  .a-ticket-issue { font-size: 11px; font-weight: 600; color: var(--text); margin-top: 2px; }
+  .a-ticket-meta-row { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .a-ticket-resolved { opacity: 0.5; }
+  .a-resolved-dot { width: 24px; height: 24px; border-radius: 50%; background: #d1fae5; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 2px; }
+  .a-section-lbl { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 0 8px; }
+
+  /* Agent detail screen */
+  .a-detail-hdr { background: #1c1c2e; padding: 12px 16px 14px; }
+  .a-back-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .a-back-btn { background: rgba(255,255,255,0.12); border: none; color: white; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-family: inherit; cursor: pointer; }
+  .a-detail-id { font-size: 18px; font-weight: 800; color: white; font-family: monospace; letter-spacing: -0.3px; }
+  .a-detail-badges { display: flex; gap: 6px; margin-top: 6px; }
+  .a-detail-badge { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; }
+  .a-detail-badge.new { background: var(--teal); color: white; }
+  .a-detail-badge.partner { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+  .a-detail-body { padding: 12px; overflow-y: auto; height: calc(780px - 44px - 96px); background: #f0f2f5; }
+
+  .a-card { background: white; border-radius: 12px; border: 1px solid #e4e6ea; overflow: hidden; margin-bottom: 10px; }
+  .a-card-hdr { padding: 9px 12px 0; font-size: 9px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+  .a-auto-tag { background: #e0f2fe; color: #0369a1; font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+  .a-row { display: flex; align-items: baseline; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #f4f4f6; font-size: 11px; }
+  .a-row:last-child { border-bottom: none; }
+  .a-row-lbl { color: var(--muted); font-size: 10px; font-weight: 600; width: 52px; flex-shrink: 0; }
+  .a-row-val { color: var(--text); font-weight: 500; flex: 1; }
+  .a-row-val.mono { font-family: monospace; }
+  .a-row-val.issue { color: #92400e; font-weight: 700; }
+
+  .a-log { background: #1c1c2e; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; }
+  .a-log-line { font-size: 10px; color: rgba(255,255,255,0.55); font-family: monospace; display: flex; align-items: center; gap: 5px; }
+  .a-log-dot { font-size: 7px; color: var(--lime); }
+  .a-log-dot.red { color: #f87171; }
+
+  .a-suggestion { background: white; border: 1px solid #e4e6ea; border-left: 3px solid var(--teal); border-radius: 10px; padding: 10px 12px; font-size: 11px; color: var(--text); line-height: 1.6; }
+  .a-action-row { display: flex; gap: 8px; margin-top: 10px; }
+  .a-btn-primary { flex:1; background: var(--navy); color: var(--lime); border: none; border-radius: 10px; padding: 11px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
+  .a-btn-ghost { flex:1; background: white; color: var(--muted); border: 1px solid #e4e6ea; border-radius: 10px; padding: 11px; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
+
+  @media (max-width: 900px) {
+    .phones-pair { flex-direction: column; }
+    .demo-phone2 { width: 375px; }
+  }
 
   /* Scenario buttons */
   .scenario-lbl {
@@ -1147,8 +1250,12 @@
         </div>
       </div>
 
-      <div class="phone-wrap">
-        <div class="demo-phone" id="demo-phone">
+      <div class="phones-pair">
+
+        <!-- PHONE 1: Customer (Monzo) -->
+        <div class="phone-col">
+          <div class="phone-col-lbl"><span>🏦 Customer · Monzo</span></div>
+          <div class="demo-phone" id="demo-phone">
 
           <!-- SCREEN 0: LOCK SCREEN + NOTIFICATION -->
           <div class="p-screen" id="p-s0">
@@ -1656,10 +1763,138 @@
             </div>
           </div>
 
-        </div>
-      </div>
-    </div>
-  </div>
+          </div><!-- /demo-phone -->
+        </div><!-- /phone-col -->
+
+        <!-- PHONE 2: Wise Support Agent -->
+        <div class="phone-col">
+          <div class="phone-col-lbl"><span>⚡ Wise Support · Agent</span></div>
+          <div class="demo-phone2" id="demo-phone2">
+
+            <!-- AGENT SCREEN 0: INBOX -->
+            <div class="p-screen" id="p2-s0">
+              <div class="a-status">
+                <span>9:41</span><span style="font-size:12px">●●●</span>
+              </div>
+              <div class="a-inbox-hdr">
+                <div class="a-inbox-title">Support Queue</div>
+                <div class="a-inbox-sub">Wise Platform Partners</div>
+              </div>
+              <div class="a-tabs">
+                <div class="a-tab active">Open</div>
+                <div class="a-tab">Resolved</div>
+                <div class="a-tab">All</div>
+              </div>
+              <div class="a-body">
+                <div class="a-section-lbl">Incoming</div>
+
+                <!-- NEW ticket — hidden until submitted -->
+                <div class="a-ticket a-ticket-new" id="p2-new-ticket" onclick="p2GoDetail()">
+                  <div class="a-new-badge">NEW</div>
+                  <div class="a-ticket-body">
+                    <div class="a-ticket-id-row">
+                      <span class="a-ticket-id" id="p2-ticket-id">SUP-00000</span>
+                      <span class="a-ticket-time">just now</span>
+                    </div>
+                    <div class="a-ticket-issue" id="p2-ticket-issue">Transfer delay — SEPA batch cut-off</div>
+                    <div class="a-ticket-meta-row" id="p2-ticket-meta">via Monzo · GBP → EUR (Germany)</div>
+                  </div>
+                  <div style="color:#ccc;font-size:18px;margin-top:2px">›</div>
+                </div>
+
+                <div class="a-section-lbl" style="margin-top:10px">Earlier today</div>
+
+                <!-- Existing resolved tickets -->
+                <div class="a-ticket a-ticket-resolved">
+                  <div class="a-resolved-dot">✓</div>
+                  <div class="a-ticket-body">
+                    <div class="a-ticket-id-row">
+                      <span class="a-ticket-id">SUP-82341</span>
+                      <span class="a-ticket-time">2h ago</span>
+                    </div>
+                    <div class="a-ticket-issue">Transfer delay — RBI purpose code</div>
+                    <div class="a-ticket-meta-row">via Barclays · GBP → INR (India)</div>
+                  </div>
+                </div>
+                <div class="a-ticket a-ticket-resolved">
+                  <div class="a-resolved-dot">✓</div>
+                  <div class="a-ticket-body">
+                    <div class="a-ticket-id-row">
+                      <span class="a-ticket-id">SUP-82298</span>
+                      <span class="a-ticket-time">5h ago</span>
+                    </div>
+                    <div class="a-ticket-issue">Transfer delay — US ACH settlement</div>
+                    <div class="a-ticket-meta-row">via Revolut · GBP → USD</div>
+                  </div>
+                </div>
+                <div class="a-ticket a-ticket-resolved">
+                  <div class="a-resolved-dot">✓</div>
+                  <div class="a-ticket-body">
+                    <div class="a-ticket-id-row">
+                      <span class="a-ticket-id">SUP-82201</span>
+                      <span class="a-ticket-time">8h ago</span>
+                    </div>
+                    <div class="a-ticket-issue">Transfer delay — SEPA batch cut-off</div>
+                    <div class="a-ticket-meta-row">via Monzo · GBP → EUR (France)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AGENT SCREEN 1: TICKET DETAIL -->
+            <div class="p-screen slide-right" id="p2-s1">
+              <div class="a-detail-hdr">
+                <div class="a-back-row">
+                  <button class="a-back-btn" onclick="p2GoBack()">← Queue</button>
+                </div>
+                <div class="a-detail-id" id="p2-detail-id">SUP-00000</div>
+                <div class="a-detail-badges">
+                  <span class="a-detail-badge new">New</span>
+                  <span class="a-detail-badge partner">Monzo · Platform API v2</span>
+                </div>
+              </div>
+              <div class="a-detail-body">
+
+                <div class="a-card">
+                  <div class="a-card-hdr">Transfer context <span class="a-auto-tag">auto-populated</span></div>
+                  <div class="a-row"><span class="a-row-lbl">Ref</span><span class="a-row-val mono" id="p2-ref">TRF-3344-EUR</span></div>
+                  <div class="a-row"><span class="a-row-lbl">Transfer</span><span class="a-row-val" id="p2-transfer">£750 → €875.25 · Klaus Müller</span></div>
+                  <div class="a-row"><span class="a-row-lbl">Corridor</span><span class="a-row-val" id="p2-corridor">GBP → EUR (Germany)</span></div>
+                  <div class="a-row"><span class="a-row-lbl">Status</span><span class="a-row-val" id="p2-status">Delayed</span></div>
+                  <div class="a-row"><span class="a-row-lbl">Issue</span><span class="a-row-val issue" id="p2-issue">Transfer delay — SEPA batch cut-off</span></div>
+                  <div class="a-row"><span class="a-row-lbl">ETA</span><span class="a-row-val" id="p2-eta">Tomorrow by 3pm CET</span></div>
+                </div>
+
+                <div class="a-card">
+                  <div class="a-card-hdr">Widget interaction log <span class="a-auto-tag">live</span></div>
+                  <div class="a-log" style="border-radius:0;margin:0;padding:10px 12px">
+                    <div class="a-log-line"><span class="a-log-dot">●</span> AI explanation shown to customer</div>
+                    <div class="a-log-line p2-log-chat" id="p2-log-chat" style="display:none"><span class="a-log-dot">●</span> Follow-up chat: <span id="p2-chat-count">0</span> message(s)</div>
+                    <div class="a-log-line"><span class="a-log-dot red">●</span> Customer escalated to support</div>
+                  </div>
+                </div>
+
+                <div class="a-card">
+                  <div class="a-card-hdr">Suggested resolution <span class="a-auto-tag">AI</span></div>
+                  <div class="a-suggestion" style="border-radius:0;border:none;border-top:1px solid #f0f0f0;margin:0" id="p2-suggestion">
+                    Routine SEPA batch cutoff delay — no action required. Transfer will process in next batch (Tue ~9am CET). Advise customer delivery expected Tue 10 Mar by 3pm CET. Rate locked at 1.167 EUR/GBP.
+                  </div>
+                </div>
+
+                <div class="a-action-row">
+                  <button class="a-btn-primary" onclick="this.textContent='✓ Resolved';this.style.background='#059669';this.style.color='white'">Mark resolved</button>
+                  <button class="a-btn-ghost">Assign →</button>
+                </div>
+
+              </div>
+            </div>
+
+          </div><!-- /demo-phone2 -->
+        </div><!-- /phone-col 2 -->
+
+      </div><!-- /phones-pair -->
+    </div><!-- /demo-layout -->
+  </div><!-- /section-inner -->
 </section>
 
 <!-- IMPACT -->
@@ -1950,6 +2185,13 @@ function setSupportScenario(name, btn) {
   document.getElementById('s0-notif-body').textContent   = d.notifBody;
   updateScreen2(name);
   resetToLockScreen();
+  resetPhone2();
+}
+
+function resetPhone2() {
+  document.getElementById('p2-new-ticket').classList.remove('visible');
+  document.getElementById('p2-s1').classList.add('slide-right');
+  document.getElementById('p2-s0').classList.remove('slide-left');
 }
 
 /* ===== AI INTEGRATION ===== */
@@ -2045,6 +2287,53 @@ function submitSupportTicket() {
   document.getElementById('sp-ticket-ref').textContent = lastTicketRef;
   document.getElementById('support-form-view').style.display = 'none';
   document.getElementById('support-sent-view').classList.add('show');
+  populatePhone2(lastTicketRef);
+}
+
+function populatePhone2(ticketRef) {
+  var d = scenarioData[currentScenario];
+  var t = scenarioTransfers[currentScenario];
+  var chatCount = Math.ceil(document.getElementById('chat-msgs').children.length / 2);
+
+  // Inbox entry
+  document.getElementById('p2-ticket-id').textContent    = ticketRef;
+  document.getElementById('p2-ticket-issue').textContent = issueCategories[currentScenario];
+  document.getElementById('p2-ticket-meta').textContent  = 'via Monzo · ' + t.corridor;
+
+  // Detail screen
+  document.getElementById('p2-detail-id').textContent  = ticketRef;
+  document.getElementById('p2-ref').textContent        = d.ref;
+  document.getElementById('p2-transfer').textContent   = d.amt + ' → ' + d.receive + ' · ' + d.to.replace(/^to /, '').split(' · ')[0];
+  document.getElementById('p2-corridor').textContent   = t.corridor;
+  document.getElementById('p2-status').textContent     = t.status;
+  document.getElementById('p2-issue').textContent      = issueCategories[currentScenario];
+  document.getElementById('p2-eta').textContent        = t.eta;
+  document.getElementById('p2-suggestion').textContent = agentSuggestions[currentScenario];
+
+  var logChat = document.getElementById('p2-log-chat');
+  if (chatCount > 0) {
+    document.getElementById('p2-chat-count').textContent = chatCount;
+    logChat.style.display = 'flex';
+  } else {
+    logChat.style.display = 'none';
+  }
+
+  // Animate ticket into inbox
+  var newTicket = document.getElementById('p2-new-ticket');
+  newTicket.classList.add('visible');
+
+  // After short delay, slide to detail view
+  setTimeout(function() { p2GoDetail(); }, 1400);
+}
+
+function p2GoDetail() {
+  document.getElementById('p2-s0').classList.add('slide-left');
+  document.getElementById('p2-s1').classList.remove('slide-right');
+}
+
+function p2GoBack() {
+  document.getElementById('p2-s1').classList.add('slide-right');
+  document.getElementById('p2-s0').classList.remove('slide-left');
 }
 
 function openAgentPanel() {
