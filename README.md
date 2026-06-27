@@ -44,16 +44,6 @@ Switch between three live scenarios from outside the phone mockup:
 - **India** — RBI purpose code missing, customer must act
 - **US** — ACH settlement window, informational
 
-## UNFILTERED (experiment)
-
-A separate single-file concept exploring AI model bias: ask a question, pick one or more
-models (Claude, ChatGPT, Grok, DeepSeek), and compare how each frames the same question
-through its own lens. Includes three demo questions with illustrative per-model responses.
-
-**Open `unfiltered.html` in any browser** — also linked from the nav bar in `demo.html`.
-
-> Responses are simulated illustrations of each model's house style, not live API output.
-
 ## Design
 
 - Wise design system: `#163300` navy, `#9FE870` lime, `#00b9a9` teal
