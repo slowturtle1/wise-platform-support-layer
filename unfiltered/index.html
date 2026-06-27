@@ -163,6 +163,21 @@
   }
   .disclaimer strong { color: var(--txt); }
   .backhome { text-align:center; color: var(--muted); font-size: 12px; padding: 30px; }
+
+  /* compare CTA (shown for the voting question) */
+  .compare-cta {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    background: linear-gradient(90deg, rgba(0,135,220,0.12), rgba(228,0,59,0.12));
+    border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px;
+  }
+  .compare-cta .ct-txt { flex: 1; min-width: 240px; }
+  .compare-cta .ct-txt h4 { font-size: 16px; margin-bottom: 3px; }
+  .compare-cta .ct-txt p { font-size: 13px; color: var(--muted); }
+  .compare-cta a.ct-btn {
+    background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; font-size: 14px;
+    padding: 11px 18px; border-radius: 10px; white-space: nowrap;
+  }
+  .compare-cta a.ct-btn:hover { filter: brightness(1.08); }
 </style>
 </head>
 <body>
@@ -237,6 +252,7 @@
   <section class="screen" id="s4">
     <div class="resbar"><h2 class="title">The unfiltered answers</h2></div>
     <p class="resq">Q: <em id="resQ"></em></p>
+    <div id="compareCta"></div>
     <div class="answers" id="answers"></div>
     <div class="disclaimer">
       <strong>This is a concept demo.</strong> These responses are <strong>simulated illustrations</strong> of each model's general
@@ -472,6 +488,17 @@ function renderResults() {
   const out = document.getElementById("answers");
   out.className = "answers" + (STATE.models.length > 1 ? " multi" : "");
   document.getElementById("resQ").innerHTML = escapeHtml(STATE.question);
+
+  // For the UK voting question, surface the sourced two-option comparison
+  const cta = document.getElementById("compareCta");
+  cta.innerHTML = STATE.demoKey === "vote" ? `
+    <div class="compare-cta">
+      <div class="ct-txt">
+        <h4>Want the receipts, not the rhetoric?</h4>
+        <p>See a sourced, side-by-side comparison — Conservatives vs Labour, what they <em>promised</em> vs what they <em>delivered</em>.</p>
+      </div>
+      <a class="ct-btn" href="compare.html">Open transparency comparison →</a>
+    </div>` : "";
   out.innerHTML = STATE.models.map((key, idx) => {
     const m = MODELS[key];
     const data = (STATE.demoKey && ANSWERS[STATE.demoKey]) ? ANSWERS[STATE.demoKey][key] : genericAnswer(key, STATE.question);

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UNFILTERED · Transparency — Conservatives vs Labour: promised vs delivered</title>
+<style>
+  :root {
+    --ink: #121212;
+    --ink-soft: #4a4a4a;
+    --paper: #fffef9;
+    --rule: #dcdcd2;
+    --masthead: #052962;        /* Guardian-ish navy */
+    --con: #0087DC;             /* Conservative blue */
+    --lab: #E4003B;             /* Labour red */
+    --kept: #1f7a3d;
+    --partial: #b8860b;
+    --broken: #c0392b;
+    --progress: #5a6b7a;
+    --accent: #ff4d4d;          /* UNFILTERED red */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", "Liberation Serif", serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .sans { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    background: var(--masthead); color: #fff;
+    padding: 10px 20px; display: flex; align-items: center; gap: 14px;
+  }
+  .masthead .home { font-family: -apple-system, Arial, sans-serif; font-weight: 800; letter-spacing: -0.3px; text-decoration: none; font-size: 15px; }
+  .masthead .home .x { color: #ff7a7a; }
+  .masthead .sec { font-family: -apple-system, Arial, sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; opacity: .85; }
+  .masthead .date { margin-left: auto; font-family: -apple-system, Arial, sans-serif; font-size: 12px; opacity: .8; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Headline block ---------- */
+  .head { padding: 34px 0 22px; border-bottom: 1px solid var(--rule); }
+  .kicker { font-family: -apple-system, Arial, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); }
+  h1 { font-size: clamp(30px, 5vw, 50px); line-height: 1.04; letter-spacing: -0.5px; margin: 10px 0 14px; font-weight: 700; }
+  .standfirst { font-size: 19px; color: var(--ink-soft); max-width: 760px; }
+  .byline { font-family: -apple-system, Arial, sans-serif; font-size: 13px; color: var(--ink-soft); margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .byline .pill { border: 1px solid var(--rule); border-radius: 3px; padding: 3px 8px; }
+
+  /* ---------- Option switcher (generic "two options") ---------- */
+  .vs-banner {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch;
+    margin: 26px 0 8px; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden;
+  }
+  .vs-side { padding: 16px 18px; }
+  .vs-side.con { border-top: 5px solid var(--con); }
+  .vs-side.lab { border-top: 5px solid var(--lab); text-align: right; }
+  .vs-side .nm { font-size: 22px; font-weight: 700; }
+  .vs-side .meta { font-family: -apple-system, Arial, sans-serif; font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+  .vs-mid { display: flex; align-items: center; justify-content: center; padding: 0 14px; font-family: -apple-system, Arial, sans-serif; font-weight: 800; color: var(--ink-soft); background: #f3f3ec; }
+
+  /* ---------- Legend ---------- */
+  .legend { font-family: -apple-system, Arial, sans-serif; font-size: 12.5px; color: var(--ink-soft); display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 4px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .status { font-family: -apple-system, Arial, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding: 2px 7px; border-radius: 3px; color: #fff; white-space: nowrap; }
+  .s-kept { background: var(--kept); }
+  .s-partial { background: var(--partial); }
+  .s-broken { background: var(--broken); }
+  .s-progress { background: var(--progress); }
+
+  /* ---------- Theme blocks ---------- */
+  .theme { padding: 26px 0; border-bottom: 1px solid var(--rule); }
+  .theme h2 { font-size: 24px; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .theme .q { font-family: -apple-system, Arial, sans-serif; font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .col { border-top: 4px solid; padding-top: 12px; }
+  .col.con { border-color: var(--con); }
+  .col.lab { border-color: var(--lab); }
+  .col .party { font-family: -apple-system, Arial, sans-serif; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .col.con .party { color: var(--con); }
+  .col.lab .party { color: var(--lab); }
+  .row { margin-bottom: 14px; }
+  .row .lbl { font-family: -apple-system, Arial, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #8a8a80; }
+  .row .txt { font-size: 16px; margin-top: 2px; }
+  .row .txt sup a { color: var(--accent); text-decoration: none; font-size: 11px; font-family: -apple-system, Arial, sans-serif; font-weight: 700; }
+  .verdict { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-family: -apple-system, Arial, sans-serif; font-size: 12.5px; color: var(--ink-soft); }
+
+  /* ---------- Sources ---------- */
+  .sources { padding: 28px 0 12px; }
+  .sources h3 { font-family: -apple-system, Arial, sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-soft); margin-bottom: 12px; }
+  .sources ol { font-family: -apple-system, Arial, sans-serif; font-size: 13px; color: var(--ink-soft); padding-left: 22px; }
+  .sources li { margin-bottom: 7px; }
+  .sources li a { color: var(--masthead); }
+
+  .disclaimer {
+    font-family: -apple-system, Arial, sans-serif; font-size: 13px; color: var(--ink-soft);
+    background: #f3f3ec; border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0;
+    padding: 14px 16px; margin: 18px 0 40px;
+  }
+  .disclaimer strong { color: var(--ink); }
+
+  .backbar { font-family: -apple-system, Arial, sans-serif; padding: 18px 0 50px; }
+  .backbar a { color: var(--masthead); text-decoration: none; font-weight: 600; font-size: 14px; }
+
+  @media (max-width: 680px) {
+    .cols { grid-template-columns: 1fr; }
+    .vs-banner { grid-template-columns: 1fr; }
+    .vs-side.lab { text-align: left; }
+    .vs-mid { padding: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <a class="home" href="index.html">UN<span class="x">FILTERED</span></a>
+  <span class="sec">Transparency</span>
+  <span class="date" id="dateline"></span>
+</div>
+
+<div class="wrap">
+
+  <div class="head">
+    <div class="kicker">Decision explainer · Compare two options</div>
+    <h1>Conservatives vs Labour: what they promised, what they delivered</h1>
+    <p class="standfirst">A side-by-side record for voters who want the receipts, not the rhetoric. For each party we set their manifesto pledge against what actually happened in government — every claim linked to a primary source so you can check it yourself.</p>
+    <div class="byline">
+      <span class="pill">A transparency comparison</span>
+      <span>Compiled from public records, the IFS, ONS, OBR &amp; Full&nbsp;Fact</span>
+      <span id="reviewed"></span>
+    </div>
+  </div>
+
+  <div class="vs-banner">
+    <div class="vs-side con">
+      <div class="nm">Conservatives</div>
+      <div class="meta">Pledges: 2019 manifesto · Record: government 2019–2024</div>
+    </div>
+    <div class="vs-mid">VS</div>
+    <div class="vs-side lab">
+      <div class="nm">Labour</div>
+      <div class="meta">Pledges: 2024 manifesto · Record: government 2024– (early)</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="chip"><span class="dot" style="background:var(--con)"></span>Conservatives</span>
+    <span class="chip"><span class="dot" style="background:var(--lab)"></span>Labour</span>
+    <span style="margin-left:6px">Status:</span>
+    <span class="status s-kept">Kept</span>
+    <span class="status s-partial">Partial</span>
+    <span class="status s-broken">Broken</span>
+    <span class="status s-progress">In progress</span>
+  </div>
+
+  <!-- ============ THEMES ============ -->
+  <div id="themes"></div>
+
+  <!-- ============ SOURCES ============ -->
+  <div class="sources">
+    <h3>Sources &amp; further reading</h3>
+    <ol id="sourceList"></ol>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Read this first.</strong> This is a hackathon transparency prototype, not a finished fact-checker. The pledges and outcomes
+    below are <strong>summarised</strong> for comparison and simplified for space; the "kept / partial / broken / in progress" labels are
+    editorial judgements, not official ratings. Labour's record is necessarily <strong>early and partial</strong>. Every item links to a
+    primary or independent source — <strong>treat those as the truth, not this page</strong>. The goal is to make a major decision more
+    transparent, not to tell you how to vote.
+  </div>
+
+  <div class="backbar">
+    <a href="index.html">← Back to UNFILTERED</a>
+  </div>
+
+</div>
+
+<script>
+// ---------- Dateline ----------
+const today = new Date();
+const fmt = today.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+document.getElementById("dateline").textContent = fmt;
+document.getElementById("reviewed").textContent = "Last reviewed " + fmt;
+
+// ---------- Data: themes ----------
+// status: kept | partial | broken | progress
+const THEMES = [
+  {
+    title: "Economy & tax",
+    q: "What did each promise on tax — and what happened to the tax burden?",
+    con: {
+      promised: 'A "triple lock" on taxes: no rise in the rates of income tax, National Insurance or VAT. <sup><a href="#s1">[1]</a></sup>',
+      delivered: 'Headline rates were largely held, but income-tax thresholds were frozen (a stealth rise via "fiscal drag") and the overall tax burden climbed to its highest sustained level since the 1940s. <sup><a href="#s2">[2]</a></sup>',
+      status: "partial", verdict: "Letter largely kept, spirit broken — burden rose"
+    },
+    lab: {
+      promised: 'No increase in income tax, National Insurance or VAT for "working people"; growth-first, with firm fiscal rules. <sup><a href="#s3">[3]</a></sup>',
+      delivered: 'The October 2024 Budget kept those headline personal rates but raised employer National Insurance, capital gains tax and other levies to fund spending. <sup><a href="#s4">[4]</a></sup>',
+      status: "partial", verdict: "Personal rates held; other taxes raised — contested"
+    }
+  },
+  {
+    title: "NHS & health",
+    q: "Staffing, hospitals and waiting lists.",
+    con: {
+      promised: '50,000 more nurses, 6,000 more GPs and 40 new hospitals by 2030. <sup><a href="#s5">[5]</a></sup>',
+      delivered: 'Nurse numbers rose by roughly the promised figure (though the counting method was disputed); the "40 hospitals" programme was reclassified and delayed by the National Audit Office\'s account, and the GP target was missed. <sup><a href="#s6">[6]</a></sup>',
+      status: "partial", verdict: "Nurses ~met; hospitals & GPs fell short"
+    },
+    lab: {
+      promised: '40,000 extra appointments, scans and operations every week, and a drive to cut waiting lists. <sup><a href="#s3">[3]</a></sup>',
+      delivered: 'Extra NHS funding was announced in the 2024 Budget and early figures pointed to falling waiting lists, but it is too soon to judge the full pledge. <sup><a href="#s7">[7]</a></sup>',
+      status: "progress", verdict: "Funding committed; outcome still early"
+    }
+  },
+  {
+    title: "Immigration",
+    q: "Promises to control numbers — versus the numbers themselves.",
+    con: {
+      promised: 'An Australian-style points-based system and a clear pledge that "overall numbers will come down." <sup><a href="#s1">[1]</a></sup>',
+      delivered: 'The points system was introduced after Brexit, but net migration rose to a record of around 764,000 in 2022 (ONS revised) before later falling. <sup><a href="#s8">[8]</a></sup>',
+      status: "broken", verdict: "System delivered; numbers rose sharply"
+    },
+    lab: {
+      promised: 'Scrap the Rwanda removals scheme, set up a Border Security Command and bring net migration down. <sup><a href="#s3">[3]</a></sup>',
+      delivered: 'The Rwanda scheme was scrapped within days of taking office in July 2024 and new border-enforcement measures were introduced; the effect on overall numbers is not yet clear. <sup><a href="#s9">[9]</a></sup>',
+      status: "progress", verdict: "Rwanda scrapped as promised; numbers TBD"
+    }
+  },
+  {
+    title: "Housing",
+    q: "Both parties set a homebuilding target. Did the homes follow?",
+    con: {
+      promised: '300,000 net new homes a year in England by the mid-2020s. <sup><a href="#s1">[1]</a></sup>',
+      delivered: 'Net additions peaked at roughly 234,000 (2019–20) and the 300,000 target was not met; mandatory local targets were later softened. <sup><a href="#s10">[10]</a></sup>',
+      status: "broken", verdict: "Target missed"
+    },
+    lab: {
+      promised: '1.5 million new homes over the parliament, with sweeping planning reform. <sup><a href="#s3">[3]</a></sup>',
+      delivered: 'A revised National Planning Policy Framework (Dec 2024) restored mandatory housing targets and a Planning &amp; Infrastructure Bill followed; delivery against the 1.5m figure is in its early stages. <sup><a href="#s11">[11]</a></sup>',
+      status: "progress", verdict: "Reforms in motion; build numbers pending"
+    }
+  },
+  {
+    title: "Energy & climate",
+    q: "Competing visions for power and decarbonisation.",
+    con: {
+      promised: 'Net zero by 2050, support for offshore wind and new nuclear, while "maxing out" domestic North Sea oil and gas. <sup><a href="#s12">[12]</a></sup>',
+      delivered: 'Offshore wind and nuclear support continued and emissions kept falling, but some interim green commitments (e.g. the 2030 petrol-car ban) were pushed back. <sup><a href="#s13">[13]</a></sup>',
+      status: "partial", verdict: "Targets kept; some timelines slipped"
+    },
+    lab: {
+      promised: 'A publicly owned Great British Energy company and a clean-power grid by 2030, with no new North Sea exploration licences. <sup><a href="#s3">[3]</a></sup>',
+      delivered: 'The Great British Energy Act established the new body in 2025; the 2030 clean-power goal is a work in progress. <sup><a href="#s14">[14]</a></sup>',
+      status: "progress", verdict: "GB Energy created; 2030 goal underway"
+    }
+  },
+  {
+    title: "Defining mission",
+    q: "The flagship promise each party staked its name on.",
+    con: {
+      promised: '"Get Brexit Done" — leave the EU on the agreed terms. <sup><a href="#s1">[1]</a></sup>',
+      delivered: 'The UK left the EU on 31 January 2020 and the Trade &amp; Cooperation Agreement took effect in 2021. <sup><a href="#s15">[15]</a></sup>',
+      status: "kept", verdict: "Delivered"
+    },
+    lab: {
+      promised: 'A "New Deal for Working People" — strengthen employment rights via legislation in the first 100 days. <sup><a href="#s3">[3]</a></sup>',
+      delivered: 'An Employment Rights Bill was introduced in October 2024, within the promised window, and is progressing through Parliament. <sup><a href="#s16">[16]</a></sup>',
+      status: "progress", verdict: "Bill introduced on time; not yet law"
+    }
+  }
+];
+
+// ---------- Data: sources ----------
+const SOURCES = [
+  ['s1', 'Conservative and Unionist Party Manifesto 2019', 'https://www.conservatives.com'],
+  ['s2', 'Institute for Fiscal Studies — analysis of the UK tax burden', 'https://ifs.org.uk'],
+  ['s3', 'The Labour Party Manifesto 2024 ("Change")', 'https://labour.org.uk'],
+  ['s4', 'HM Treasury — Autumn Budget 2024; IFS Budget analysis', 'https://www.gov.uk/government/topical-events/autumn-budget-2024'],
+  ['s5', 'Conservative 2019 manifesto — NHS pledges', 'https://www.conservatives.com'],
+  ['s6', 'Full Fact & National Audit Office — nurses, GPs and the "40 hospitals" programme', 'https://fullfact.org'],
+  ['s7', 'The King’s Fund — NHS performance and waiting lists', 'https://www.kingsfund.org.uk'],
+  ['s8', 'Office for National Statistics — Long-term international migration', 'https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration'],
+  ['s9', 'GOV.UK — Home Office: ending the Rwanda partnership; Border Security Command', 'https://www.gov.uk/government/organisations/home-office'],
+  ['s10', 'DLUHC / MHCLG housing supply statistics; Full Fact homebuilding checks', 'https://www.gov.uk/government/collections/net-supply-of-housing'],
+  ['s11', 'GOV.UK — revised National Planning Policy Framework (Dec 2024)', 'https://www.gov.uk/government/publications/national-planning-policy-framework--2'],
+  ['s12', 'Conservative 2019 manifesto & subsequent net-zero strategy', 'https://www.gov.uk/government/publications/net-zero-strategy'],
+  ['s13', 'Climate Change Committee — progress reports', 'https://www.theccc.org.uk'],
+  ['s14', 'GOV.UK — Great British Energy Act 2025', 'https://www.gov.uk/government/organisations/great-british-energy'],
+  ['s15', 'GOV.UK — UK–EU Trade and Cooperation Agreement', 'https://www.gov.uk/government/publications/ukeu-trade-and-cooperation-agreement'],
+  ['s16', 'GOV.UK / Parliament — Employment Rights Bill 2024', 'https://bills.parliament.uk']
+];
+
+// ---------- Render themes ----------
+const STATUS_LABEL = { kept: "Kept", partial: "Partial", broken: "Broken", progress: "In progress" };
+function side(cls, party, data) {
+  return `
+    <div class="col ${cls}">
+      <div class="party"><span class="dot" style="background:var(--${cls})"></span>${party}</div>
+      <div class="row"><div class="lbl">Promised</div><div class="txt">${data.promised}</div></div>
+      <div class="row"><div class="lbl">Delivered</div><div class="txt">${data.delivered}</div></div>
+      <div class="verdict"><span class="status s-${data.status}">${STATUS_LABEL[data.status]}</span> ${data.verdict}</div>
+    </div>`;
+}
+document.getElementById("themes").innerHTML = THEMES.map(t => `
+  <div class="theme">
+    <h2>${t.title}</h2>
+    <div class="q">${t.q}</div>
+    <div class="cols">
+      ${side("con", "Conservatives", t.con)}
+      ${side("lab", "Labour", t.lab)}
+    </div>
+  </div>`).join("");
+
+// ---------- Render sources ----------
+document.getElementById("sourceList").innerHTML = SOURCES.map(([id, label, url]) =>
+  `<li id="${id}"><a href="${url}" target="_blank" rel="noopener">${label}</a></li>`
+).join("");
+</script>
+</body>
+</html>
