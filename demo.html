@@ -8,15 +8,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:   #163300;
-    --lime:   #9FE870;
-    --lime-dk:#7ed44e;
+    /* Wise brand — two core colours only (wise.design / brandcolorcode.com).
+       Headlines use Wise Sans (proprietary); body uses Inter (Wise's open secondary). */
+    --forest: #163300;   /* Forest Green — primary brand dark */
+    --bright: #9FE870;   /* Bright Green — primary accent */
+    --navy:   #163300;   /* alias kept for existing rules */
+    --lime:   #9FE870;   /* alias kept for existing rules */
+    --lime-dk:#83d653;
     --white:  #ffffff;
-    --bg:     #f9f9f7;
+    --bg:     #f7f8f4;   /* soft green-neutral background */
     --border: #e8e8e4;
-    --muted:  #6b7280;
+    --muted:  #5f6b58;   /* green-leaning neutral text */
     --text:   #1a1a1a;
-    --teal:   #00b9a9;
+    /* Interactive/accent now uses Forest Green instead of off-brand teal */
+    --teal:   #163300;
+    /* Soft Bright-Green tints for positive / AI-assist surfaces */
+    --tint-bg:  #f1fae8;
+    --tint-bg2: #e4f3d4;
+    --tint-bd:  #cfeab0;
+    --tint-ink: #21501a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -180,7 +190,7 @@
     max-width: 600px;
     margin-bottom: 0.75rem;
   }
-  .section-h2 em { font-style: normal; color: var(--teal); }
+  .section-h2 em { font-style: normal; color: var(--navy); background: linear-gradient(transparent 62%, rgba(159,232,112,0.6) 62%); padding: 0 3px; border-radius: 2px; }
   .section-sub {
     font-size: 1rem; color: var(--muted);
     max-width: 520px; line-height: 1.7;
@@ -247,7 +257,7 @@
   }
   @keyframes ticketIn { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
   .a-new-badge {
-    background: var(--teal); color: white;
+    background: var(--lime); color: var(--navy);
     font-size: 8px; font-weight: 800; letter-spacing: 0.5px;
     padding: 2px 7px; border-radius: 9999px; text-transform: uppercase;
     flex-shrink: 0; margin-top: 2px;
@@ -269,13 +279,13 @@
   .a-detail-id { font-size: 18px; font-weight: 800; color: white; font-family: monospace; letter-spacing: -0.3px; }
   .a-detail-badges { display: flex; gap: 6px; margin-top: 6px; }
   .a-detail-badge { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; }
-  .a-detail-badge.new { background: var(--teal); color: white; }
+  .a-detail-badge.new { background: var(--lime); color: var(--navy); }
   .a-detail-badge.partner { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
   .a-detail-body { padding: 12px; overflow-y: auto; height: calc(780px - 44px - 96px); background: #f0f2f5; }
 
   .a-card { background: white; border-radius: 12px; border: 1px solid #e4e6ea; overflow: hidden; margin-bottom: 10px; }
   .a-card-hdr { padding: 9px 12px 0; font-size: 9px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
-  .a-auto-tag { background: #e0f2fe; color: #0369a1; font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+  .a-auto-tag { background: #eef9e2; color: #2f5711; font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
   .a-row { display: flex; align-items: baseline; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #f4f4f6; font-size: 11px; }
   .a-row:last-child { border-bottom: none; }
   .a-row-lbl { color: var(--muted); font-size: 10px; font-weight: 600; width: 52px; flex-shrink: 0; }
@@ -670,13 +680,13 @@
 
   /* Diagnosis */
   .wpt-diag {
-    background: #f0faf8; border: 1px solid #b2e8e3;
+    background: #f1fae8; border: 1px solid #cfeab0;
     border-left: 3px solid var(--teal);
     border-radius: 12px; padding: 14px; margin-top: 14px;
   }
   .wpt-diag-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--teal); }
   .wpt-diag-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-top: 5px; }
-  .wpt-diag-body { font-size: 12px; color: #1a4040; margin-top: 6px; line-height: 1.65; }
+  .wpt-diag-body { font-size: 12px; color: #21501a; margin-top: 6px; line-height: 1.65; }
 
   /* Timeline */
   .wpt-tl { margin-top: 18px; }
@@ -721,12 +731,12 @@
   /* OK card */
   .wpt-ok-card {
     display: flex; gap: 12px; align-items: flex-start;
-    background: #f0faf8; border: 1px solid #b2e8e3;
+    background: #f1fae8; border: 1px solid #cfeab0;
     border-radius: 14px; padding: 14px; margin-top: 14px;
   }
   .wpt-ok-ico { font-size: 22px; flex-shrink: 0; }
   .wpt-ok-ttl { font-size: 13px; font-weight: 700; color: var(--navy); }
-  .wpt-ok-txt { font-size: 12px; color: #1a4040; margin-top: 4px; line-height: 1.55; }
+  .wpt-ok-txt { font-size: 12px; color: #21501a; margin-top: 4px; line-height: 1.55; }
 
   /* Escalation */
   .wpt-esc {
@@ -739,6 +749,45 @@
     display: flex; align-items: center; justify-content: center;
     gap: 6px; margin-top: 10px; font-size: 11px; color: #ccc;
   }
+
+  /* Deflect (self-resolve) button inside widget */
+  .wpt-deflect-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; margin-top: 14px;
+    background: var(--lime); color: var(--navy);
+    border: none; border-radius: 9999px;
+    padding: 13px; font-size: 14px; font-weight: 800;
+    font-family: inherit; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .wpt-deflect-btn:hover  { background: var(--lime-dk); }
+  .wpt-deflect-btn:active { transform: scale(0.98); }
+
+  /* "Ticket avoided" ghost row on agent phone */
+  .a-ticket-avoided { display: none; border-color: #cfeab0; border-left: 3px solid var(--teal); align-items: center; gap: 10px; }
+  .a-ticket-avoided.visible { display: flex; animation: avoidedIn 0.4s cubic-bezier(0.32,0.72,0,1); }
+  .a-ticket-avoided.dissolve { animation: avoidedOut 0.85s ease forwards; }
+  @keyframes avoidedIn  { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes avoidedOut { to { opacity:0; transform:scale(0.96); } }
+  .a-avoided-dot { width:24px; height:24px; border-radius:50%; background:#e7f6d9; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+  .a-avoided-label { font-size:9px; font-weight:800; letter-spacing:0.5px; color:var(--teal); text-transform:uppercase; }
+  .a-ticket-avoided .a-ticket-issue { text-decoration: line-through; color: var(--muted); }
+
+  /* Live deflection meter (landing) */
+  .deflect-meter {
+    margin-top: 1.5rem;
+    background: var(--navy); border-radius: 16px;
+    padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.85rem;
+  }
+  .deflect-meter.bump { animation: meterBump 0.5s ease; }
+  @keyframes meterBump { 0%{transform:scale(1);} 30%{transform:scale(1.035);} 100%{transform:scale(1);} }
+  .deflect-meter-dot { width:10px; height:10px; border-radius:50%; background:var(--lime); animation:livePulse 1.8s infinite; flex-shrink:0; }
+  @keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(159,232,112,0.5);} 70%{box-shadow:0 0 0 8px rgba(159,232,112,0);} 100%{box-shadow:0 0 0 0 rgba(159,232,112,0);} }
+  .deflect-meter-num { font-size:1.75rem; font-weight:900; color:var(--lime); letter-spacing:-0.5px; line-height:1; }
+  .deflect-meter-lbl { font-size:0.78rem; color:rgba(255,255,255,0.55); font-weight:500; margin-top:3px; }
+  .deflect-meter-side { margin-left:auto; text-align:right; }
+  .deflect-meter-side .v { font-size:1rem; font-weight:800; color:#fff; }
+  .deflect-meter-side .l { font-size:0.66rem; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.5px; }
 
   .wpt-scen { display: none; }
   .wpt-scen.on { display: block; }
@@ -857,7 +906,7 @@
     border-radius: 14px; padding: 1.25rem;
   }
   .compare-side.before { background: #fef2f2; border: 1px solid #fecaca; }
-  .compare-side.after  { background: #f0faf8; border: 1px solid #b2e8e3; }
+  .compare-side.after  { background: #f1fae8; border: 1px solid #cfeab0; }
   .compare-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
   .compare-side.before .compare-label { color: #dc2626; }
   .compare-side.after  .compare-label { color: var(--teal); }
@@ -921,21 +970,21 @@
 
   /* ===== AI EXPLAIN BLOCK ===== */
   .ai-explain-block {
-    background: linear-gradient(135deg, #f0faf8, #e6f5f3);
-    border: 1px solid #b2e8e3; border-left: 3px solid var(--teal);
+    background: linear-gradient(135deg, #f1fae8, #e4f3d4);
+    border: 1px solid #cfeab0; border-left: 3px solid var(--teal);
     border-radius: 12px; padding: 12px 14px; margin-top: 14px;
   }
   .ai-explain-header {
     display: flex; align-items: center; gap: 8px; margin-bottom: 7px;
   }
   .ai-badge {
-    background: var(--teal); color: white;
+    background: var(--lime); color: var(--navy);
     font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
     padding: 2px 7px; border-radius: 9999px; text-transform: uppercase;
     flex-shrink: 0;
   }
   .ai-mode-label { font-size: 10px; color: var(--muted); font-weight: 500; }
-  .ai-explain-text { font-size: 12.5px; color: #1a3a3a; line-height: 1.65; min-height: 18px; }
+  .ai-explain-text { font-size: 12.5px; color: #21501a; line-height: 1.65; min-height: 18px; }
   .ai-cursor {
     display: inline-block; width: 2px; height: 13px;
     background: var(--teal); vertical-align: middle; margin-left: 1px;
@@ -947,14 +996,14 @@
   /* ===== CHAT OPEN BUTTON ===== */
   .chat-open-btn {
     width: 100%; margin-top: 14px;
-    background: linear-gradient(135deg, #f0faf8, #e6f5f3);
-    border: 1.5px solid #b2e8e3; border-radius: 12px;
+    background: linear-gradient(135deg, #f1fae8, #e4f3d4);
+    border: 1.5px solid #cfeab0; border-radius: 12px;
     padding: 11px 14px; cursor: pointer; font-family: inherit;
     display: flex; align-items: center; gap: 9px;
-    font-size: 12.5px; font-weight: 600; color: #1a3a3a;
+    font-size: 12.5px; font-weight: 600; color: #21501a;
     transition: border-color 0.2s, background 0.2s;
   }
-  .chat-open-btn:hover { border-color: var(--teal); background: #d8f3ef; }
+  .chat-open-btn:hover { border-color: var(--teal); background: #e7f6d9; }
   .chat-open-ico { font-size: 16px; flex-shrink: 0; }
   .chat-open-arr { margin-left: auto; color: var(--teal); font-size: 16px; }
 
@@ -987,9 +1036,9 @@
     color: white; font-size: 12px; flex-shrink: 0;
   }
   .chat-popup-context {
-    background: #f0faf8; border-bottom: 1px solid #d0eeea;
+    background: #f1fae8; border-bottom: 1px solid #d6ecc0;
     padding: 8px 14px; flex-shrink: 0;
-    font-size: 10.5px; color: #1a3a3a; line-height: 1.4;
+    font-size: 10.5px; color: #21501a; line-height: 1.4;
     display: none;
   }
   .chat-popup-context.show { display: block; }
@@ -1001,7 +1050,7 @@
   .chat-msg { font-size: 12.5px; line-height: 1.55; padding: 9px 12px; border-radius: 14px; max-width: 88%; }
   .chat-msg-user { background: var(--navy); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
   .chat-msg-ai { background: #f0f0f2; color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; }
-  .chat-msg-intro { background: #f0faf8; color: #1a3a3a; border: 1px solid #b2e8e3; align-self: stretch; border-radius: 12px; font-size: 12px; }
+  .chat-msg-intro { background: #f1fae8; color: #21501a; border: 1px solid #cfeab0; align-self: stretch; border-radius: 12px; font-size: 12px; }
   .chat-popup-input-row {
     display: flex; gap: 8px; align-items: center;
     padding: 10px 12px 14px; border-top: 1px solid #f0f0f0; flex-shrink: 0;
@@ -1099,7 +1148,7 @@
   .agent-panel-sub { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 1px; }
   .agent-panel-top .support-back { background: rgba(255,255,255,0.1); color: #fff; }
   .agent-badge {
-    background: var(--teal); color: white;
+    background: var(--lime); color: var(--navy);
     font-size: 8px; font-weight: 800; letter-spacing: 0.6px;
     padding: 3px 8px; border-radius: 9999px; text-transform: uppercase;
     flex-shrink: 0;
@@ -1124,7 +1173,7 @@
     color: var(--muted); margin: 10px 0 6px; display: flex; align-items: center; gap: 6px;
   }
   .agent-auto-tag {
-    background: #e0f2fe; color: #0369a1;
+    background: #eef9e2; color: #2f5711;
     font-size: 8px; font-weight: 700; padding: 1px 6px; border-radius: 4px;
     text-transform: uppercase; letter-spacing: 0.4px;
   }
@@ -1180,7 +1229,29 @@
   .ai-key-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; }
   .ai-key-status.demo { background: #fef3c7; color: #92400e; }
   .ai-key-status.live { background: #d1fae5; color: #065f46; }
+
+  /* ===== SCROLL MOTION — vanilla, faithful to motion-stack-guide values =====
+     Ease [0.22,1,0.36,1] · fade-up 16–24px · vertical only · once · respects reduced-motion.
+     Gated behind .js-anim so content stays visible with no JS / FOUC. */
+  @media (prefers-reduced-motion: no-preference) {
+    .js-anim .reveal {
+      opacity: 0;
+      transform: translateY(var(--reveal-y, 20px));
+      transition:
+        opacity   var(--reveal-dur, 0.9s) cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+        transform var(--reveal-dur, 0.9s) cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+      will-change: opacity, transform;
+    }
+    .js-anim .reveal.reveal-fade { transform: none; }   /* opacity-only: labels & sticky blocks */
+    .js-anim .reveal.in { opacity: 1; transform: none; }
+  }
 </style>
+<script>
+  // Enable scroll-motion only when JS runs — set before first paint to avoid any flash.
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('js-anim');
+  }
+</script>
 </head>
 <body>
 
@@ -1204,14 +1275,14 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">Wise Platform</div>
-  <h1>The infrastructure to power<br><em>your money movement</em></h1>
-  <p class="hero-sub">Embed fast, low-cost international payments into your product. Wise handles the corridors, compliance, and FX — your users never hit a wall.</p>
-  <div class="hero-actions">
+  <div class="hero-eyebrow reveal reveal-fade" style="--reveal-dur:0.8s;--reveal-delay:0.05s">Wise Platform</div>
+  <h1 class="reveal" style="--reveal-y:24px;--reveal-dur:1.2s;--reveal-delay:0.1s">The infrastructure to power<br><em>your money movement</em></h1>
+  <p class="hero-sub reveal" style="--reveal-y:16px;--reveal-dur:1.0s;--reveal-delay:0.35s">Embed fast, low-cost international payments into your product. Wise handles the corridors, compliance, and FX — your users never hit a wall.</p>
+  <div class="hero-actions reveal" style="--reveal-y:16px;--reveal-dur:1.0s;--reveal-delay:0.55s">
     <button class="btn-primary">Get in touch</button>
     <button class="btn-ghost">Explore the API →</button>
   </div>
-  <div class="trust-bar">
+  <div class="trust-bar reveal reveal-fade" style="--reveal-dur:0.8s;--reveal-delay:0.8s">
     <span class="trust-lbl">Trusted by</span>
     <div class="trust-partners">
       <span class="trust-partner">Monzo</span>
@@ -1225,19 +1296,19 @@
 
 <!-- STATS -->
 <div class="stats-row">
-  <div class="stat-item">
+  <div class="stat-item reveal" style="--reveal-y:16px;--reveal-dur:0.9s;--reveal-delay:0s">
     <div class="stat-val">£<span>145</span>BN</div>
     <div class="stat-lbl">Global FX volumes</div>
   </div>
-  <div class="stat-item">
+  <div class="stat-item reveal" style="--reveal-y:16px;--reveal-dur:0.9s;--reveal-delay:0.12s">
     <div class="stat-val"><span>160</span>+</div>
     <div class="stat-lbl">Countries covered</div>
   </div>
-  <div class="stat-item">
+  <div class="stat-item reveal" style="--reveal-y:16px;--reveal-dur:0.9s;--reveal-delay:0.24s">
     <div class="stat-val"><span>40</span>+</div>
     <div class="stat-lbl">Currencies supported</div>
   </div>
-  <div class="stat-item">
+  <div class="stat-item reveal" style="--reveal-y:16px;--reveal-dur:0.9s;--reveal-delay:0.36s">
     <div class="stat-val"><span>70</span>+</div>
     <div class="stat-lbl">Regulatory licences</div>
   </div>
@@ -1264,7 +1335,7 @@
             <div class="how-num">2</div>
             <div class="how-text">
               <h4>Widget renders the right explanation</h4>
-              <p>Thai AML, RBI purpose codes, ACH windows — Wise knows why and tells your user in plain English.</p>
+              <p>SEPA cut-offs, RBI purpose codes, ACH windows — Wise knows why and tells your user in plain English.</p>
             </div>
           </div>
           <div class="how-item">
@@ -1299,6 +1370,18 @@
             <p>GET /v1/transfers/{id}/delay-context returns corridor reason, ETA, and required actions.</p>
           </div>
           <button class="api-callout-btn">View docs</button>
+        </div>
+
+        <div class="deflect-meter" id="deflect-meter">
+          <div class="deflect-meter-dot"></div>
+          <div>
+            <div class="deflect-meter-num"><span id="deflect-count">1,247</span></div>
+            <div class="deflect-meter-lbl">Tickets deflected today · live across partners</div>
+          </div>
+          <div class="deflect-meter-side">
+            <div class="v" id="deflect-saved">£9,976</div>
+            <div class="l">Saved today</div>
+          </div>
         </div>
       </div>
 
@@ -1528,7 +1611,7 @@
               <div class="tx-hero">
                 <div class="tx-hero-flag" id="s2-flag">🇹🇭</div>
                 <div class="tx-hero-amt" id="s2-amt">£850.00</div>
-                <div class="tx-hero-to" id="s2-to">to Somsak Chai · Thailand</div>
+                <div class="tx-hero-to" id="s2-to">to Klaus Müller · Germany</div>
                 <div class="tx-spill">
                   <div class="tx-spill-dot"></div>
                   <span id="s2-spill">Delayed · 2 days</span>
@@ -1688,6 +1771,10 @@
                     <div><div class="wpt-ok-ttl">This is normal for US bank transfers</div><div class="wpt-ok-txt">Tip: next time fund your transfer with a debit card to skip ACH and send instantly.</div></div>
                   </div>
                 </div>
+
+                <button class="wpt-deflect-btn" onclick="deflectTicket()">
+                  <span>✓</span> Got it — that answers my question
+                </button>
 
                 <button class="chat-open-btn" id="chat-open-btn" onclick="openChatPopup()">
                   <span class="chat-open-ico">💬</span>
@@ -1876,6 +1963,19 @@
                   <div style="color:#ccc;font-size:18px;margin-top:2px">›</div>
                 </div>
 
+                <!-- Deflected ticket ghost — appears then dissolves -->
+                <div class="a-ticket a-ticket-avoided" id="p2-avoided">
+                  <div class="a-avoided-dot">✓</div>
+                  <div class="a-ticket-body">
+                    <div class="a-ticket-id-row">
+                      <span class="a-avoided-label">Ticket avoided</span>
+                      <span class="a-ticket-time">just now</span>
+                    </div>
+                    <div class="a-ticket-issue" id="p2-avoided-issue">Transfer delay — SEPA batch cut-off</div>
+                    <div class="a-ticket-meta-row">Resolved in-app · never reached support</div>
+                  </div>
+                </div>
+
                 <div class="a-section-lbl" style="margin-top:10px">Earlier today</div>
 
                 <!-- Existing resolved tickets -->
@@ -2021,7 +2121,7 @@
 
             <!-- Widget enabled marker -->
             <line class="widget-marker" x1="264" y1="8" x2="264" y2="138"/>
-            <rect x="252" y="0" width="86" height="16" rx="4" fill="#f0faf8"/>
+            <rect x="252" y="0" width="86" height="16" rx="4" fill="#f1fae8"/>
             <text class="widget-label" x="256" y="11">Widget enabled ↓</text>
 
             <!-- Week 5 - 140 tickets -->
@@ -2077,7 +2177,7 @@
           <div class="roi-card-ico" style="background:rgba(159,232,112,0.12)">📉</div>
           <div>
             <div class="roi-val"><span>76%</span></div>
-            <div class="roi-lbl">Reduction in delay-related support tickets across Thailand, India & US corridors</div>
+            <div class="roi-lbl">Reduction in delay-related support tickets across EU, India & US corridors</div>
           </div>
         </div>
         <div class="roi-card">
@@ -2264,8 +2364,40 @@ function setSupportScenario(name, btn) {
 
 function resetPhone2() {
   document.getElementById('p2-new-ticket').classList.remove('visible');
+  var av = document.getElementById('p2-avoided');
+  if (av) av.classList.remove('visible', 'dissolve');
   document.getElementById('p2-s1').classList.add('slide-right');
   document.getElementById('p2-s0').classList.remove('slide-left');
+}
+
+/* ===== DEFLECTION (ticket avoided) ===== */
+var deflectedToday = 1247;
+var COST_PER_TICKET = 8; // £ avg cost per delay-related support ticket
+
+function deflectTicket() {
+  pCloseSheet();
+  bumpDeflectionMeter();
+  showTicketAvoided();
+}
+
+function bumpDeflectionMeter() {
+  deflectedToday++;
+  document.getElementById('deflect-count').textContent = deflectedToday.toLocaleString();
+  document.getElementById('deflect-saved').textContent = '£' + (deflectedToday * COST_PER_TICKET).toLocaleString();
+  var meter = document.getElementById('deflect-meter');
+  meter.classList.remove('bump');
+  void meter.offsetWidth; // restart animation
+  meter.classList.add('bump');
+}
+
+// Agent phone: a ticket appears, then dissolves — "this one never reached you"
+function showTicketAvoided() {
+  var g = document.getElementById('p2-avoided');
+  document.getElementById('p2-avoided-issue').textContent = issueCategories[currentScenario];
+  g.classList.remove('dissolve');
+  g.classList.add('visible');
+  setTimeout(function() { g.classList.add('dissolve'); }, 1600);
+  setTimeout(function() { g.classList.remove('visible', 'dissolve'); }, 2500);
 }
 
 /* ===== AI INTEGRATION ===== */
@@ -2637,7 +2769,59 @@ function pickFallback(q, t) {
 window.addEventListener('DOMContentLoaded', () => {
   updateScreen2('eu');
   setTimeout(() => document.getElementById('s0-notif').classList.add('show'), 1200);
+  // Keep the meter feeling live (other partners deflecting in the background)
+  setInterval(() => {
+    deflectedToday++;
+    var c = document.getElementById('deflect-count');
+    if (!c) return;
+    c.textContent = deflectedToday.toLocaleString();
+    document.getElementById('deflect-saved').textContent = '£' + (deflectedToday * COST_PER_TICKET).toLocaleString();
+  }, 7000);
 });
+
+/* ===== SCROLL REVEALS — vanilla, faithful to motion-stack-guide =====
+   Hero + stats are tagged in HTML (no flash); below-the-fold sections are tagged here.
+   Everything reveals once, fades up vertically, fires ~15% early. */
+(function initReveals() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function set(el, y, dur, delay, fade) {
+    if (!el || el.classList.contains('reveal')) return;
+    el.classList.add('reveal');
+    if (fade) el.classList.add('reveal-fade');
+    if (y    != null) el.style.setProperty('--reveal-y', y + 'px');
+    if (dur  != null) el.style.setProperty('--reveal-dur', dur + 's');
+    if (delay)        el.style.setProperty('--reveal-delay', delay + 's');
+  }
+  function each(sel, fn) { document.querySelectorAll(sel).forEach(fn); }
+  function stagger(sel, y, dur) { each(sel, function(el, i) { set(el, y, dur, i * 0.12); }); }
+
+  // Section headers (demo / impact / features)
+  each('.section .section-tag', function(el) { set(el, null, 0.8, 0,    true); });
+  each('.section .section-h2',  function(el) { set(el, 24,   1.0, 0.05);       });
+  each('.section .section-sub', function(el) { set(el, 16,   1.0, 0.15);       });
+
+  // Staggered groups — each item a beat behind the last
+  stagger('.how-list .how-item',          16, 0.9);
+  stagger('.roi-cards .roi-card',          16, 0.9);
+  stagger('.compare-row .compare-side',    16, 0.9);
+  stagger('.features-grid .feature-card',  16, 0.9);
+
+  // Single blocks
+  set(document.querySelector('.api-callout'),      20, 0.9, 0.10);
+  set(document.querySelector('.deflect-meter'),    20, 0.9, 0.15);
+  set(document.querySelector('.impact-chart-wrap'),24, 1.0, 0);
+  set(document.querySelector('.phones-pair'),      null, 1.0, 0.10, true); // fade only — keeps sticky intact
+  set(document.querySelector('.footer-strip'),     20, 0.9, 0);
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -15% 0px', threshold: 0.01 });
+
+  document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
+})();
 </script>
 </body>
 </html>
