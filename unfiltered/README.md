@@ -12,7 +12,7 @@ visible so you can judge for yourself.
 
 Single-file HTML — no build, no dependencies.
 
-**Open `unfiltered.html` in any browser.**
+**Open `index.html` in any browser.**
 
 ## The click-through
 
