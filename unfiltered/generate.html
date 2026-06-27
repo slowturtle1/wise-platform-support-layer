@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UNFILTERED · Generate a comparison</title>
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --panel: #141418;
+    --panel-2: #1c1c22;
+    --line: #2a2a33;
+    --txt: #e8e8ea;
+    --muted: #8b8b96;
+    --accent: #ff4d4d;
+    --con: #2a9df4;
+    --lab: #ff4d6d;
+    --kept: #2ecc71;
+    --partial: #f1c40f;
+    --broken: #e74c3c;
+    --progress: #7f8fa6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: radial-gradient(1200px 600px at 50% -10%, #16161c 0%, var(--bg) 55%);
+    color: var(--txt);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+
+  /* top bar */
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 16px 22px; }
+  .topbar .logo { font-weight: 800; letter-spacing: -0.4px; font-size: 16px; }
+  .topbar .logo .x { color: var(--accent); }
+  .topbar .links { margin-left: auto; display: flex; gap: 16px; font-size: 13px; }
+  .topbar .links a { color: var(--muted); text-decoration: none; }
+  .topbar .links a:hover { color: var(--txt); }
+
+  /* ---------- HERO / generator ---------- */
+  .hero { text-align: center; padding: 64px 0 30px; }
+  .hero h1 { font-size: clamp(34px, 6vw, 60px); font-weight: 800; letter-spacing: -2px; line-height: 1.02; }
+  .hero h1 .grad {
+    background: linear-gradient(90deg, var(--con), var(--accent), var(--lab));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% auto; animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .hero p.lede { color: var(--muted); font-size: 16px; margin-top: 14px; }
+
+  .genbox {
+    margin: 30px auto 0; max-width: 680px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+    padding: 10px 10px 10px 18px; display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .genbox:focus-within { border-color: var(--accent); box-shadow: 0 20px 70px rgba(255,77,77,0.18); }
+  .genbox input {
+    flex: 1; background: transparent; border: none; color: var(--txt);
+    font-size: 17px; font-family: inherit; padding: 12px 0;
+  }
+  .genbox input:focus { outline: none; }
+  .genbtn {
+    background: var(--accent); color: #fff; border: none; border-radius: 11px;
+    padding: 13px 22px; font-size: 15px; font-weight: 700; cursor: pointer; white-space: nowrap;
+    font-family: inherit; transition: filter .15s, transform .1s;
+  }
+  .genbtn:hover { filter: brightness(1.08); }
+  .genbtn:active { transform: translateY(1px); }
+
+  .chips { margin: 16px auto 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 680px; }
+  .chip-ex {
+    font-size: 13px; color: var(--muted); border: 1px solid var(--line); background: var(--panel-2);
+    border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: all .15s;
+  }
+  .chip-ex:hover { color: var(--txt); border-color: var(--muted); }
+
+  /* ---------- GENERATING overlay ---------- */
+  .generating { max-width: 520px; margin: 40px auto 0; display: none; }
+  .generating.show { display: block; animation: fade .3s both; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .gbar { height: 6px; background: var(--panel-2); border-radius: 4px; overflow: hidden; margin-bottom: 22px; }
+  .gbar > i { display: block; height: 100%; width: 0; border-radius: 4px;
+    background: linear-gradient(90deg, var(--con), var(--accent), var(--lab)); transition: width .35s ease; }
+  .gstep { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--muted); padding: 7px 0; opacity: .35; transition: opacity .3s, color .3s; }
+  .gstep.on { opacity: 1; color: var(--txt); }
+  .gstep .tick {
+    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent;
+  }
+  .gstep.on .tick { border-color: var(--con); }
+  .gstep.done .tick { background: var(--kept); border-color: var(--kept); color: #0a0a0c; }
+  .gstep.on:not(.done) .tick { border-top-color: var(--accent); animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- RESULTS ---------- */
+  .results { display: none; padding-bottom: 70px; }
+  .results.show { display: block; }
+  .res-head { text-align: center; margin: 10px 0 6px; }
+  .res-head .q { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .res-head h2 { font-size: clamp(24px,4vw,34px); letter-spacing: -1px; margin-top: 6px; }
+
+  .scoreboard { display: flex; justify-content: center; gap: 26px; margin: 18px 0 6px; flex-wrap: wrap; }
+  .score { text-align: center; }
+  .score b { font-size: 30px; display: block; line-height: 1; }
+  .score span { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .score.k b { color: var(--kept); } .score.p b { color: var(--partial); }
+  .score.b b { color: var(--broken); } .score.g b { color: var(--progress); }
+
+  .vsrow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+  .pcol {
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--panel);
+    opacity: 0; transform: translateY(18px);
+  }
+  .pcol.con { border-top: 4px solid var(--con); }
+  .pcol.lab { border-top: 4px solid var(--lab); }
+  .pcol.in { animation: rise .5s cubic-bezier(.2,.7,.3,1) forwards; }
+  .pcol.con.in { animation-delay: .05s; }
+  .pcol.lab.in { animation-delay: .18s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .pcol .ph { padding: 14px 16px; font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 9px; border-bottom: 1px solid var(--line); }
+  .pcol.con .ph { color: var(--con); }
+  .pcol.lab .ph { color: var(--lab); }
+  .pcol .ph .d { width: 11px; height: 11px; border-radius: 50%; }
+
+  .item { padding: 13px 16px; border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(8px); }
+  .item:last-child { border-bottom: none; }
+  .item.in { animation: slidein .4s ease forwards; }
+  @keyframes slidein { to { opacity: 1; transform: none; } }
+  .item .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .item .topic { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  .status { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; padding: 2px 7px; border-radius: 4px; color: #0a0a0c; white-space: nowrap; }
+  .s-kept { background: var(--kept); } .s-partial { background: var(--partial); }
+  .s-broken { background: var(--broken); } .s-progress { background: var(--progress); color:#fff; }
+  .item .line { font-size: 14.5px; margin-top: 5px; }
+  .item .line b { color: #fff; }
+  .item .line .arrow { color: var(--accent); margin: 0 6px; }
+
+  .res-foot { text-align: center; margin-top: 26px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .res-foot a, .res-foot button {
+    font-family: inherit; font-size: 14px; cursor: pointer; text-decoration: none;
+    border-radius: 10px; padding: 11px 18px; border: 1px solid var(--line); background: transparent; color: var(--muted);
+  }
+  .res-foot a.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; }
+  .res-foot a:hover, .res-foot button:hover { color: var(--txt); border-color: var(--muted); }
+  .res-foot a.primary:hover { color: #fff; }
+  .note { text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; }
+
+  @media (max-width: 620px) { .vsrow { grid-template-columns: 1fr; } .genbox { flex-direction: column; align-items: stretch; padding: 14px; } .genbtn { width: 100%; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">UN<span class="x">FILTERED</span></span>
+  <span class="links">
+    <a href="index.html">Model bias</a>
+    <a href="compare.html">Full breakdown</a>
+  </span>
+</div>
+
+<div class="wrap">
+
+  <!-- generator -->
+  <section class="hero" id="hero">
+    <h1>Generate a <span class="grad">comparison</span></h1>
+    <p class="lede">Type two options. Get the receipts — promised vs delivered, side by side.</p>
+
+    <div class="genbox">
+      <input id="q" type="text" autocomplete="off" placeholder="" />
+      <button class="genbtn" id="go">Generate comparison →</button>
+    </div>
+
+    <div class="chips" id="chips">
+      <span class="chip-ex">Labour or Tories programme UK</span>
+      <span class="chip-ex">Conservatives vs Labour</span>
+      <span class="chip-ex">UK government promised vs delivered</span>
+    </div>
+  </section>
+
+  <!-- generating -->
+  <section class="generating" id="generating">
+    <div class="gbar"><i id="gfill"></i></div>
+    <div id="gsteps"></div>
+  </section>
+
+  <!-- results -->
+  <section class="results" id="results">
+    <div class="res-head">
+      <div class="q" id="resQ"></div>
+      <h2>Conservatives vs Labour</h2>
+    </div>
+
+    <div class="scoreboard" id="scoreboard"></div>
+
+    <div class="vsrow">
+      <div class="pcol con" id="colCon">
+        <div class="ph"><span class="d" style="background:var(--con)"></span>Conservatives <span style="font-size:12px;color:var(--muted);font-weight:500">· 2019→24</span></div>
+        <div id="itemsCon"></div>
+      </div>
+      <div class="pcol lab" id="colLab">
+        <div class="ph"><span class="d" style="background:var(--lab)"></span>Labour <span style="font-size:12px;color:var(--muted);font-weight:500">· 2024→</span></div>
+        <div id="itemsLab"></div>
+      </div>
+    </div>
+
+    <div class="res-foot">
+      <a class="primary" href="compare.html">See full sourced breakdown →</a>
+      <button id="again">↺ New comparison</button>
+    </div>
+    <p class="note">Brief summary · editorial status tags · verify everything in the full breakdown.</p>
+  </section>
+
+</div>
+
+<script>
+// ---------- Brief, non-explanatory data ----------
+const DATA = {
+  con: [
+    { topic: "Tax",        promised: "No rate rises",          delivered: "Highest tax burden since 1940s", status: "broken" },
+    { topic: "NHS",        promised: "50k nurses, 40 hospitals", delivered: "Nurses ~met, hospitals delayed", status: "partial" },
+    { topic: "Immigration",promised: "Numbers will fall",       delivered: "Record ~764k (2022)",            status: "broken" },
+    { topic: "Housing",    promised: "300k homes / year",       delivered: "Peaked ~234k",                   status: "broken" },
+    { topic: "Brexit",     promised: "Get Brexit Done",         delivered: "Left EU Jan 2020",               status: "kept" }
+  ],
+  lab: [
+    { topic: "Tax",        promised: "No rises for working people", delivered: "Employer NI & CGT up",        status: "partial" },
+    { topic: "NHS",        promised: "40k extra appts / week",      delivered: "Funding up, early days",       status: "progress" },
+    { topic: "Immigration",promised: "Scrap Rwanda scheme",         delivered: "Scrapped Jul 2024",            status: "kept" },
+    { topic: "Housing",    promised: "1.5m homes",                  delivered: "Planning reform underway",     status: "progress" },
+    { topic: "Energy",     promised: "Great British Energy",        delivered: "GB Energy Act 2025",           status: "progress" }
+  ]
+};
+const STATUS_LABEL = { kept: "Kept", partial: "Partial", broken: "Broken", progress: "In progress" };
+
+const STEPS = [
+  "Parsing your question",
+  "Identifying the two options",
+  "Pulling manifesto pledges",
+  "Checking the delivery record",
+  "Tagging kept / broken",
+  "Building comparison"
+];
+
+// ---------- Placeholder typewriter ----------
+const PH = ["Labour or Tories programme UK…", "Conservatives vs Labour…", "What they promised vs delivered…"];
+const qinput = document.getElementById("q");
+let phi = 0, chi = 0, typing = true, paused = 0;
+(function tw(){
+  if (document.activeElement === qinput || qinput.value) { qinput.placeholder = "Type two options to compare…"; return setTimeout(tw, 600); }
+  const word = PH[phi];
+  if (typing) {
+    qinput.placeholder = word.slice(0, chi++) + "▍";
+    if (chi > word.length) { typing = false; paused = 14; }
+  } else if (paused > 0) { paused--; }
+  else {
+    qinput.placeholder = word.slice(0, chi--) + "▍";
+    if (chi === 0) { typing = true; phi = (phi + 1) % PH.length; }
+  }
+  setTimeout(tw, typing ? 70 : (paused > 0 ? 90 : 35));
+})();
+
+// ---------- Chips ----------
+document.querySelectorAll(".chip-ex").forEach(c =>
+  c.addEventListener("click", () => { qinput.value = c.textContent; run(); }));
+
+// ---------- Run ----------
+function run() {
+  const q = qinput.value.trim() || "Labour or Tories programme UK";
+  document.getElementById("resQ").textContent = '“' + q + '”';
+  document.getElementById("hero").style.display = "none";
+
+  const gen = document.getElementById("generating");
+  const res = document.getElementById("results");
+  res.classList.remove("show");
+  gen.classList.add("show");
+
+  // build steps
+  const gsteps = document.getElementById("gsteps");
+  gsteps.innerHTML = STEPS.map((s,i) => `<div class="gstep" id="st${i}"><span class="tick">✓</span>${s}</div>`).join("");
+  const fill = document.getElementById("gfill");
+
+  let i = 0;
+  function nextStep() {
+    if (i > 0) { const prev = document.getElementById("st"+(i-1)); prev.classList.add("done"); }
+    if (i >= STEPS.length) { fill.style.width = "100%"; return setTimeout(reveal, 350); }
+    const el = document.getElementById("st"+i);
+    el.classList.add("on");
+    fill.style.width = Math.round(((i+1)/STEPS.length)*100) + "%";
+    i++;
+    setTimeout(nextStep, 360 + Math.random()*220);
+  }
+  nextStep();
+}
+
+// ---------- Reveal results ----------
+function reveal() {
+  document.getElementById("generating").classList.remove("show");
+  const res = document.getElementById("results");
+  res.classList.add("show");
+
+  // scoreboard counts (across both parties)
+  const all = [...DATA.con, ...DATA.lab];
+  const counts = { kept:0, partial:0, broken:0, progress:0 };
+  all.forEach(d => counts[d.status]++);
+  document.getElementById("scoreboard").innerHTML = `
+    <div class="score k"><b data-n="${counts.kept}">0</b><span>Kept</span></div>
+    <div class="score p"><b data-n="${counts.partial}">0</b><span>Partial</span></div>
+    <div class="score b"><b data-n="${counts.broken}">0</b><span>Broken</span></div>
+    <div class="score g"><b data-n="${counts.progress}">0</b><span>In progress</span></div>`;
+
+  // columns rise
+  const colCon = document.getElementById("colCon"), colLab = document.getElementById("colLab");
+  colCon.classList.remove("in"); colLab.classList.remove("in");
+  void colCon.offsetWidth; // reflow to restart animation
+  colCon.classList.add("in"); colLab.classList.add("in");
+
+  // items
+  document.getElementById("itemsCon").innerHTML = DATA.con.map(itemHtml).join("");
+  document.getElementById("itemsLab").innerHTML = DATA.lab.map(itemHtml).join("");
+  const items = document.querySelectorAll(".item");
+  items.forEach((el, idx) => setTimeout(() => el.classList.add("in"), 260 + idx*70));
+
+  // count up
+  setTimeout(() => document.querySelectorAll(".score b").forEach(countUp), 300);
+}
+
+function itemHtml(d) {
+  return `<div class="item">
+    <div class="top"><span class="topic">${d.topic}</span><span class="status s-${d.status}">${STATUS_LABEL[d.status]}</span></div>
+    <div class="line"><b>${d.promised}</b><span class="arrow">→</span>${d.delivered}</div>
+  </div>`;
+}
+
+function countUp(el) {
+  const n = +el.dataset.n; let c = 0;
+  const step = () => { c++; el.textContent = c; if (c < n) setTimeout(step, 90); };
+  if (n > 0) step();
+}
+
+// ---------- Reset ----------
+document.getElementById("again").addEventListener("click", () => {
+  document.getElementById("results").classList.remove("show");
+  document.getElementById("hero").style.display = "";
+  qinput.value = ""; qinput.focus();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+document.getElementById("go").addEventListener("click", run);
+qinput.addEventListener("keydown", e => { if (e.key === "Enter") run(); });
+</script>
+</body>
+</html>
