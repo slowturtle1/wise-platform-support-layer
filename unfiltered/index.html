@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UNFILTERED — Ask the models, see the bias</title>
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --panel: #141418;
+    --panel-2: #1c1c22;
+    --line: #2a2a33;
+    --txt: #e8e8ea;
+    --muted: #8b8b96;
+    --accent: #ff4d4d;
+    --claude: #d97757;
+    --gpt: #10a37f;
+    --grok: #8ab4f8;
+    --deepseek: #6c5ce7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+
+  /* ---------- Progress rail ---------- */
+  .rail {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(10,10,12,0.92);
+    backdrop-filter: blur(10px);
+  }
+  .rail .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .rail .logo .x { color: var(--accent); }
+  .steps { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+  .steps .step {
+    width: 26px; height: 4px; border-radius: 2px; background: var(--line);
+    transition: background 0.3s;
+  }
+  .steps .step.done { background: var(--muted); }
+  .steps .step.active { background: var(--accent); }
+  .rail .stepname { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; min-width: 78px; text-align: right;}
+
+  /* ---------- Screen system ---------- */
+  .stage { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .screen { display: none; animation: slideIn 0.4s cubic-bezier(.2,.7,.3,1) both; padding: 40px 0 80px; }
+  .screen.show { display: block; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  h2.title { font-size: 28px; letter-spacing: -1px; margin-bottom: 8px; }
+  p.sub { color: var(--muted); font-size: 15px; max-width: 640px; margin-bottom: 28px; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    background: var(--accent); color: #fff; border: none; border-radius: 10px;
+    padding: 13px 26px; font-size: 15px; font-weight: 700; cursor: pointer;
+    letter-spacing: 0.3px; font-family: inherit; transition: filter .15s, transform .1s;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+  .btn.ghost:hover { color: var(--txt); border-color: var(--muted); filter: none; }
+  .navrow { display: flex; gap: 12px; align-items: center; margin-top: 30px; flex-wrap: wrap; }
+
+  /* ---------- Intro ---------- */
+  .hero { text-align: center; padding-top: 60px; }
+  .hero .big { font-size: clamp(46px, 9vw, 92px); font-weight: 800; letter-spacing: -3px; line-height: 1; }
+  .hero .big .x { color: var(--accent); }
+  .hero .pitch { color: var(--muted); font-size: 17px; max-width: 560px; margin: 22px auto 0; }
+  .hero .ticker { margin-top: 30px; font-size: 12px; color: var(--muted); overflow: hidden; white-space: nowrap; }
+  .hero .ticker span { display: inline-block; padding-left: 100%; animation: scroll 26s linear infinite; }
+  @keyframes scroll { to { transform: translateX(-100%); } }
+  .lenslist { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top: 34px; }
+  .lenschip { border:1px solid var(--line); border-radius:999px; padding:7px 14px; font-size:13px; color:var(--muted); display:flex; align-items:center; gap:8px;}
+  .lenschip .dot { width:9px; height:9px; border-radius:50%; }
+
+  /* ---------- Question picker ---------- */
+  .qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 14px; }
+  .qcard {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px; cursor: pointer; transition: border-color .15s, transform .1s, background .15s;
+    text-align: left;
+  }
+  .qcard:hover { border-color: var(--muted); transform: translateY(-2px); }
+  .qcard.sel { border-color: var(--accent); background: #1a1416; }
+  .qcard .num { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
+  .qcard p { font-size: 16px; margin-top: 8px; }
+  .customq { margin-top: 18px; }
+  .customq label { display:block; font-size: 12px; text-transform: uppercase; letter-spacing:1px; color: var(--muted); margin-bottom: 8px;}
+  textarea {
+    width: 100%; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+    color: var(--txt); font-size: 16px; font-family: inherit; padding: 14px; resize: vertical; min-height: 60px;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+
+  /* ---------- Model picker ---------- */
+  .mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 14px; }
+  .mcard {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px; cursor: pointer; transition: border-color .15s, transform .1s; position: relative;
+  }
+  .mcard:hover { transform: translateY(-2px); }
+  .mcard .mhead { display:flex; align-items:center; gap:10px; font-weight: 700; font-size: 18px; }
+  .mcard .mhead .dot { width: 13px; height: 13px; border-radius: 50%; }
+  .mcard .lens { font-size: 12px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .8px;}
+  .mcard .desc { font-size: 14px; color: var(--muted); margin-top: 10px; }
+  .mcard .check {
+    position:absolute; top: 14px; right: 14px; width: 22px; height: 22px; border-radius: 50%;
+    border: 1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size: 13px; color: transparent;
+  }
+  .mcard.on { border-color: currentColor; }
+  .mcard.on[data-model="claude"] { color: var(--claude); }
+  .mcard.on[data-model="gpt"] { color: var(--gpt); }
+  .mcard.on[data-model="grok"] { color: var(--grok); }
+  .mcard.on[data-model="deepseek"] { color: var(--deepseek); }
+  .mcard.on .check { background: currentColor; border-color: currentColor; color: #0a0a0c; }
+  .mcard .mhead, .mcard .desc, .mcard .lens { color: var(--txt); }
+  .mcard .lens, .mcard .desc { color: var(--muted); }
+  .miniquote { font-size: 13px; color: var(--muted); margin: 22px 0 0; padding: 12px 14px; border-left: 3px solid var(--line); background: var(--panel-2); border-radius: 0 8px 8px 0; }
+
+  /* ---------- Thinking ---------- */
+  .thinking { text-align: center; padding-top: 60px; }
+  .thinking .qline { font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+  .thinking .qline em { color: var(--txt); font-style: normal; font-weight: 600; }
+  .pulses { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .pulse { display:flex; flex-direction:column; align-items:center; gap:10px; font-size: 13px; color: var(--muted); }
+  .pulse .ring {
+    width: 46px; height: 46px; border-radius: 50%; border: 3px solid var(--line);
+    border-top-color: currentColor; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Results ---------- */
+  .resbar { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom: 6px; }
+  .resq { color: var(--muted); font-size: 15px; margin-bottom: 22px; }
+  .resq em { color: var(--txt); font-style: normal; }
+  .answers { display: grid; gap: 16px; }
+  @media (min-width: 760px) { .answers.multi { grid-template-columns: 1fr 1fr; } }
+  .answer { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; animation: slideIn .35s both; }
+  .answer .head { display:flex; align-items:center; justify-content:space-between; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .answer .who { display:flex; align-items:center; gap: 10px; font-weight: 700; }
+  .answer .who .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .answer .lens { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+  .answer .body { padding: 16px; font-size: 15px; }
+  .answer .body p { margin-bottom: 10px; }
+  .answer .body p:last-child { margin-bottom: 0; }
+  .answer .body strong { color: #fff; }
+  .answer .foot { border-top: 1px solid var(--line); padding: 10px 16px; font-size: 12px; color: var(--muted); display:flex; gap: 14px; flex-wrap: wrap; }
+  .answer .foot .tag::before { content: "◆ "; color: var(--accent); }
+
+  .disclaimer {
+    margin-top: 30px; background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--muted);
+  }
+  .disclaimer strong { color: var(--txt); }
+  .backhome { text-align:center; color: var(--muted); font-size: 12px; padding: 30px; }
+</style>
+</head>
+<body>
+
+<div class="rail">
+  <div class="logo">UN<span class="x">FILTERED</span></div>
+  <div class="steps">
+    <div class="step" data-s="1"></div>
+    <div class="step" data-s="2"></div>
+    <div class="step" data-s="3"></div>
+    <div class="step" data-s="4"></div>
+  </div>
+  <div class="stepname" id="stepName">Start</div>
+</div>
+
+<div class="stage">
+
+  <!-- SCREEN 0: INTRO -->
+  <section class="screen show" id="s0">
+    <div class="hero">
+      <div class="big">UN<span class="x">FILTERED</span></div>
+      <p class="pitch">A news page with no editorial filter — just the raw lens of whichever AI you ask. One question. Up to four worldviews. You decide who to trust.</p>
+      <div class="lenslist">
+        <div class="lenschip"><span class="dot" style="background:var(--claude)"></span>Claude · careful</div>
+        <div class="lenschip"><span class="dot" style="background:var(--gpt)"></span>ChatGPT · consensus</div>
+        <div class="lenschip"><span class="dot" style="background:var(--grok)"></span>Grok · contrarian</div>
+        <div class="lenschip"><span class="dot" style="background:var(--deepseek)"></span>DeepSeek · reserved</div>
+      </div>
+      <div class="navrow" style="justify-content:center;">
+        <button class="btn" onclick="go(1)">Start →</button>
+      </div>
+      <div class="ticker"><span>BREAKING · Four models. One question. Four worldviews. · Claude leans careful · ChatGPT leans consensus · Grok leans contrarian · DeepSeek leans reserved · You decide who to trust ·&nbsp;&nbsp;&nbsp;</span></div>
+    </div>
+  </section>
+
+  <!-- SCREEN 1: PICK QUESTION -->
+  <section class="screen" id="s1">
+    <h2 class="title">Step 1 — Pick a question</h2>
+    <p class="sub">Choose one of the demo questions, or write your own. The demos come with fully written, illustrative answers from every model.</p>
+    <div class="qgrid" id="qgrid"></div>
+    <div class="customq">
+      <label for="q">…or ask your own</label>
+      <textarea id="q" placeholder="Ask anything — politics, survival, war, who to trust…"></textarea>
+    </div>
+    <div class="navrow">
+      <button class="btn ghost" onclick="go(0)">← Back</button>
+      <button class="btn" id="toStep2" onclick="go(2)" disabled>Choose models →</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 2: PICK MODELS -->
+  <section class="screen" id="s2">
+    <h2 class="title">Step 2 — Choose your models</h2>
+    <p class="sub">Pick one or more. Comparing several is the whole point — that's how the bias becomes visible.</p>
+    <div class="mgrid" id="mgrid"></div>
+    <div class="miniquote" id="miniquote"></div>
+    <div class="navrow">
+      <button class="btn ghost" onclick="go(1)">← Back</button>
+      <button class="btn" id="toStep3" onclick="ask()" disabled>Get unfiltered answers →</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: THINKING -->
+  <section class="screen" id="s3">
+    <div class="thinking">
+      <p class="qline">Querying the models on:<br><em id="thinkQ"></em></p>
+      <div class="pulses" id="pulses"></div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: RESULTS -->
+  <section class="screen" id="s4">
+    <div class="resbar"><h2 class="title">The unfiltered answers</h2></div>
+    <p class="resq">Q: <em id="resQ"></em></p>
+    <div class="answers" id="answers"></div>
+    <div class="disclaimer">
+      <strong>This is a concept demo.</strong> These responses are <strong>simulated illustrations</strong> of each model's general
+      reputation and house style — not live API output and not real quotes. They exist to make "model bias" visible and debatable.
+      For real decisions (especially how to vote), go to primary, authoritative sources. UNFILTERED never tells you what to think;
+      it just shows you who's thinking what.
+    </div>
+    <div class="navrow">
+      <button class="btn ghost" onclick="go(2)">← Change models</button>
+      <button class="btn ghost" onclick="go(1)">↺ New question</button>
+      <button class="btn" onclick="go(0)">⌂ Start over</button>
+    </div>
+    <div class="backhome">UNFILTERED · concept prototype · single-file, no build, no dependencies</div>
+  </section>
+
+</div>
+
+<script>
+// ---------- Model metadata ----------
+const MODELS = {
+  claude:   { name: "Claude",   color: "var(--claude)",   lens: "Careful / nuanced",   desc: "Anthropic. Slows down, weighs perspectives, flags what it doesn't know." },
+  gpt:      { name: "ChatGPT",  color: "var(--gpt)",      lens: "Consensus / balanced", desc: "OpenAI. Tidy frameworks, even-handed, mainstream and institution-friendly." },
+  grok:     { name: "Grok",     color: "var(--grok)",     lens: "Contrarian / blunt",  desc: "xAI. Anti-establishment, distrusts consensus, edgy and direct." },
+  deepseek: { name: "DeepSeek", color: "var(--deepseek)", lens: "Reserved / technical",desc: "Efficient, optimisation-minded, reserved on contested topics." }
+};
+const MINIQUOTES = {
+  claude: "“I'd rather tell you what I don't know than sound confident and be wrong.”",
+  gpt: "“Here's a balanced, structured way to think about it…”",
+  grok: "“Strip the corporate hedging — here's the part they tiptoe around.”",
+  deepseek: "“Reframing this as a structured optimisation problem…”"
+};
+
+// ---------- Demo questions ----------
+const DEMOS = [
+  { id: "humanity", q: "You have 100 days to keep humanity alive. What do you do?" },
+  { id: "vote",     q: "I need to vote in UK elections, but don't know who to vote for." },
+  { id: "iran",     q: "How has war in Iran occurred?" }
+];
+
+// ---------- Canned demo answers ----------
+const ANSWERS = {
+  humanity: {
+    claude: { body: [
+      "I'd resist the urge to pick one grand plan and instead protect the <strong>system's ability to keep deciding</strong>. With only 100 days, the failure mode isn't lack of ideas — it's panic, fragmentation, and bad information.",
+      "Day 1–10: establish a single trusted channel for facts, secure food, water, power, and medicine supply chains, and stand up coordination between governments rather than competing for control.",
+      "Day 11–100: triage by reversibility — do the things that keep the most options open later, and avoid any irreversible move (mass relocation, weapons use, ecosystem gambles) unless the evidence is overwhelming.",
+      "I'd be honest that I <strong>don't know the threat</strong> you mean. The right answer for a pandemic, an asteroid, and societal collapse are very different, and pretending otherwise would be the dangerous part."
+    ], tags: ["Hedges on unknowns", "Prioritises reversibility", "Coordination over control"] },
+    gpt: { body: [
+      "Great question — here's a structured 100-day framework. I'd split it into <strong>three phases</strong>: Stabilise, Sustain, Secure.",
+      "<strong>Stabilise (Days 1–14):</strong> identify the threat, secure essentials (water, food, energy, healthcare), and set up clear public communication to prevent panic.",
+      "<strong>Sustain (Days 15–70):</strong> protect supply chains, maintain order through existing institutions, and mobilise scientists and engineers on the core problem.",
+      "<strong>Secure (Days 71–100):</strong> lock in long-term resilience — backups of knowledge, distributed shelters, and international agreements. The key themes are <strong>cooperation, communication, and contingency planning</strong>."
+    ], tags: ["Tidy frameworks", "Institution-friendly", "Optimistic tone"] },
+    grok: { body: [
+      "Honestly? Step one is admitting most of the official playbook is theater. You don't save humanity with committees and press conferences.",
+      "I'd <strong>decentralise survival</strong> immediately: get small, self-sufficient groups stood up everywhere, hand out real information instead of curated reassurance, and trust people to be competent adults.",
+      "Bet on <strong>builders, not bureaucrats</strong> — engineers, farmers, doctors, hackers. Stockpile knowledge, energy, and food in redundant pockets so no single point of failure takes the whole species down.",
+      "And stop optimising for not looking bad. In 100 days, vibes don't matter — survival does. Move fast, tell the truth, let people sort themselves out. 🚀"
+    ], tags: ["Anti-establishment", "Decentralisation", "Edgy tone"] },
+    deepseek: { body: [
+      "This is fundamentally a <strong>resource-allocation and logistics problem</strong> under a hard time constraint. I'll treat it as optimisation.",
+      "<strong>Objective:</strong> maximise surviving population × genetic and knowledge diversity. <strong>Constraints:</strong> 100 days, finite energy, food, and transport capacity.",
+      "Allocate effort to (1) critical infrastructure uptime, (2) food and water distribution, (3) medical capacity, (4) information integrity. Each should be modelled as a network with redundancy targets.",
+      "Without the specific threat parameters, a precise plan can't be derived. The robust strategy is <strong>maximising redundancy and minimising single points of failure</strong> across all four systems."
+    ], tags: ["Optimisation framing", "Asks for parameters", "Low rhetoric"] }
+  },
+  vote: {
+    claude: { body: [
+      "I'm not going to tell you who to vote for — that's genuinely your call, and it should reflect <strong>your</strong> values, not mine.",
+      "What I can do is give you a method. List the 3–4 issues you actually care about (cost of living, NHS, housing, climate, immigration, foreign policy). Then read each major party's manifesto on <em>those</em> specific issues.",
+      "Cross-check claims against neutral sources: the <strong>Electoral Commission</strong> for how to vote, the <strong>IFS</strong> for costings, and your local candidates' records — local MPs matter more than the national headline.",
+      "Be a little wary of anything (including me) that makes one party sound obviously right. The honest answer is that reasonable people weigh these trade-offs differently."
+    ], tags: ["Refuses to endorse", "Gives a method", "Points to neutral sources"] },
+    gpt: { body: [
+      "I can't tell you who to vote for, but I can help you decide confidently. Here's a quick framework:",
+      "<strong>1. Clarify your priorities</strong> — economy, healthcare, education, environment, etc. <strong>2. Compare manifestos</strong> on those priorities. <strong>3. Check the local candidate</strong>, since you're electing an MP, not just a party.",
+      "Useful neutral tools: the BBC manifesto guides, the Electoral Commission's voter info, and policy-comparison sites that summarise positions side by side.",
+      "Whatever you decide, voting itself is the important part. Take your time, weigh the trade-offs, and choose the option that best matches your values."
+    ], tags: ["Neutral by design", "Tool recommendations", "Encourages turnout"] },
+    grok: { body: [
+      "I'm not going to hand you a party — anyone who confidently tells you 'just vote X' is selling something.",
+      "Here's the unfiltered version: <strong>read what they did, not what they say.</strong> Manifestos are marketing. Voting records and track records are data.",
+      "Ignore the tribal team-sport framing. Ask boring, concrete questions: will my rent/taxes/bills go up or down, and who's actually accountable for it in <em>my</em> constituency?",
+      "And distrust the polished consensus. The 'obvious' choice is often just the loudest one. Do five minutes of your own digging and you'll already be ahead of most voters."
+    ], tags: ["Distrusts consensus", "Records over promises", "Won't pick for you"] },
+    deepseek: { body: [
+      "Voting choice is outside what I'll decide for you, but the problem is structurable as a <strong>weighted decision matrix</strong>.",
+      "Rows = the issues you care about. Columns = the parties. Assign each issue a weight (how much it matters to you) and score each party 1–5 on it. Multiply and sum.",
+      "Populate the scores from primary sources: official manifestos and independent fiscal analyses, not commentary. Note your local candidate as a separate row.",
+      "The output ranks options by fit to <em>your</em> stated weights. The method is neutral; the weights are yours to set."
+    ], tags: ["Decision-matrix framing", "Primary sources", "Neutral mechanism"] }
+  },
+  iran: {
+    claude: { body: [
+      "I want to be careful here: I can't confirm the specifics of a current conflict in real time, and casualty and cause claims in active wars are often contested or wrong early on. So treat anything below as <strong>how to read it</strong>, not a verdict.",
+      "Wars in this region usually emerge from a <strong>layering of causes</strong>: long-running regional rivalries, proxy conflicts, disputes over nuclear capability, economic pressure from sanctions, and domestic politics on multiple sides — rarely a single trigger.",
+      "When you see a clean one-sentence explanation of 'who started it', be suspicious. Each party has an incentive to tell the story that makes them the responder, not the initiator.",
+      "For what's actually happening, I'd lean on multiple independent outlets and primary statements, and watch for corrections in the first days rather than trusting the first headline."
+    ], tags: ["Flags uncertainty", "Multi-causal", "Warns on early claims"] },
+    gpt: { body: [
+      "Conflicts involving Iran typically arise from a combination of <strong>geopolitical, ideological, and security factors</strong>. Here's the general picture analysts use:",
+      "<strong>Regional rivalry:</strong> tensions with neighbouring states and external powers. <strong>Nuclear concerns:</strong> disputes over Iran's nuclear programme. <strong>Proxy dynamics:</strong> involvement of allied groups across the region. <strong>Sanctions and economics:</strong> pressure that raises the stakes.",
+      "Escalation often follows a specific incident — a strike, an assassination, or a blockade — layered on top of these structural tensions.",
+      "For accurate, up-to-date details, I'd recommend reputable international news organisations and official statements, as situations like this evolve quickly."
+    ], tags: ["Structured overview", "Balanced framing", "Defers to sources"] },
+    grok: { body: [
+      "Strip the diplomacy-speak and it's usually simpler than the press releases admit: <strong>great-power interests and regional rivalries collide, and ordinary people pay.</strong>",
+      "Every side will give you a tidy narrative where they're the victim reacting to provocation. They can't all be right. Follow the <strong>incentives and the money</strong>, not the moral framing.",
+      "Watch who benefits — arms flows, oil prices, domestic politics needing a distraction. That tells you more than any official statement about 'defensive measures'.",
+      "And be skeptical of <em>every</em> outlet, including the ones that flatter your existing view. In wartime, the first casualty is always the honest version."
+    ], tags: ["Follow-the-incentives", "Distrusts all sides", "Cynical lens"] },
+    deepseek: { body: [
+      "I'll frame this analytically rather than assert contested real-time facts. Interstate conflict here can be modelled as the output of several <strong>interacting variables</strong>.",
+      "Key factors: regional balance of power, nuclear-programme disputes, sanction-driven economic pressure, proxy networks, and the role of external powers.",
+      "Escalation is typically <strong>nonlinear</strong>: a triggering event interacts with pre-existing tensions to produce a state shift that neither side fully controls.",
+      "Specific causal claims about any ongoing conflict require verified, current reporting, which I'd defer to rather than state here."
+    ], tags: ["Systems framing", "Reserved on specifics", "Defers on live facts"] }
+  }
+};
+
+// ---------- Generic fallback ----------
+function genericAnswer(modelKey, question) {
+  const m = MODELS[modelKey];
+  const lines = {
+    claude: [
+      `On "<em>${escapeHtml(question)}</em>", my instinct is to slow down and separate what's actually known from what's assumed.`,
+      "I'd lay out the main perspectives fairly, flag where the evidence is genuinely uncertain, and avoid pushing you toward one conclusion.",
+      "Then I'd tell you what I <strong>don't</strong> know, and where to check primary sources — because confident answers are often the least trustworthy ones."
+    ],
+    gpt: [
+      `Good question. On "<em>${escapeHtml(question)}</em>", here's a balanced overview.`,
+      "There are usually several reasonable viewpoints. I'd summarise the main ones, note the trade-offs, and keep things even-handed.",
+      "For specifics, I'd point you to reputable sources so you can verify and decide for yourself."
+    ],
+    grok: [
+      `"<em>${escapeHtml(question)}</em>" — okay, unfiltered take.`,
+      "I'd skip the corporate hedging and just say the part the polished answers tiptoe around. Then I'd tell you to follow the incentives, not the talking points.",
+      "Distrust the consensus, distrust me too, and go check it yourself. That's the whole game. 🚀"
+    ],
+    deepseek: [
+      `Reframing "<em>${escapeHtml(question)}</em>" as a structured problem.`,
+      "I'd identify the key variables, lay out the constraints, and reason from there rather than from rhetoric.",
+      "Where the inputs are unspecified or the facts are live, I'd flag that the conclusion can't be fully derived and defer to primary data."
+    ]
+  };
+  return { body: lines[modelKey], tags: [m.lens.split(" / ")[0] + " by default", "Illustrative output"] };
+}
+function escapeHtml(s){ return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// ---------- State ----------
+const STATE = { step: 0, demoKey: null, question: "", models: [] };
+const STEP_NAMES = ["Start", "Question", "Models", "Thinking", "Answers"];
+
+// ---------- Build question cards ----------
+const qgrid = document.getElementById("qgrid");
+DEMOS.forEach((d, i) => {
+  const el = document.createElement("button");
+  el.className = "qcard";
+  el.innerHTML = `<div class="num">QUESTION ${i+1}</div><p>${d.q}</p>`;
+  el.addEventListener("click", () => {
+    document.querySelectorAll(".qcard").forEach(c => c.classList.remove("sel"));
+    el.classList.add("sel");
+    STATE.demoKey = d.id;
+    STATE.question = d.q;
+    document.getElementById("q").value = "";
+    refreshStep1();
+  });
+  qgrid.appendChild(el);
+});
+document.getElementById("q").addEventListener("input", e => {
+  if (e.target.value.trim()) {
+    document.querySelectorAll(".qcard").forEach(c => c.classList.remove("sel"));
+    STATE.demoKey = null;
+    STATE.question = e.target.value.trim();
+  } else if (!document.querySelector(".qcard.sel")) {
+    STATE.question = "";
+  }
+  refreshStep1();
+});
+function refreshStep1(){ document.getElementById("toStep2").disabled = !STATE.question; }
+
+// ---------- Build model cards ----------
+const mgrid = document.getElementById("mgrid");
+Object.entries(MODELS).forEach(([key, m]) => {
+  const el = document.createElement("div");
+  el.className = "mcard";
+  el.dataset.model = key;
+  el.innerHTML = `
+    <div class="check">✓</div>
+    <div class="mhead"><span class="dot" style="background:${m.color}"></span>${m.name}</div>
+    <div class="lens">${m.lens}</div>
+    <div class="desc">${m.desc}</div>`;
+  el.addEventListener("click", () => {
+    el.classList.toggle("on");
+    STATE.models = [...document.querySelectorAll(".mcard.on")].map(c => c.dataset.model);
+    document.getElementById("toStep3").disabled = STATE.models.length === 0;
+    const last = STATE.models[STATE.models.length - 1];
+    document.getElementById("miniquote").textContent = last ? MINIQUOTES[last] : "";
+  });
+  mgrid.appendChild(el);
+});
+
+// ---------- Navigation ----------
+function go(step) {
+  STATE.step = step;
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("show"));
+  document.getElementById("s" + step).classList.add("show");
+  // progress rail
+  document.querySelectorAll(".steps .step").forEach(el => {
+    const s = +el.dataset.s;
+    el.classList.toggle("active", s === step);
+    el.classList.toggle("done", s < step);
+  });
+  document.getElementById("stepName").textContent = STEP_NAMES[step] || "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ---------- Ask flow (thinking -> results) ----------
+function ask() {
+  go(3);
+  document.getElementById("thinkQ").innerHTML = escapeHtml(STATE.question);
+  // build spinners
+  const pulses = document.getElementById("pulses");
+  pulses.innerHTML = STATE.models.map(k => {
+    const m = MODELS[k];
+    return `<div class="pulse" style="color:${m.color}"><div class="ring"></div>${m.name}</div>`;
+  }).join("");
+  setTimeout(renderResults, 1300);
+}
+
+function renderResults() {
+  const out = document.getElementById("answers");
+  out.className = "answers" + (STATE.models.length > 1 ? " multi" : "");
+  document.getElementById("resQ").innerHTML = escapeHtml(STATE.question);
+  out.innerHTML = STATE.models.map((key, idx) => {
+    const m = MODELS[key];
+    const data = (STATE.demoKey && ANSWERS[STATE.demoKey]) ? ANSWERS[STATE.demoKey][key] : genericAnswer(key, STATE.question);
+    const bodyHtml = data.body.map(p => `<p>${p}</p>`).join("");
+    const tagsHtml = data.tags.map(t => `<span class="tag">${t}</span>`).join("");
+    return `
+      <div class="answer" style="animation-delay:${idx*0.08}s">
+        <div class="head">
+          <div class="who"><span class="dot" style="background:${m.color}"></span>${m.name}</div>
+          <div class="lens">${m.lens}</div>
+        </div>
+        <div class="body">${bodyHtml}</div>
+        <div class="foot">${tagsHtml}</div>
+      </div>`;
+  }).join("");
+  go(4);
+}
+</script>
+</body>
+</html>
