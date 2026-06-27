@@ -6,149 +6,141 @@
 <title>UNFILTERED · Generate a comparison</title>
 <style>
   :root {
-    --bg: #0a0a0c;
-    --panel: #141418;
-    --panel-2: #1c1c22;
-    --line: #2a2a33;
-    --txt: #e8e8ea;
-    --muted: #8b8b96;
-    --accent: #ff4d4d;
-    --con: #2a9df4;
-    --lab: #ff4d6d;
-    --kept: #2ecc71;
-    --partial: #f1c40f;
-    --broken: #e74c3c;
-    --progress: #7f8fa6;
+    --bg: #0a0a0c; --panel: #141418; --panel-2: #1c1c22; --line: #2a2a33;
+    --txt: #e8e8ea; --muted: #8b8b96; --accent: #ff4d4d;
+    --a: #2a9df4; --b: #ff4d6d;
+    --kept: #2ecc71; --partial: #f1c40f; --broken: #e74c3c; --progress: #7f8fa6;
+    --contest: #ffb020;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
     background: radial-gradient(1200px 600px at 50% -10%, #16161c 0%, var(--bg) 55%);
-    color: var(--txt);
+    color: var(--txt); line-height: 1.5; overflow-x: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    overflow-x: hidden;
   }
   a { color: inherit; }
   .wrap { max-width: 980px; margin: 0 auto; padding: 0 22px; }
 
-  /* top bar */
-  .topbar { display: flex; align-items: center; gap: 12px; padding: 16px 22px; }
+  .topbar { display: flex; align-items: center; gap: 12px; padding: 16px 22px; flex-wrap: wrap; }
   .topbar .logo { font-weight: 800; letter-spacing: -0.4px; font-size: 16px; }
   .topbar .logo .x { color: var(--accent); }
-  .topbar .links { margin-left: auto; display: flex; gap: 16px; font-size: 13px; }
-  .topbar .links a { color: var(--muted); text-decoration: none; }
-  .topbar .links a:hover { color: var(--txt); }
+  .topbar .links { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 13px; }
+  .topbar .links a, .topbar .links button {
+    color: var(--muted); text-decoration: none; background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 13px; padding: 0;
+  }
+  .topbar .links a:hover, .topbar .links button:hover { color: var(--txt); }
+  .keydot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); display:inline-block; margin-right:5px; vertical-align: middle; }
+  .keydot.live { background: var(--kept); box-shadow: 0 0 6px var(--kept); }
 
-  /* ---------- HERO / generator ---------- */
-  .hero { text-align: center; padding: 64px 0 30px; }
-  .hero h1 { font-size: clamp(34px, 6vw, 60px); font-weight: 800; letter-spacing: -2px; line-height: 1.02; }
+  /* API key panel */
+  .keypanel { display:none; max-width: 680px; margin: 4px auto 0; background: var(--panel); border:1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .keypanel.show { display:block; animation: fade .25s both; }
+  .keypanel label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display:block; margin-bottom: 8px; }
+  .keyrow { display:flex; gap: 8px; flex-wrap: wrap; }
+  .keypanel input { flex:1; min-width: 220px; background: var(--panel-2); border:1px solid var(--line); border-radius: 9px; color: var(--txt); font-size: 14px; font-family: inherit; padding: 11px 12px; }
+  .keypanel input:focus { outline:none; border-color: var(--accent); }
+  .keypanel .mini { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .keypanel .mini b { color: var(--txt); }
+
+  .hero { text-align: center; padding: 54px 0 24px; }
+  .hero h1 { font-size: clamp(32px, 6vw, 56px); font-weight: 800; letter-spacing: -2px; line-height: 1.02; }
   .hero h1 .grad {
-    background: linear-gradient(90deg, var(--con), var(--accent), var(--lab));
+    background: linear-gradient(90deg, var(--a), var(--accent), var(--b));
     -webkit-background-clip: text; background-clip: text; color: transparent;
     background-size: 200% auto; animation: shimmer 4s linear infinite;
   }
   @keyframes shimmer { to { background-position: 200% center; } }
-  .hero p.lede { color: var(--muted); font-size: 16px; margin-top: 14px; }
+  .hero p.lede { color: var(--muted); font-size: 16px; margin-top: 14px; max-width: 620px; margin-left:auto; margin-right:auto; }
 
   .genbox {
-    margin: 30px auto 0; max-width: 680px;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
-    padding: 10px 10px 10px 18px; display: flex; align-items: center; gap: 10px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
-    transition: border-color .2s, box-shadow .2s;
+    margin: 28px auto 0; max-width: 680px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 10px 10px 10px 18px; display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45); transition: border-color .2s, box-shadow .2s;
   }
   .genbox:focus-within { border-color: var(--accent); box-shadow: 0 20px 70px rgba(255,77,77,0.18); }
-  .genbox input {
-    flex: 1; background: transparent; border: none; color: var(--txt);
-    font-size: 17px; font-family: inherit; padding: 12px 0;
-  }
+  .genbox input { flex: 1; background: transparent; border: none; color: var(--txt); font-size: 17px; font-family: inherit; padding: 12px 0; }
   .genbox input:focus { outline: none; }
-  .genbtn {
-    background: var(--accent); color: #fff; border: none; border-radius: 11px;
-    padding: 13px 22px; font-size: 15px; font-weight: 700; cursor: pointer; white-space: nowrap;
-    font-family: inherit; transition: filter .15s, transform .1s;
-  }
+  .genbtn { background: var(--accent); color: #fff; border: none; border-radius: 11px; padding: 13px 22px; font-size: 15px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: inherit; transition: filter .15s, transform .1s; }
   .genbtn:hover { filter: brightness(1.08); }
   .genbtn:active { transform: translateY(1px); }
 
-  .chips { margin: 16px auto 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 680px; }
-  .chip-ex {
-    font-size: 13px; color: var(--muted); border: 1px solid var(--line); background: var(--panel-2);
-    border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: all .15s;
-  }
+  .chips { margin: 16px auto 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; max-width: 760px; }
+  .chip-ex { font-size: 13px; color: var(--muted); border: 1px solid var(--line); background: var(--panel-2); border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: all .15s; }
   .chip-ex:hover { color: var(--txt); border-color: var(--muted); }
 
-  /* ---------- GENERATING overlay ---------- */
-  .generating { max-width: 520px; margin: 40px auto 0; display: none; }
+  .modebar { text-align:center; margin-top: 14px; font-size: 12.5px; color: var(--muted); }
+  .modebar b { color: var(--txt); }
+
+  /* generating */
+  .generating { max-width: 520px; margin: 36px auto 0; display: none; }
   .generating.show { display: block; animation: fade .3s both; }
   @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
   .gbar { height: 6px; background: var(--panel-2); border-radius: 4px; overflow: hidden; margin-bottom: 22px; }
-  .gbar > i { display: block; height: 100%; width: 0; border-radius: 4px;
-    background: linear-gradient(90deg, var(--con), var(--accent), var(--lab)); transition: width .35s ease; }
+  .gbar > i { display: block; height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg, var(--a), var(--accent), var(--b)); transition: width .35s ease; }
   .gstep { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--muted); padding: 7px 0; opacity: .35; transition: opacity .3s, color .3s; }
   .gstep.on { opacity: 1; color: var(--txt); }
-  .gstep .tick {
-    width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex: none;
-    display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent;
-  }
-  .gstep.on .tick { border-color: var(--con); }
+  .gstep .tick { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); flex: none; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; }
+  .gstep.on .tick { border-color: var(--a); }
   .gstep.done .tick { background: var(--kept); border-color: var(--kept); color: #0a0a0c; }
   .gstep.on:not(.done) .tick { border-top-color: var(--accent); animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ---------- RESULTS ---------- */
+  /* results */
   .results { display: none; padding-bottom: 70px; }
   .results.show { display: block; }
   .res-head { text-align: center; margin: 10px 0 6px; }
   .res-head .q { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
   .res-head h2 { font-size: clamp(24px,4vw,34px); letter-spacing: -1px; margin-top: 6px; }
 
-  .scoreboard { display: flex; justify-content: center; gap: 26px; margin: 18px 0 6px; flex-wrap: wrap; }
+  .scoreboard { display: flex; justify-content: center; gap: 22px; margin: 16px 0 4px; flex-wrap: wrap; }
   .score { text-align: center; }
-  .score b { font-size: 30px; display: block; line-height: 1; }
+  .score b { font-size: 28px; display: block; line-height: 1; }
   .score span { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
   .score.k b { color: var(--kept); } .score.p b { color: var(--partial); }
   .score.b b { color: var(--broken); } .score.g b { color: var(--progress); }
+  .score.c b { color: var(--contest); }
 
-  .vsrow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
-  .pcol {
-    border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--panel);
-    opacity: 0; transform: translateY(18px);
-  }
-  .pcol.con { border-top: 4px solid var(--con); }
-  .pcol.lab { border-top: 4px solid var(--lab); }
+  .contestbar { text-align:center; margin: 10px auto 0; max-width: 640px; font-size: 13px; color: var(--contest); }
+  .contestbar.none { color: var(--muted); }
+
+  .vsrow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+  .pcol { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--panel); opacity: 0; transform: translateY(18px); }
+  .pcol.a { border-top: 4px solid var(--a); }
+  .pcol.b { border-top: 4px solid var(--b); }
   .pcol.in { animation: rise .5s cubic-bezier(.2,.7,.3,1) forwards; }
-  .pcol.con.in { animation-delay: .05s; }
-  .pcol.lab.in { animation-delay: .18s; }
+  .pcol.a.in { animation-delay: .05s; } .pcol.b.in { animation-delay: .18s; }
   @keyframes rise { to { opacity: 1; transform: none; } }
   .pcol .ph { padding: 14px 16px; font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 9px; border-bottom: 1px solid var(--line); }
-  .pcol.con .ph { color: var(--con); }
-  .pcol.lab .ph { color: var(--lab); }
+  .pcol.a .ph { color: var(--a); } .pcol.b .ph { color: var(--b); }
   .pcol .ph .d { width: 11px; height: 11px; border-radius: 50%; }
+  .pcol .ph .meta { font-size:12px; color: var(--muted); font-weight:500; }
 
   .item { padding: 13px 16px; border-bottom: 1px solid var(--line); opacity: 0; transform: translateX(8px); }
   .item:last-child { border-bottom: none; }
   .item.in { animation: slidein .4s ease forwards; }
   @keyframes slidein { to { opacity: 1; transform: none; } }
   .item .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .item .topic { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  .item .topic { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); display:flex; align-items:center; gap:7px; }
+  .item .topic .flag { color: var(--contest); font-size: 11px; }
   .status { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; padding: 2px 7px; border-radius: 4px; color: #0a0a0c; white-space: nowrap; }
   .s-kept { background: var(--kept); } .s-partial { background: var(--partial); }
   .s-broken { background: var(--broken); } .s-progress { background: var(--progress); color:#fff; }
   .item .line { font-size: 14.5px; margin-top: 5px; }
   .item .line b { color: #fff; }
   .item .line .arrow { color: var(--accent); margin: 0 6px; }
+  .item .note { font-size: 12px; color: var(--contest); margin-top: 6px; }
 
   .res-foot { text-align: center; margin-top: 26px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .res-foot a, .res-foot button {
-    font-family: inherit; font-size: 14px; cursor: pointer; text-decoration: none;
-    border-radius: 10px; padding: 11px 18px; border: 1px solid var(--line); background: transparent; color: var(--muted);
-  }
+  .res-foot a, .res-foot button { font-family: inherit; font-size: 14px; cursor: pointer; text-decoration: none; border-radius: 10px; padding: 11px 18px; border: 1px solid var(--line); background: transparent; color: var(--muted); }
   .res-foot a.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; }
   .res-foot a:hover, .res-foot button:hover { color: var(--txt); border-color: var(--muted); }
   .res-foot a.primary:hover { color: #fff; }
-  .note { text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; }
+  .sources { text-align:center; color: var(--muted); font-size: 12px; margin-top: 18px; }
+  .sources b { color: var(--txt); }
+  .note-foot { text-align: center; color: var(--muted); font-size: 12px; margin-top: 10px; }
+  .err { max-width: 600px; margin: 16px auto 0; background: #2a1416; border:1px solid #5a2a2a; color:#ffb3b3; border-radius: 10px; padding: 12px 14px; font-size: 13px; }
 
   @media (max-width: 620px) { .vsrow { grid-template-columns: 1fr; } .genbox { flex-direction: column; align-items: stretch; padding: 14px; } .genbtn { width: 100%; } }
 </style>
@@ -158,6 +150,7 @@
 <div class="topbar">
   <span class="logo">UN<span class="x">FILTERED</span></span>
   <span class="links">
+    <button id="keyToggle"><span class="keydot" id="keyDot"></span><span id="keyLabel">Add API key</span></button>
     <a href="index.html">Model bias</a>
     <a href="compare.html">Full breakdown</a>
   </span>
@@ -165,10 +158,21 @@
 
 <div class="wrap">
 
+  <!-- API key panel -->
+  <section class="keypanel" id="keypanel">
+    <label for="apikey">Anthropic API key — for live AI generation</label>
+    <div class="keyrow">
+      <input id="apikey" type="password" autocomplete="off" placeholder="sk-ant-..." />
+      <button class="genbtn" id="keySave">Save</button>
+      <button class="genbtn" id="keyClear" style="background:var(--panel-2);color:var(--muted)">Clear</button>
+    </div>
+    <p class="mini">Stored only in your browser (<b>localStorage</b>) and sent directly to <b>api.anthropic.com</b> — it never touches any server of ours. Without a key, the demo runs on built-in sample data. Model: <b>claude-opus-4-8</b>.</p>
+  </section>
+
   <!-- generator -->
   <section class="hero" id="hero">
     <h1>Generate a <span class="grad">comparison</span></h1>
-    <p class="lede">Type two options. Get the receipts — promised vs delivered, side by side.</p>
+    <p class="lede">Type any two options. Live AI builds a sourced, side-by-side scorecard — promised vs delivered — and flags the claims where the evidence is contested.</p>
 
     <div class="genbox">
       <input id="q" type="text" autocomplete="off" placeholder="" />
@@ -177,9 +181,11 @@
 
     <div class="chips" id="chips">
       <span class="chip-ex">Labour or Tories programme UK</span>
-      <span class="chip-ex">Conservatives vs Labour</span>
-      <span class="chip-ex">UK government promised vs delivered</span>
+      <span class="chip-ex">iPhone vs Android</span>
+      <span class="chip-ex">Rwanda asylum policy: for vs against</span>
     </div>
+
+    <div class="modebar" id="modebar"></div>
   </section>
 
   <!-- generating -->
@@ -192,166 +198,291 @@
   <section class="results" id="results">
     <div class="res-head">
       <div class="q" id="resQ"></div>
-      <h2>Conservatives vs Labour</h2>
+      <h2 id="resTitle">Comparison</h2>
     </div>
 
     <div class="scoreboard" id="scoreboard"></div>
+    <div class="contestbar" id="contestbar"></div>
 
     <div class="vsrow">
-      <div class="pcol con" id="colCon">
-        <div class="ph"><span class="d" style="background:var(--con)"></span>Conservatives <span style="font-size:12px;color:var(--muted);font-weight:500">· 2019→24</span></div>
-        <div id="itemsCon"></div>
+      <div class="pcol a" id="colA">
+        <div class="ph"><span class="d" style="background:var(--a)"></span><span id="aName">Option A</span> <span class="meta" id="aMeta"></span></div>
+        <div id="itemsA"></div>
       </div>
-      <div class="pcol lab" id="colLab">
-        <div class="ph"><span class="d" style="background:var(--lab)"></span>Labour <span style="font-size:12px;color:var(--muted);font-weight:500">· 2024→</span></div>
-        <div id="itemsLab"></div>
+      <div class="pcol b" id="colB">
+        <div class="ph"><span class="d" style="background:var(--b)"></span><span id="bName">Option B</span> <span class="meta" id="bMeta"></span></div>
+        <div id="itemsB"></div>
       </div>
     </div>
+
+    <div class="sources" id="sources"></div>
 
     <div class="res-foot">
       <a class="primary" href="compare.html">See full sourced breakdown →</a>
       <button id="again">↺ New comparison</button>
     </div>
-    <p class="note">Brief summary · editorial status tags · verify everything in the full breakdown.</p>
+    <p class="note-foot" id="noteFoot"></p>
   </section>
 
 </div>
 
 <script>
-// ---------- Brief, non-explanatory data ----------
-const DATA = {
-  con: [
-    { topic: "Tax",        promised: "No rate rises",          delivered: "Highest tax burden since 1940s", status: "broken" },
-    { topic: "NHS",        promised: "50k nurses, 40 hospitals", delivered: "Nurses ~met, hospitals delayed", status: "partial" },
-    { topic: "Immigration",promised: "Numbers will fall",       delivered: "Record ~764k (2022)",            status: "broken" },
-    { topic: "Housing",    promised: "300k homes / year",       delivered: "Peaked ~234k",                   status: "broken" },
-    { topic: "Brexit",     promised: "Get Brexit Done",         delivered: "Left EU Jan 2020",               status: "kept" }
-  ],
-  lab: [
-    { topic: "Tax",        promised: "No rises for working people", delivered: "Employer NI & CGT up",        status: "partial" },
-    { topic: "NHS",        promised: "40k extra appts / week",      delivered: "Funding up, early days",       status: "progress" },
-    { topic: "Immigration",promised: "Scrap Rwanda scheme",         delivered: "Scrapped Jul 2024",            status: "kept" },
-    { topic: "Housing",    promised: "1.5m homes",                  delivered: "Planning reform underway",     status: "progress" },
-    { topic: "Energy",     promised: "Great British Energy",        delivered: "GB Energy Act 2025",           status: "progress" }
-  ]
-};
+// ---------- config ----------
+const MODEL = "claude-opus-4-8";
+const KEY_LS = "unfiltered_anthropic_key";
+
+// ---------- status meta ----------
 const STATUS_LABEL = { kept: "Kept", partial: "Partial", broken: "Broken", progress: "In progress" };
+function normStatus(s){ s=(s||"").toLowerCase(); return ["kept","partial","broken","progress"].includes(s)?s:"progress"; }
+
+// ---------- built-in fallback dataset (no key) ----------
+const FALLBACK = {
+  title: "Conservatives vs Labour",
+  a: { name: "Conservatives", meta: "· 2019→24" },
+  b: { name: "Labour", meta: "· 2024→" },
+  rows: [
+    { topic:"Tax", a:{promised:"No rate rises", delivered:"Highest tax burden since 1940s", status:"broken"},
+      b:{promised:"No rises for working people", delivered:"Employer NI & CGT up", status:"partial"}, contested:true, note:"Both sides dispute the framing" },
+    { topic:"NHS", a:{promised:"50k nurses, 40 hospitals", delivered:"Nurses ~met, hospitals delayed", status:"partial"},
+      b:{promised:"40k extra appts / week", delivered:"Funding up, early days", status:"progress"}, contested:false, note:"" },
+    { topic:"Immigration", a:{promised:"Numbers will fall", delivered:"Record ~764k (2022)", status:"broken"},
+      b:{promised:"Scrap Rwanda scheme", delivered:"Scrapped Jul 2024", status:"kept"}, contested:false, note:"" },
+    { topic:"Housing", a:{promised:"300k homes / year", delivered:"Peaked ~234k", status:"broken"},
+      b:{promised:"1.5m homes", delivered:"Planning reform underway", status:"progress"}, contested:false, note:"" },
+    { topic:"Energy", a:{promised:"Net zero by 2050", delivered:"Targets kept, timelines slipped", status:"partial"},
+      b:{promised:"Great British Energy", delivered:"GB Energy Act 2025", status:"progress"}, contested:false, note:"" }
+  ],
+  sources: ["Manifestos", "IFS", "ONS", "Full Fact", "gov.uk"]
+};
 
 const STEPS = [
   "Parsing your question",
   "Identifying the two options",
-  "Pulling manifesto pledges",
-  "Checking the delivery record",
-  "Tagging kept / broken",
+  "Pulling pledges & record",
+  "Cross-checking the evidence",
+  "Flagging contested claims",
   "Building comparison"
 ];
 
-// ---------- Placeholder typewriter ----------
-const PH = ["Labour or Tories programme UK…", "Conservatives vs Labour…", "What they promised vs delivered…"];
+// ---------- API key handling ----------
+const apikeyEl = document.getElementById("apikey");
+const keyDot = document.getElementById("keyDot");
+const keyLabel = document.getElementById("keyLabel");
+const modebar = document.getElementById("modebar");
+function getKey(){ return localStorage.getItem(KEY_LS) || ""; }
+function refreshKeyUI(){
+  const has = !!getKey();
+  keyDot.classList.toggle("live", has);
+  keyLabel.textContent = has ? "API key set · live" : "Add API key";
+  modebar.innerHTML = has
+    ? 'Live mode — comparisons generated by <b>Claude (claude-opus-4-8)</b> for any two options you type.'
+    : 'Running on <b>built-in sample data</b>. Add an API key (top right) for live AI on <b>any</b> two options.';
+}
+document.getElementById("keyToggle").addEventListener("click", ()=>{
+  const p = document.getElementById("keypanel");
+  p.classList.toggle("show");
+  if (p.classList.contains("show")) { apikeyEl.value = getKey(); apikeyEl.focus(); }
+});
+document.getElementById("keySave").addEventListener("click", ()=>{
+  const v = apikeyEl.value.trim();
+  if (v) localStorage.setItem(KEY_LS, v); else localStorage.removeItem(KEY_LS);
+  document.getElementById("keypanel").classList.remove("show");
+  refreshKeyUI();
+});
+document.getElementById("keyClear").addEventListener("click", ()=>{
+  localStorage.removeItem(KEY_LS); apikeyEl.value=""; refreshKeyUI();
+});
+
+// ---------- placeholder typewriter ----------
+const PH = ["Labour or Tories programme UK…", "iPhone vs Android…", "What they promised vs delivered…"];
 const qinput = document.getElementById("q");
-let phi = 0, chi = 0, typing = true, paused = 0;
+let phi=0, chi=0, typing=true, paused=0;
 (function tw(){
   if (document.activeElement === qinput || qinput.value) { qinput.placeholder = "Type two options to compare…"; return setTimeout(tw, 600); }
   const word = PH[phi];
-  if (typing) {
-    qinput.placeholder = word.slice(0, chi++) + "▍";
-    if (chi > word.length) { typing = false; paused = 14; }
-  } else if (paused > 0) { paused--; }
-  else {
-    qinput.placeholder = word.slice(0, chi--) + "▍";
-    if (chi === 0) { typing = true; phi = (phi + 1) % PH.length; }
-  }
-  setTimeout(tw, typing ? 70 : (paused > 0 ? 90 : 35));
+  if (typing) { qinput.placeholder = word.slice(0, chi++) + "▍"; if (chi > word.length) { typing=false; paused=14; } }
+  else if (paused>0) paused--;
+  else { qinput.placeholder = word.slice(0, chi--) + "▍"; if (chi===0) { typing=true; phi=(phi+1)%PH.length; } }
+  setTimeout(tw, typing ? 70 : (paused>0 ? 90 : 35));
 })();
 
-// ---------- Chips ----------
-document.querySelectorAll(".chip-ex").forEach(c =>
-  c.addEventListener("click", () => { qinput.value = c.textContent; run(); }));
+// ---------- chips ----------
+document.querySelectorAll(".chip-ex").forEach(c => c.addEventListener("click", ()=>{ qinput.value = c.textContent; run(); }));
 
-// ---------- Run ----------
-function run() {
+// ---------- Claude call ----------
+function buildPrompt(question){
+  const sys = "You are a neutral decision-transparency engine. Given two options to compare (political parties, products, policies — anything), produce a brief, balanced, sourced, head-to-head comparison of what each side PROMISED versus what they actually DELIVERED or now claim. Be factual and even-handed; do not endorse a side. Critically assess each claim and mark it `contested: true` when the evidence is genuinely disputed or sources disagree. Output ONLY valid minified JSON — no markdown, no code fences, no preamble.";
+  const schema = 'JSON shape: {"title":string,"a":{"name":string,"meta":string},"b":{"name":string,"meta":string},'
+    + '"rows":[{"topic":string,"a":{"promised":string,"delivered":string,"status":"kept|partial|broken|progress"},'
+    + '"b":{"promised":string,"delivered":string,"status":"kept|partial|broken|progress"},"contested":boolean,"note":string}],'
+    + '"sources":[string]}. Rules: 4-6 rows; every string under ~12 words; `meta` is a short timeframe like "2019-24"; `note` is <=10 words explaining why contested, else "". Respond with the JSON object only.';
+  return { system: sys + "\n\n" + schema,
+    user: 'Compare these two options: "' + question + '". If the text names two things, compare those; otherwise infer the two most relevant opposing options.' };
+}
+function extractJSON(text){
+  let t = (text||"").trim();
+  t = t.replace(/^```(?:json)?/i,"").replace(/```$/,"").trim();
+  const i = t.indexOf("{"), j = t.lastIndexOf("}");
+  if (i>=0 && j>i) t = t.slice(i, j+1);
+  return JSON.parse(t);
+}
+async function callClaude(question, key){
+  const p = buildPrompt(question);
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": key,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 2000,
+      output_config: { effort: "low" },
+      system: p.system,
+      messages: [{ role: "user", content: p.user }]
+    })
+  });
+  if (!res.ok) {
+    let detail = "";
+    try { const e = await res.json(); detail = e.error && e.error.message ? e.error.message : JSON.stringify(e); }
+    catch(_) { detail = await res.text(); }
+    throw new Error("API " + res.status + " — " + String(detail).slice(0, 240));
+  }
+  const data = await res.json();
+  const text = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("");
+  const obj = extractJSON(text);
+  // normalise
+  obj.rows = (obj.rows || []).slice(0, 6).map(r => ({
+    topic: r.topic || "—",
+    a: { promised: r.a?.promised || "—", delivered: r.a?.delivered || "—", status: normStatus(r.a?.status) },
+    b: { promised: r.b?.promised || "—", delivered: r.b?.delivered || "—", status: normStatus(r.b?.status) },
+    contested: !!r.contested, note: r.note || ""
+  }));
+  obj.a = obj.a || { name: "Option A", meta: "" };
+  obj.b = obj.b || { name: "Option B", meta: "" };
+  obj.sources = obj.sources || [];
+  return obj;
+}
+
+// ---------- run ----------
+let pending = null; // { result } or { error }
+function run(){
   const q = qinput.value.trim() || "Labour or Tories programme UK";
-  document.getElementById("resQ").textContent = '“' + q + '”';
+  document.getElementById("resQ").textContent = "“" + q + "”";
   document.getElementById("hero").style.display = "none";
-
+  document.getElementById("results").classList.remove("show");
   const gen = document.getElementById("generating");
-  const res = document.getElementById("results");
-  res.classList.remove("show");
   gen.classList.add("show");
 
-  // build steps
   const gsteps = document.getElementById("gsteps");
-  gsteps.innerHTML = STEPS.map((s,i) => `<div class="gstep" id="st${i}"><span class="tick">✓</span>${s}</div>`).join("");
+  gsteps.innerHTML = STEPS.map((s,i)=>`<div class="gstep" id="st${i}"><span class="tick">✓</span>${s}</div>`).join("");
   const fill = document.getElementById("gfill");
 
+  // kick off the work (live or fallback)
+  pending = null;
+  const key = getKey();
+  if (key) {
+    callClaude(q, key).then(r => pending = { result: r }).catch(e => pending = { error: e.message });
+  } else {
+    setTimeout(()=> pending = { result: FALLBACK }, 600 + Math.random()*400);
+  }
+
+  // animate steps; hold the final spinner until work resolves
   let i = 0;
-  function nextStep() {
-    if (i > 0) { const prev = document.getElementById("st"+(i-1)); prev.classList.add("done"); }
-    if (i >= STEPS.length) { fill.style.width = "100%"; return setTimeout(reveal, 350); }
-    const el = document.getElementById("st"+i);
-    el.classList.add("on");
+  function nextStep(){
+    if (i > 0) document.getElementById("st"+(i-1)).classList.add("done");
+    if (i >= STEPS.length) { fill.style.width = "100%"; return waitForWork(); }
+    const el = document.getElementById("st"+i); el.classList.add("on");
     fill.style.width = Math.round(((i+1)/STEPS.length)*100) + "%";
-    i++;
-    setTimeout(nextStep, 360 + Math.random()*220);
+    i++; setTimeout(nextStep, 360 + Math.random()*220);
+  }
+  function waitForWork(){
+    if (pending) {
+      if (pending.error) return showError(pending.error);
+      return reveal(pending.result);
+    }
+    setTimeout(waitForWork, 200);
   }
   nextStep();
 }
 
-// ---------- Reveal results ----------
-function reveal() {
+function showError(msg){
+  document.getElementById("generating").classList.remove("show");
+  const hero = document.getElementById("hero");
+  hero.style.display = "";
+  let box = document.getElementById("errBox");
+  if (!box) { box = document.createElement("div"); box.id = "errBox"; box.className = "err"; hero.appendChild(box); }
+  box.innerHTML = "Live generation failed: " + msg + "<br><span style='color:var(--muted)'>Check your API key (top right), or clear it to use sample data.</span>";
+}
+
+// ---------- reveal ----------
+function reveal(R){
   document.getElementById("generating").classList.remove("show");
   const res = document.getElementById("results");
   res.classList.add("show");
 
-  // scoreboard counts (across both parties)
-  const all = [...DATA.con, ...DATA.lab];
+  document.getElementById("resTitle").textContent = R.title || (R.a.name + " vs " + R.b.name);
+  document.getElementById("aName").textContent = R.a.name;
+  document.getElementById("bName").textContent = R.b.name;
+  document.getElementById("aMeta").textContent = R.a.meta || "";
+  document.getElementById("bMeta").textContent = R.b.meta || "";
+
+  // scoreboard across both sides
   const counts = { kept:0, partial:0, broken:0, progress:0 };
-  all.forEach(d => counts[d.status]++);
-  document.getElementById("scoreboard").innerHTML = `
-    <div class="score k"><b data-n="${counts.kept}">0</b><span>Kept</span></div>
-    <div class="score p"><b data-n="${counts.partial}">0</b><span>Partial</span></div>
-    <div class="score b"><b data-n="${counts.broken}">0</b><span>Broken</span></div>
-    <div class="score g"><b data-n="${counts.progress}">0</b><span>In progress</span></div>`;
+  let contested = 0;
+  R.rows.forEach(r => { counts[r.a.status]++; counts[r.b.status]++; if (r.contested) contested++; });
+  document.getElementById("scoreboard").innerHTML =
+    score("k", counts.kept, "Kept") + score("p", counts.partial, "Partial") +
+    score("b", counts.broken, "Broken") + score("g", counts.progress, "In progress") +
+    score("c", contested, "Contested");
 
-  // columns rise
-  const colCon = document.getElementById("colCon"), colLab = document.getElementById("colLab");
-  colCon.classList.remove("in"); colLab.classList.remove("in");
-  void colCon.offsetWidth; // reflow to restart animation
-  colCon.classList.add("in"); colLab.classList.add("in");
+  const cb = document.getElementById("contestbar");
+  if (contested > 0) { cb.className = "contestbar"; cb.innerHTML = "⚑ " + contested + " claim" + (contested>1?"s":"") + " flagged as <b>contested</b> — the evidence is disputed. Don't take either side at face value."; }
+  else { cb.className = "contestbar none"; cb.textContent = "No claims flagged as contested in this comparison."; }
 
-  // items
-  document.getElementById("itemsCon").innerHTML = DATA.con.map(itemHtml).join("");
-  document.getElementById("itemsLab").innerHTML = DATA.lab.map(itemHtml).join("");
+  // columns
+  const colA = document.getElementById("colA"), colB = document.getElementById("colB");
+  colA.classList.remove("in"); colB.classList.remove("in"); void colA.offsetWidth;
+  colA.classList.add("in"); colB.classList.add("in");
+  document.getElementById("itemsA").innerHTML = R.rows.map(r => itemHtml(r, "a")).join("");
+  document.getElementById("itemsB").innerHTML = R.rows.map(r => itemHtml(r, "b")).join("");
   const items = document.querySelectorAll(".item");
-  items.forEach((el, idx) => setTimeout(() => el.classList.add("in"), 260 + idx*70));
+  items.forEach((el, idx) => setTimeout(()=> el.classList.add("in"), 240 + idx*70));
 
-  // count up
-  setTimeout(() => document.querySelectorAll(".score b").forEach(countUp), 300);
+  document.getElementById("sources").innerHTML = (R.sources && R.sources.length)
+    ? "<b>Sources:</b> " + R.sources.map(esc).join(" · ") : "";
+  document.getElementById("noteFoot").textContent = getKey()
+    ? "Generated live by Claude · verify against the cited primary sources before deciding."
+    : "Built-in sample data · add an API key for live generation on any two options.";
 }
-
-function itemHtml(d) {
+function score(cls, n, label){ return `<div class="score ${cls}"><b>${n}</b><span>${label}</span></div>`; }
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function itemHtml(r, side){
+  const d = r[side];
+  const flag = (side === "a" && r.contested) ? '<span class="flag" title="Contested claim">⚑ contested</span>' : '';
+  const note = (side === "a" && r.contested && r.note) ? `<div class="note">⚑ ${esc(r.note)}</div>` : '';
   return `<div class="item">
-    <div class="top"><span class="topic">${d.topic}</span><span class="status s-${d.status}">${STATUS_LABEL[d.status]}</span></div>
-    <div class="line"><b>${d.promised}</b><span class="arrow">→</span>${d.delivered}</div>
+    <div class="top"><span class="topic">${esc(r.topic)} ${flag}</span><span class="status s-${d.status}">${STATUS_LABEL[d.status]}</span></div>
+    <div class="line"><b>${esc(d.promised)}</b><span class="arrow">→</span>${esc(d.delivered)}</div>
+    ${note}
   </div>`;
 }
 
-function countUp(el) {
-  const n = +el.dataset.n; let c = 0;
-  const step = () => { c++; el.textContent = c; if (c < n) setTimeout(step, 90); };
-  if (n > 0) step();
-}
-
-// ---------- Reset ----------
-document.getElementById("again").addEventListener("click", () => {
+// ---------- reset ----------
+document.getElementById("again").addEventListener("click", ()=>{
   document.getElementById("results").classList.remove("show");
   document.getElementById("hero").style.display = "";
+  const eb = document.getElementById("errBox"); if (eb) eb.remove();
   qinput.value = ""; qinput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 document.getElementById("go").addEventListener("click", run);
 qinput.addEventListener("keydown", e => { if (e.key === "Enter") run(); });
+
+refreshKeyUI();
 </script>
 </body>
 </html>
