@@ -10,7 +10,7 @@
     --txt: #e8e8ea; --muted: #8b8b96; --accent: #ff4d4d;
     --a: #2a9df4; --b: #ff4d6d;
     --kept: #2ecc71; --partial: #f1c40f; --broken: #e74c3c; --progress: #7f8fa6;
-    --contest: #ffb020;
+    --contest: #ffb020; --verify: #54c7ec;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -131,6 +131,12 @@
   .item .line b { color: #fff; }
   .item .line .arrow { color: var(--accent); margin: 0 6px; }
   .item .note { font-size: 12px; color: var(--contest); margin-top: 6px; }
+  .item .src { font-size: 12px; margin-top: 6px; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+  .item .src a { color: var(--verify); text-decoration: none; font-weight: 600; white-space: nowrap; }
+  .item .src a:hover { text-decoration: underline; }
+  .item .src .quote { color: var(--muted); font-style: italic; }
+  .item .src.unver { color: #7a6a3a; }
+  .score.s b { color: var(--verify); }
 
   .res-foot { text-align: center; margin-top: 26px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .res-foot a, .res-foot button { font-family: inherit; font-size: 14px; cursor: pointer; text-decoration: none; border-radius: 10px; padding: 11px 18px; border: 1px solid var(--line); background: transparent; color: var(--muted); }
@@ -166,13 +172,13 @@
       <button class="genbtn" id="keySave">Save</button>
       <button class="genbtn" id="keyClear" style="background:var(--panel-2);color:var(--muted)">Clear</button>
     </div>
-    <p class="mini">Stored only in your browser (<b>localStorage</b>) and sent directly to <b>api.anthropic.com</b> — it never touches any server of ours. Without a key, the demo runs on built-in sample data. Model: <b>claude-opus-4-8</b>.</p>
+    <p class="mini">Stored only in your browser (<b>localStorage</b>) and sent directly to <b>api.anthropic.com</b> — it never touches any server of ours. Live mode uses <b>web search</b> to ground each claim in a real source (billed to your key). Without a key, the demo runs on built-in sample data. Model: <b>claude-opus-4-8</b>.</p>
   </section>
 
   <!-- generator -->
   <section class="hero" id="hero">
     <h1>Generate a <span class="grad">comparison</span></h1>
-    <p class="lede">Type any two options. Live AI builds a sourced, side-by-side scorecard — promised vs delivered — and flags the claims where the evidence is contested.</p>
+    <p class="lede">Type any two options. Live AI searches the web, builds a side-by-side scorecard — promised vs delivered — backs each claim with a real source you can click, and flags anything it couldn't verify.</p>
 
     <div class="genbox">
       <input id="q" type="text" autocomplete="off" placeholder="" />
@@ -241,16 +247,26 @@ const FALLBACK = {
   a: { name: "Conservatives", meta: "· 2019→24" },
   b: { name: "Labour", meta: "· 2024→" },
   rows: [
-    { topic:"Tax", a:{promised:"No rate rises", delivered:"Highest tax burden since 1940s", status:"broken"},
-      b:{promised:"No rises for working people", delivered:"Employer NI & CGT up", status:"partial"}, contested:true, note:"Both sides dispute the framing" },
-    { topic:"NHS", a:{promised:"50k nurses, 40 hospitals", delivered:"Nurses ~met, hospitals delayed", status:"partial"},
-      b:{promised:"40k extra appts / week", delivered:"Funding up, early days", status:"progress"}, contested:false, note:"" },
-    { topic:"Immigration", a:{promised:"Numbers will fall", delivered:"Record ~764k (2022)", status:"broken"},
-      b:{promised:"Scrap Rwanda scheme", delivered:"Scrapped Jul 2024", status:"kept"}, contested:false, note:"" },
-    { topic:"Housing", a:{promised:"300k homes / year", delivered:"Peaked ~234k", status:"broken"},
-      b:{promised:"1.5m homes", delivered:"Planning reform underway", status:"progress"}, contested:false, note:"" },
-    { topic:"Energy", a:{promised:"Net zero by 2050", delivered:"Targets kept, timelines slipped", status:"partial"},
-      b:{promised:"Great British Energy", delivered:"GB Energy Act 2025", status:"progress"}, contested:false, note:"" }
+    { topic:"Tax",
+      a:{promised:"No rate rises", delivered:"Highest tax burden since 1940s", status:"broken", verified:true, source:{url:"https://ifs.org.uk/", quote:"tax burden rising to its highest sustained level"}},
+      b:{promised:"No rises for working people", delivered:"Employer NI & CGT up", status:"partial", verified:true, source:{url:"https://www.gov.uk/government/topical-events/autumn-budget-2024", quote:"employer National Insurance contributions will rise"}},
+      contested:true, note:"Both sides dispute the framing" },
+    { topic:"NHS",
+      a:{promised:"50k nurses, 40 hospitals", delivered:"Nurses ~met, hospitals delayed", status:"partial", verified:true, source:{url:"https://fullfact.org/", quote:"the 40 new hospitals programme has been delayed"}},
+      b:{promised:"40k extra appts / week", delivered:"Funding up, early days", status:"progress", verified:false, source:{url:"", quote:""}},
+      contested:false, note:"" },
+    { topic:"Immigration",
+      a:{promised:"Numbers will fall", delivered:"Record ~764k (2022)", status:"broken", verified:true, source:{url:"https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration", quote:"net migration was estimated at 764,000 in 2022"}},
+      b:{promised:"Scrap Rwanda scheme", delivered:"Scrapped Jul 2024", status:"kept", verified:true, source:{url:"https://www.gov.uk/government/organisations/home-office", quote:"the Rwanda partnership has been ended"}},
+      contested:false, note:"" },
+    { topic:"Housing",
+      a:{promised:"300k homes / year", delivered:"Peaked ~234k", status:"broken", verified:true, source:{url:"https://www.gov.uk/government/collections/net-supply-of-housing", quote:"net additional dwellings totalled around 234,000"}},
+      b:{promised:"1.5m homes", delivered:"Planning reform underway", status:"progress", verified:true, source:{url:"https://www.gov.uk/government/publications/national-planning-policy-framework--2", quote:"mandatory housing targets have been restored"}},
+      contested:false, note:"" },
+    { topic:"Energy",
+      a:{promised:"Net zero by 2050", delivered:"Targets kept, timelines slipped", status:"partial", verified:false, source:{url:"", quote:""}},
+      b:{promised:"Great British Energy", delivered:"GB Energy Act 2025", status:"progress", verified:true, source:{url:"https://www.gov.uk/government/organisations/great-british-energy", quote:"Great British Energy has been established"}},
+      contested:false, note:"" }
   ],
   sources: ["Manifestos", "IFS", "ONS", "Full Fact", "gov.uk"]
 };
@@ -258,9 +274,9 @@ const FALLBACK = {
 const STEPS = [
   "Parsing your question",
   "Identifying the two options",
-  "Pulling pledges & record",
-  "Cross-checking the evidence",
-  "Flagging contested claims",
+  "Searching the web for evidence",
+  "Reading & quoting sources",
+  "Flagging contested & unverified claims",
   "Building comparison"
 ];
 
@@ -311,13 +327,17 @@ document.querySelectorAll(".chip-ex").forEach(c => c.addEventListener("click", (
 
 // ---------- Claude call ----------
 function buildPrompt(question){
-  const sys = "You are a neutral decision-transparency engine. Given two options to compare (political parties, products, policies — anything), produce a brief, balanced, sourced, head-to-head comparison of what each side PROMISED versus what they actually DELIVERED or now claim. Be factual and even-handed; do not endorse a side. Critically assess each claim and mark it `contested: true` when the evidence is genuinely disputed or sources disagree. Output ONLY valid minified JSON — no markdown, no code fences, no preamble.";
+  const sys = "You are a neutral decision-transparency engine. Given two options to compare (political parties, products, policies — anything), produce a brief, balanced, head-to-head comparison of what each side PROMISED versus what they actually DELIVERED or now claim. Be factual and even-handed; do not endorse a side. "
+    + "Use the web_search tool to GROUND every delivered/outcome claim in a real, current source. For each side of each row, set `verified:true` only when you actually retrieved a supporting page via web_search, and fill `source.url` with that page's real URL plus a short `source.quote` (verbatim words from it). If you genuinely cannot verify a claim, set `verified:false` and leave the source empty — do NOT invent a URL. "
+    + "Mark `contested:true` when the evidence is genuinely disputed or sources disagree. Output ONLY valid minified JSON — no markdown, no code fences, no preamble.";
   const schema = 'JSON shape: {"title":string,"a":{"name":string,"meta":string},"b":{"name":string,"meta":string},'
-    + '"rows":[{"topic":string,"a":{"promised":string,"delivered":string,"status":"kept|partial|broken|progress"},'
-    + '"b":{"promised":string,"delivered":string,"status":"kept|partial|broken|progress"},"contested":boolean,"note":string}],'
-    + '"sources":[string]}. Rules: 4-6 rows; every string under ~12 words; `meta` is a short timeframe like "2019-24"; `note` is <=10 words explaining why contested, else "". Respond with the JSON object only.';
+    + '"rows":[{"topic":string,'
+    + '"a":{"promised":string,"delivered":string,"status":"kept|partial|broken|progress","verified":boolean,"source":{"url":string,"quote":string}},'
+    + '"b":{"promised":string,"delivered":string,"status":"kept|partial|broken|progress","verified":boolean,"source":{"url":string,"quote":string}},'
+    + '"contested":boolean,"note":string}],'
+    + '"sources":[string]}. Rules: 4-6 rows; promised/delivered strings under ~12 words; `quote` under ~16 words and copied verbatim from the cited page; `meta` is a short timeframe like "2019-24"; `note` is <=10 words explaining why contested, else "". Respond with the JSON object only.';
   return { system: sys + "\n\n" + schema,
-    user: 'Compare these two options: "' + question + '". If the text names two things, compare those; otherwise infer the two most relevant opposing options.' };
+    user: 'Compare these two options: "' + question + '". If the text names two things, compare those; otherwise infer the two most relevant opposing options. Search the web to verify each outcome before writing it.' };
 }
 function extractJSON(text){
   let t = (text||"").trim();
@@ -326,38 +346,59 @@ function extractJSON(text){
   if (i>=0 && j>i) t = t.slice(i, j+1);
   return JSON.parse(t);
 }
+function normSide(s){
+  s = s || {};
+  const src = s.source || {};
+  return {
+    promised: s.promised || "—", delivered: s.delivered || "—", status: normStatus(s.status),
+    verified: !!s.verified && !!src.url,
+    source: { url: (!!s.verified && src.url) ? String(src.url) : "", quote: src.quote ? String(src.quote) : "" }
+  };
+}
 async function callClaude(question, key){
   const p = buildPrompt(question);
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": key,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 2000,
-      output_config: { effort: "low" },
-      system: p.system,
-      messages: [{ role: "user", content: p.user }]
-    })
-  });
-  if (!res.ok) {
-    let detail = "";
-    try { const e = await res.json(); detail = e.error && e.error.message ? e.error.message : JSON.stringify(e); }
-    catch(_) { detail = await res.text(); }
-    throw new Error("API " + res.status + " — " + String(detail).slice(0, 240));
+  const tools = [{ type: "web_search_20260209", name: "web_search" }];
+  let messages = [{ role: "user", content: p.user }];
+  let data, guard = 0;
+  while (true) {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 3000,
+        output_config: { effort: "medium" },
+        system: p.system,
+        tools,
+        messages
+      })
+    });
+    if (!res.ok) {
+      let detail = "";
+      try { const e = await res.json(); detail = e.error && e.error.message ? e.error.message : JSON.stringify(e); }
+      catch(_) { detail = await res.text(); }
+      throw new Error("API " + res.status + " — " + String(detail).slice(0, 240));
+    }
+    data = await res.json();
+    // server-side tool loop hit its cap — resend to continue (no extra user turn)
+    if (data.stop_reason === "pause_turn" && guard < 4) {
+      guard++;
+      messages.push({ role: "assistant", content: data.content });
+      continue;
+    }
+    break;
   }
-  const data = await res.json();
-  const text = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("");
+  const text = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("\n");
   const obj = extractJSON(text);
-  // normalise
   obj.rows = (obj.rows || []).slice(0, 6).map(r => ({
     topic: r.topic || "—",
-    a: { promised: r.a?.promised || "—", delivered: r.a?.delivered || "—", status: normStatus(r.a?.status) },
-    b: { promised: r.b?.promised || "—", delivered: r.b?.delivered || "—", status: normStatus(r.b?.status) },
+    a: normSide(r.a),
+    b: normSide(r.b),
     contested: !!r.contested, note: r.note || ""
   }));
   obj.a = obj.a || { name: "Option A", meta: "" };
@@ -431,12 +472,18 @@ function reveal(R){
 
   // scoreboard across both sides
   const counts = { kept:0, partial:0, broken:0, progress:0 };
-  let contested = 0;
-  R.rows.forEach(r => { counts[r.a.status]++; counts[r.b.status]++; if (r.contested) contested++; });
+  let contested = 0, verified = 0;
+  const claims = R.rows.length * 2;
+  R.rows.forEach(r => {
+    counts[r.a.status]++; counts[r.b.status]++;
+    if (r.contested) contested++;
+    if (r.a.verified) verified++; if (r.b.verified) verified++;
+  });
   document.getElementById("scoreboard").innerHTML =
     score("k", counts.kept, "Kept") + score("p", counts.partial, "Partial") +
     score("b", counts.broken, "Broken") + score("g", counts.progress, "In progress") +
-    score("c", contested, "Contested");
+    score("c", contested, "Contested") +
+    score("s", verified + "/" + claims, "Sourced");
 
   const cb = document.getElementById("contestbar");
   if (contested > 0) { cb.className = "contestbar"; cb.innerHTML = "⚑ " + contested + " claim" + (contested>1?"s":"") + " flagged as <b>contested</b> — the evidence is disputed. Don't take either side at face value."; }
@@ -454,11 +501,19 @@ function reveal(R){
   document.getElementById("sources").innerHTML = (R.sources && R.sources.length)
     ? "<b>Sources:</b> " + R.sources.map(esc).join(" · ") : "";
   document.getElementById("noteFoot").textContent = getKey()
-    ? "Generated live by Claude · verify against the cited primary sources before deciding."
-    : "Built-in sample data · add an API key for live generation on any two options.";
+    ? "Generated live by Claude with web search · click any ⌖ source to check the claim yourself."
+    : "Built-in sample data with illustrative sources · add an API key for live, web-verified generation on any two options.";
 }
 function score(cls, n, label){ return `<div class="score ${cls}"><b>${n}</b><span>${label}</span></div>`; }
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function domainOf(url){ try { return new URL(url).hostname.replace(/^www\./,""); } catch(_) { return "source"; } }
+function srcHtml(d){
+  if (d.verified && d.source && d.source.url) {
+    const q = d.source.quote ? `<span class="quote">“${esc(d.source.quote)}”</span>` : "";
+    return `<div class="src"><a href="${esc(d.source.url)}" target="_blank" rel="noopener">⌖ ${esc(domainOf(d.source.url))} ↗</a>${q}</div>`;
+  }
+  return `<div class="src unver">⌀ unverified — no source found</div>`;
+}
 function itemHtml(r, side){
   const d = r[side];
   const flag = (side === "a" && r.contested) ? '<span class="flag" title="Contested claim">⚑ contested</span>' : '';
@@ -466,6 +521,7 @@ function itemHtml(r, side){
   return `<div class="item">
     <div class="top"><span class="topic">${esc(r.topic)} ${flag}</span><span class="status s-${d.status}">${STATUS_LABEL[d.status]}</span></div>
     <div class="line"><b>${esc(d.promised)}</b><span class="arrow">→</span>${esc(d.delivered)}</div>
+    ${srcHtml(d)}
     ${note}
   </div>`;
 }
